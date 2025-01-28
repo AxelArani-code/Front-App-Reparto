@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogPanel, Disclosure, DisclosurePanel } from '@headlessui/react';
+import {  Dialog, DialogPanel, Disclosure, DisclosurePanel } from '@headlessui/react';
 import { useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Fieldset from './Fieldset'; // Importa el componente Fieldset
@@ -60,7 +60,7 @@ export default function NavigationButton() {
       {/* Renderizar Fieldset si showFieldset es true */}
       {showFieldset && <Fieldset />}
 
-      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 inline-flex left-0 mx-auto justify-between bg-[#C0E6F9] w-11/12 rounded-3xl h-15 max-w-lg ">
+      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 inline-flex  mx-auto justify-between bg-[#C0E6F9] w-11/12 rounded-3xl h-15 max-w-lg ">
         <a
           aria-current="page"
           className="inline-flex flex-col items-center text-xs font-medium py-3 px-4 text-[#160817] flex-grow rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800"

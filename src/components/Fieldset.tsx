@@ -1,16 +1,11 @@
 import { Description, Field, Input, Label } from '@headlessui/react'
 import clsx from 'clsx'
-import { Button, Dialog, DialogPanel, Disclosure, DisclosurePanel } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import {  Dialog, DialogPanel,  } from '@headlessui/react';
 import { useState } from 'react';
 
 export default function Fieldset() {
   const [isOpen, setIsOpen] = useState(true);
-  const [ setShowFieldset] = useState(false); // Estado para controlar la visibilidad del Fieldset
 
-  function open() {
-    setIsOpen(true);
-  }
 
   function close() {
     setIsOpen(false);
