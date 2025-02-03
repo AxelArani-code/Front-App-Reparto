@@ -31,7 +31,7 @@ export default function Login() {
             label="Email"
             labelPlacement="outside"
             name="email"
-            placeholder="Enter your email"
+            placeholder="Ingresar Email"
             type="email"
             variant="bordered"
           />
@@ -52,23 +52,23 @@ export default function Login() {
                 )}
               </button>
             }
-            label="Password"
+            label="Constraseña"
             labelPlacement="outside"
             name="password"
-            placeholder="Enter your password"
+            placeholder="Ingresar Contraseña"
             type={isVisible ? "text" : "password"}
             variant="bordered"
           />
           <div className="flex w-full items-center justify-between px-1 py-2">
             <Checkbox defaultSelected name="remember" size="sm">
-              Remember me
+              Recordar
             </Checkbox>
             <Link className="text-default-500" href="#" size="sm">
-              Forgot password?
+              Recuperar Contraseña ?
             </Link>
           </div>
           <Button className="w-full" color="primary" type="submit">
-            Log In
+            Ingresar
           </Button>
         </Form>
        

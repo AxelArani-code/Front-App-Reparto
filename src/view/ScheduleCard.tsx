@@ -5,10 +5,13 @@ import NavBar from '../components/NavBar'
 
 export default function ScheduleCard() {
   return (
-    <>
+    <div>
     <NavBar></NavBar>
-    <CustomEdit/>
+    <CustomEdit />
     <NavigationButton/>
-    </>
+
+    </div>
+
+   
   )
 }

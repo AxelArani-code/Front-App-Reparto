@@ -2,6 +2,25 @@ import {  Dialog, DialogPanel, Disclosure, DisclosurePanel } from '@headlessui/r
 import { useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Fieldset from './Fieldset'; // Importa el componente Fieldset
+import {Button} from "@heroui/react";
+
+
+export const HeartIcon = ({fill = "currentColor", filled, size, height, width, ...props}) => {
+  return (
+    <svg
+      fill={filled ? fill : "none"}
+      height={size || height || 44}
+      viewBox="0 0 24 24"
+      width={size || width || 24}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    </svg>
+  );
+};
+
+
 
 export default function NavigationButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,56 +79,17 @@ export default function NavigationButton() {
       {/* Renderizar Fieldset si showFieldset es true */}
       {showFieldset && <Fieldset />}
 
-      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 inline-flex  mx-auto justify-between bg-[#C0E6F9] w-11/12 rounded-3xl h-15 max-w-lg ">
-        <a
-          aria-current="page"
-          className="inline-flex flex-col items-center text-xs font-medium py-3 px-4 text-[#160817] flex-grow rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800"
-          href="#"
-        >
-          <svg
-            className="w-7 h-7"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-          </svg>
-          <span className="sr-only">Home</span>
-        </a>
+      
+      <div className="relative">
+      <Button onClick={open} isIconOnly aria-label="Like" color="danger" className='z-20 text-white flex flex-col shrink-0 grow-0 justify-around 
+                  fixed bottom-0  right-5  w-16 h-16 rounded-full
+                  mr-1 mb-5 lg:mr-5 lg:mb-5 xl:mr-10 xl:mb-10'>
+        <HeartIcon />
+      </Button>
+      
+    </div>
+  
 
-        <button onClick={open} className="relative inline-flex flex-col items-center text-xs font-medium text-[#2B112C] py-3 px-6 flex-grow">
-          <div className="absolute bottom-5 p-3 rounded-full border-4 border-white bg-[#81C1F1]">
-            <svg
-              className="w-8 h-8"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-            </svg>
-          </div>
-          <span className="sr-only">Chat</span>
-        </button>
-
-        <a
-          className="inline-flex flex-col items-center text-xs font-medium text-[#160817] py-3 px-4 flex-grow rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800"
-          href="#"
-        >
-          <svg
-            className="w-7 h-7"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <span className="sr-only">Profile</span>
-        </a>
-      </div>
     </>
   );
 }
