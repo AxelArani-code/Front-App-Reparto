@@ -9,8 +9,10 @@ import {
     User,
     Tooltip,
     Tabs, Tab,
-    ScrollShadow
+    ScrollShadow,
+    Button, 
 } from "@heroui/react";
+import NavBar from "./NavBar";
 
 export const columns = [
     { name: "FECHA", uid: "fecha" },
@@ -235,6 +237,12 @@ export const DeleteIcon = () => {
     );
   };
 
+  export const CameraIcon = () => {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    );
+  };
+
 export default function CustomEdit() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const renderCell = React.useCallback((user: any, columnKey: any ) => {
@@ -287,8 +295,9 @@ export default function CustomEdit() {
     } , []);
 
     return (
-      
+    
         <div>
+          <NavBar/>
             <h2 className="text-2xl mt-1 font-semibold text-center text-primary">Lunes</h2>
         <div className="flex flex-wrap gap-4 mb-4 mt-5">
           <div className="flex flex-wrap gap-4 rounded-lg">
@@ -308,9 +317,9 @@ export default function CustomEdit() {
               <TableColumn key={column.uid}>{column.name}</TableColumn>
             )}
           </TableHeader>
-          <TableBody items={users}>
+          <TableBody   items={users}>
             {(user) => (
-              <TableRow key={user.id}>
+              <TableRow  key={user.id}>
                 {(columnKey) => (
                   <TableCell key={columnKey}>
                     {renderCell(user, columnKey)}
@@ -320,6 +329,12 @@ export default function CustomEdit() {
             )}
           </TableBody>
         </Table>
+
+        <Button color="primary" size="lg"  fullWidth endContent={<CameraIcon />}>
+        Crear Cliente
+      </Button>
+       
       </div>
+      
     );
 }
