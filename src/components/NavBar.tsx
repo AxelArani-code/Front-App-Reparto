@@ -8,7 +8,9 @@ import {
     DropdownMenu,
     Switch
   } from "@heroui/react";
+import { SVGProps } from "react";
 import { Link } from "react-router-dom";
+import { JSX } from "react/jsx-runtime";
   
   export const AcmeLogo = () => {
     return (
@@ -17,7 +19,7 @@ import { Link } from "react-router-dom";
   };
 
 
-  export const MoonIcon = (props) => {
+  export const MoonIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
     return (
       <svg
         aria-hidden="true"
@@ -36,7 +38,7 @@ import { Link } from "react-router-dom";
     );
   };
   
-  export const SunIcon = (props) => {
+  export const SunIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
     return (
       <svg
         aria-hidden="true"
@@ -77,7 +79,7 @@ import { Link } from "react-router-dom";
           <Dropdown placement="bottom-end">
             
             <DropdownTrigger>
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user-round"><path d="M18 20a6 6 0 0 0-12 0" /><circle cx="12" cy="10" r="4" /><circle cx="12" cy="12" r="10" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-circle-user-round"><path d="M18 20a6 6 0 0 0-12 0" /><circle cx="12" cy="10" r="4" /><circle cx="12" cy="12" r="10" /></svg>
             </DropdownTrigger>
 
             <DropdownMenu aria-label="Profile Actions" variant="flat">

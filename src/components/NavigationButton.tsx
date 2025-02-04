@@ -5,7 +5,20 @@ import Fieldset from './Fieldset'; // Importa el componente Fieldset
 import {Button} from "@heroui/react";
 
 
-export const HeartIcon = ({fill = "currentColor", filled, size, height, width, ...props}) => {
+export const HeartIcon = ({
+  fill = "currentColor",
+  filled = false,
+  size,
+  height,
+  width,
+  ...props
+}: {
+  fill?: string;
+  filled?: boolean;
+  size?: number;
+  height?: number;
+  width?: number;
+}) => {
   return (
     <svg
       fill={filled ? fill : "none"}
@@ -15,10 +28,12 @@ export const HeartIcon = ({fill = "currentColor", filled, size, height, width, .
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+      <path d="M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 5v14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };
+
 
 
 
