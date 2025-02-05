@@ -13,7 +13,7 @@ export default function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/scheduleCard" element={<ScheduleCard />} />
+        <Route path="/viewComponet" element={<ScheduleCard />} />
       </Routes>
     </Router>
   )
