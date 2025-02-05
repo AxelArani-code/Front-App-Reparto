@@ -30,7 +30,7 @@ export default function NavigationButton() {
 
   return (
     <>
-      <Button className="mt-10" onPress={onOpen} color="primary" size="lg" fullWidth >Crear Nuevo Día</Button>
+      <Button className="mt-5" onPress={onOpen} color="primary" size="lg" fullWidth >Crear Nuevo Día</Button>
       <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}

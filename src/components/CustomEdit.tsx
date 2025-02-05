@@ -13,6 +13,7 @@ import {
     Button, 
 } from "@heroui/react";
 import NavBar from "./NavBar";
+import { useState } from "react";
 
 export const columns = [
     { name: "FECHA", uid: "fecha" },
@@ -209,31 +210,7 @@ export const DeleteIcon = () => {
     );
   };export const CheckIcon = () => {
     return (
-      <svg
-        aria-hidden="true"
-        fill="none"
-        focusable="false"
-        height="1em"
-        role="presentation"
-        viewBox="0 0 20 20"
-        width="1em"
-        
-      >
-        <path
-          d="M7.16667 10.3333L9.5 12.6667L14.8333 7.33333"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-        />
-        <circle
-          cx="10"
-          cy="10"
-          r="8.33333"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        />
-      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00ff4c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
     );
   };
 
@@ -244,6 +221,7 @@ export const DeleteIcon = () => {
   };
 
 export default function CustomEdit() {
+  const [selectedRow, ] = useState(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const renderCell = React.useCallback((user: any, columnKey: any ) => {
         const cellValue = user[columnKey];
@@ -298,11 +276,12 @@ export default function CustomEdit() {
     
         <div>
           <NavBar/>
-            <h2 className="text-2xl mt-1 font-semibold text-center text-primary">Lunes</h2>
+            <h2 className="text-2xl mt-1 font-semibold text-center text-primary">Lunes, <p>Axel Aranibar</p></h2>
         <div className="flex flex-wrap gap-4 mb-4 mt-5">
           <div className="flex flex-wrap gap-4 rounded-lg">
           <ScrollShadow className="max-w-[500px] max-h-[300px]" orientation="horizontal">
-       <Tabs aria-label="Dynamic tabs">
+
+       <Tabs size="lg" variant="bordered" aria-label="Dynamic tabs">
               {users.map((user) => (
                 <Tab key={user.id} title={user.nombre} />
               ))}
@@ -317,11 +296,13 @@ export default function CustomEdit() {
               <TableColumn key={column.uid}>{column.name}</TableColumn>
             )}
           </TableHeader>
-          <TableBody   items={users}>
+          <TableBody  items={users}>
             {(user) => (
-              <TableRow  key={user.id}>
+              <TableRow    className={`cursor-pointer transition-colors border-2 ${
+                selectedRow === user.id ? "border-blue-500 bg-white" : "border-transparent hover:bg-gray-700  "
+            }`}  key={user.id}>
                 {(columnKey) => (
-                  <TableCell key={columnKey}>
+                  <TableCell  key={columnKey}>
                     {renderCell(user, columnKey)}
                   </TableCell>
                 )}
