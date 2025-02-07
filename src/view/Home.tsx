@@ -5,6 +5,7 @@ import {CalendarDate, parseDate} from "@internationalized/date";
 import { Link, useNavigate } from "react-router-dom";
 import { SVGProps } from "react";
 import { JSX } from "react/jsx-runtime";
+import CreateDay from "../layout/CreateDay";
 
 
 const schedule = [
@@ -158,7 +159,7 @@ export default function Home() {
         </div>   
     
 
-      <NavigationButton />
+      <CreateDay/>
 
        {/* Modal Eliminar */}
        <Modal

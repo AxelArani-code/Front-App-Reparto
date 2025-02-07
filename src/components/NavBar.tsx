@@ -72,10 +72,13 @@ import { useEffect, useState } from "react";
 
     return (
       <Navbar>
-        <NavbarBrand>
+        <Link to="/">
+          <NavbarBrand>
           <AcmeLogo />
           <p className="font-bold text-inherit">AppRepart</p>
         </NavbarBrand>
+        </Link>
+      
   
         <NavbarContent as="div" justify="end">
 
