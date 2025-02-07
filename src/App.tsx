@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./view/Home";
 import Profile from "./view/Profile";
 import Login from "./view/Login";
-import ScheduleCard from "./view/ScheduleCard";
 import ListUser from "./components/ListUser";
 
 
