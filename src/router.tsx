@@ -5,6 +5,7 @@ import Login from "./view/Login";
 import ProfileView from "./view/Profile";
 
 import ListUser from "./components/ListUser";
+import ScheduleCard from "./view/ScheduleCard";
 
 export default function router() {
   return (
@@ -14,7 +15,8 @@ export default function router() {
         
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/profile" element={<ProfileView/>}></Route>
-        <Route path="/viewComponet" element={<ListUser/>} ></Route>
+        <Route path="/viewListUsers" element={<ListUser/>} ></Route>
+        <Route path="/viewOrdersUser" element={<ScheduleCard/>} ></Route>
 
     </Routes>
     </BrowserRouter>

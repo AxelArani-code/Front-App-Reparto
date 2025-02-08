@@ -162,7 +162,7 @@ export default function ListUser() {
             >
 
         
-              <Link to="/viewComponet" >    
+              <Link to="/viewOrdersUser" >    
 <CardHeader className=" gap-4  ">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>

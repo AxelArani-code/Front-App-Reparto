@@ -99,7 +99,7 @@ export default function Home() {
             >
 
         
-              <Link to="/viewComponet" >    
+              <Link to="/viewListUsers" >    
 <CardHeader className=" gap-4  ">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>
