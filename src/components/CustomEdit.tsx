@@ -15,6 +15,14 @@ import {
   DropdownSection,
   DropdownItem,
   cn,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+
+  Input,
 
 } from "@heroui/react";
 import NavBar from "./NavBar";
@@ -375,6 +383,9 @@ export default function CustomEdit() {
     window.open(`https://wa.me/2604278415?text=Hola, quiero más información!`, "_blank");
   };
 
+  const { isOpen: isDeleteOpen, onOpen: onOpenDelete, onOpenChange: onDeleteChange } = useDisclosure();
+  const { isOpen: isEditOpen, onOpen: onOpenEdit, onOpenChange: onEditChange } = useDisclosure();
+
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
   
   const [selectedRow,] = useState(null);
@@ -450,7 +461,7 @@ export default function CustomEdit() {
           <DropdownItem
             key="edit"
             description="Vas a poder editar el cliente"
-           
+            onPress={onOpenEdit}
             startContent={<EditDocumentIcon className={iconClasses} />}
           >
             Editar Cliente
@@ -462,7 +473,7 @@ export default function CustomEdit() {
             className="text-danger"
             color="danger"
             description="Eliminar por completo el cliente"
-    
+            onPress={onOpenDelete}
             startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
           >
             Eliminar Cliente
@@ -508,8 +519,80 @@ export default function CustomEdit() {
           )}
         </TableBody>
       </Table>
+      
 
-      <CreateOrdenUser />
+
+
+       {/* Modal Eliminar */}
+       <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        isOpen={isDeleteOpen}
+        onOpenChange={onDeleteChange}
+        placement="center"
+        backdrop="blur"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Día De Reparto</ModalHeader>
+              <ModalBody>
+
+              <p>¿Estas seguro que quieres borrar el día?</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger"  onPress={onClose}>
+                  Cerrar
+                </Button>
+                <Button color="primary" variant="bordered" onPress={onClose}>
+                  Aceptar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      {/* Modal Editar */}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        isOpen={isEditOpen}
+        onOpenChange={onEditChange}
+        placement="center"
+        backdrop="blur"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-success " >Editar Dia De Reparto</ModalHeader>
+              <ModalBody>
+
+              <p>¿Estas seguro que quieres editar el día?</p>
+
+              <Input
+      size="lg"
+   
+      placeholder="Escribe los luegares por donde recorres"
+      label="Recorrrido"
+      type="text"
+       pattern="string"
+      variant="bordered"
+    />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger"  variant="bordered" onPress={onClose}>
+                  Cerrar
+                </Button>
+                <Button color="success"  onPress={onClose}>
+                  Aceptar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <CreateOrdenUser  />
 
     </div>
 
