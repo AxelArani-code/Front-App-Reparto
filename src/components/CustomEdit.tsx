@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SVGProps } from "react";
 import {
   Table,
   TableHeader,
@@ -8,6 +8,13 @@ import {
   TableCell,
   User,
   Tooltip,
+  Dropdown,
+  DropdownTrigger,
+  Button,
+  DropdownMenu,
+  DropdownSection,
+  DropdownItem,
+  cn,
 
 } from "@heroui/react";
 import NavBar from "./NavBar";
@@ -71,6 +78,90 @@ export const users = [
     sif: "20",
     total: "27.000",
     ef: false,
+    tras: false,
+
+  },
+  {
+    id: 5,
+    nombre: "Axel Aranibar",
+    fecha: "2025-01-05",
+    cantidad: "22",
+    doceLitros: "11",
+    sif: "10",
+    total: "33.000",
+    ef: true,
+    tras: false,
+
+  },
+  {
+    id: 5,
+    nombre: "Axel Aranibar",
+    fecha: "2025-01-05",
+    cantidad: "22",
+    doceLitros: "11",
+    sif: "10",
+    total: "33.000",
+    ef: true,
+    tras: false,
+
+  },
+  {
+    id: 5,
+    nombre: "Axel Aranibar",
+    fecha: "2025-01-05",
+    cantidad: "22",
+    doceLitros: "11",
+    sif: "10",
+    total: "33.000",
+    ef: true,
+    tras: false,
+
+  },
+  {
+    id: 5,
+    nombre: "Axel Aranibar",
+    fecha: "2025-01-05",
+    cantidad: "22",
+    doceLitros: "11",
+    sif: "10",
+    total: "33.000",
+    ef: true,
+    tras: false,
+
+  },
+  {
+    id: 5,
+    nombre: "Axel Aranibar",
+    fecha: "2025-01-05",
+    cantidad: "22",
+    doceLitros: "11",
+    sif: "10",
+    total: "33.000",
+    ef: true,
+    tras: false,
+
+  },
+  {
+    id: 5,
+    nombre: "Axel Aranibar",
+    fecha: "2025-01-05",
+    cantidad: "22",
+    doceLitros: "11",
+    sif: "10",
+    total: "33.000",
+    ef: true,
+    tras: false,
+
+  },
+  {
+    id: 5,
+    nombre: "Axel Aranibar",
+    fecha: "2025-01-05",
+    cantidad: "22",
+    doceLitros: "11",
+    sif: "10",
+    total: "33.000",
+    ef: true,
     tras: false,
 
   },
@@ -218,14 +309,80 @@ export const CameraIcon = () => {
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
   );
 };
+export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      focusable="false"
+      height="1em"
+      role="presentation"
+      viewBox="0 0 24 24"
+      width="1em"
+      {...props}
+    >
+      <path
+        d="M15.48 3H7.52C4.07 3 2 5.06 2 8.52v7.95C2 19.94 4.07 22 7.52 22h7.95c3.46 0 5.52-2.06 5.52-5.52V8.52C21 5.06 18.93 3 15.48 3Z"
+        fill="currentColor"
+        opacity={0.4}
+      />
+      <path
+        d="M21.02 2.98c-1.79-1.8-3.54-1.84-5.38 0L14.51 4.1c-.1.1-.13.24-.09.37.7 2.45 2.66 4.41 5.11 5.11.03.01.08.01.11.01.1 0 .2-.04.27-.11l1.11-1.12c.91-.91 1.36-1.78 1.36-2.67 0-.9-.45-1.79-1.36-2.71ZM17.86 10.42c-.27-.13-.53-.26-.77-.41-.2-.12-.4-.25-.59-.39-.16-.1-.34-.25-.52-.4-.02-.01-.08-.06-.16-.14-.31-.25-.64-.59-.95-.96-.02-.02-.08-.08-.13-.17-.1-.11-.25-.3-.38-.51-.11-.14-.24-.34-.36-.55-.15-.25-.28-.5-.4-.76-.13-.28-.23-.54-.32-.79L7.9 10.72c-.35.35-.69 1.01-.76 1.5l-.43 2.98c-.09.63.08 1.22.47 1.61.33.33.78.5 1.28.5.11 0 .22-.01.33-.02l2.97-.42c.49-.07 1.15-.4 1.5-.76l5.38-5.38c-.25-.08-.5-.19-.78-.31Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      focusable="false"
+      height="1em"
+      role="presentation"
+      viewBox="0 0 24 24"
+      width="1em"
+      {...props}
+    >
+      <path
+        d="M21.07 5.23c-1.61-.16-3.22-.28-4.84-.37v-.01l-.22-1.3c-.15-.92-.37-2.3-2.71-2.3h-2.62c-2.33 0-2.55 1.32-2.71 2.29l-.21 1.28c-.93.06-1.86.12-2.79.21l-2.04.2c-.42.04-.72.41-.68.82.04.41.4.71.82.67l2.04-.2c5.24-.52 10.52-.32 15.82.21h.08c.38 0 .71-.29.75-.68a.766.766 0 0 0-.69-.82Z"
+        fill="currentColor"
+      />
+      <path
+        d="M19.23 8.14c-.24-.25-.57-.39-.91-.39H5.68c-.34 0-.68.14-.91.39-.23.25-.36.59-.34.94l.62 10.26c.11 1.52.25 3.42 3.74 3.42h6.42c3.49 0 3.63-1.89 3.74-3.42l.62-10.25c.02-.36-.11-.7-.34-.95Z"
+        fill="currentColor"
+        opacity={0.399}
+      />
+      <path
+        clipRule="evenodd"
+        d="M9.58 17a.75.75 0 0 1 .75-.75h3.33a.75.75 0 0 1 0 1.5h-3.33a.75.75 0 0 1-.75-.75ZM8.75 13a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75Z"
+        fill="currentColor"
+        fillRule="evenodd"
+      />
+    </svg>
+  );
+};
+
 
 export default function CustomEdit() {
+
+  const handleCall = () => {
+    window.location.href = `tel:2604278415`;
+  };
+  const handleWhatsApp = () => {
+    window.open(`https://wa.me/2604278415?text=Hola, quiero más información!`, "_blank");
+  };
+
+  const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
+  
   const [selectedRow,] = useState(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
 
-    switch (columnKey) {
+    switch (columnKey) { 
       case "fecha":
         return (
           <User
@@ -274,8 +431,63 @@ export default function CustomEdit() {
   return (
 
     <div>
+
       <NavBar />
-      <h2 className="text-2xl mt-1 font-semibold text-center text-primary">Lunes, <p>Axel Aranibar</p></h2>
+
+      <div className="flex flex-col items-center p-4  relative">
+         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">Lunes, <p>Axel Aranibar</p></h2>
+        <p>Alem 12012</p>
+        <div className="absolute top-2 right-2 flex space-x-2">
+       
+
+        <Dropdown>
+      <DropdownTrigger>
+        <Button variant="light" size="sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-ellipsis-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></Button>
+      </DropdownTrigger>
+      <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
+        <DropdownSection showDivider title="Acción">
+         
+          <DropdownItem
+            key="edit"
+            description="Vas a poder editar el cliente"
+           
+            startContent={<EditDocumentIcon className={iconClasses} />}
+          >
+            Editar Cliente
+          </DropdownItem>
+        </DropdownSection>
+        <DropdownSection title="Precausión">
+          <DropdownItem
+            key="delete"
+            className="text-danger"
+            color="danger"
+            description="Eliminar por completo el cliente"
+    
+            startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
+          >
+            Eliminar Cliente
+          </DropdownItem>
+        </DropdownSection>
+      </DropdownMenu>
+    </Dropdown>
+</div>
+
+<div className="relative"> 
+   <div className="flex space-x-4 mt-4">
+
+          <Button variant="ghost"  color="success" onPress={handleCall} className="p-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+          </Button>
+          <Button  variant="ghost"  color="success" onPress={handleWhatsApp} radius="full" className="p-2 left-4 rounded-full ">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+          </Button>
+        </div>
+</div>
+
+     
+
+      </div>
+
 
       <Table className="mt-10">
         <TableHeader columns={columns}>
@@ -297,7 +509,7 @@ export default function CustomEdit() {
         </TableBody>
       </Table>
 
-    <CreateOrdenUser/>
+      <CreateOrdenUser />
 
     </div>
 
