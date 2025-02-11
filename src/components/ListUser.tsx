@@ -6,6 +6,7 @@ import SortableItem from "./SortableItem";
 import { Button, Input, } from "@heroui/react";
 import NavBar from "./NavBar";
 import { JSX } from "react/jsx-runtime";
+import CreateClient from "../layout/CreateClient";
 
 
 // Nombre de la clave en localStorage
@@ -157,7 +158,7 @@ export default function ListUser() {
       </DndContext>
       
       
- 
+ <CreateClient/>
     </div>
   );
 }
