@@ -20,3 +20,8 @@ Tareas Completadas
 -En la parte de los Cliente ahcer Clcik y me dirija a la tabla  (LISTO)
 -Agregar en la View de Cliente un B uscador para facilitar la busquedas (LISTO)
 -En la View de tabla agregar un button Layout en donde puede agregar pedidos nuevos del dia (Agregar un Modal o algo para agregar el contenido ) (LISTO)
+
+
+
+Para mover elemntos 
+https://dndkit.com/

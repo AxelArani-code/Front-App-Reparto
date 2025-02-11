@@ -535,7 +535,7 @@ export default function CustomEdit() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Día De Reparto</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Cliente</ModalHeader>
               <ModalBody>
 
               <p>¿Estas seguro que quieres borrar el día?</p>
@@ -564,7 +564,7 @@ export default function CustomEdit() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-success " >Editar Dia De Reparto</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-success " >Editar Cliente</ModalHeader>
               <ModalBody>
 
               <p>¿Estas seguro que quieres editar el día?</p>

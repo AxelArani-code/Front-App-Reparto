@@ -123,7 +123,7 @@ export default function Home() {
               
 <Dropdown>
       <DropdownTrigger>
-        <Button variant="bordered">Open Menu</Button>
+        <Button variant="bordered">Modificación</Button>
       </DropdownTrigger>
       <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
         <DropdownSection showDivider title="Acción">
@@ -172,7 +172,7 @@ export default function Home() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Borrar Día De Reparto</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Día De Reparto</ModalHeader>
               <ModalBody>
 
               <p>¿Estas seguro que quieres borrar el día?</p>
@@ -201,7 +201,7 @@ export default function Home() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Editar Dia De Reparto</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-success">Editar Dia De Reparto</ModalHeader>
               <ModalBody>
 
               <p>¿Estas seguro que quieres editar el día?</p>
