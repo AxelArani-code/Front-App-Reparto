@@ -1,7 +1,8 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Card, CardBody, CardHeader } from "@heroui/react";
-import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
 
 interface SortableItemProps {
   id: string;
@@ -15,7 +16,7 @@ interface SortableItemProps {
 export default function SortableItem({ id, day, date, route, telefono, isDragEnabled }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
-  const style = {
+  const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
     pointerEvents: isDragEnabled ? "auto" : "none", // Activa o desactiva la interacción con drag
@@ -23,7 +24,16 @@ export default function SortableItem({ id, day, date, route, telefono, isDragEna
   };
 
   return (
-    <div className="mx-4 " ref={setNodeRef} style={style} {...(isDragEnabled ? { ...attributes, ...listeners } : {})}>
+    <motion.div 
+    ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      className="cursor-pointer"
+      animate={isDragEnabled ? { x: [0, 10, -10, 0] } : {}} // Animación cuando el Drag está activado
+      transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+    >
+        <div className="mx-4 " ref={setNodeRef} style={style} {...(isDragEnabled ? { ...attributes, ...listeners } : {})}>
       <Card shadow="md" className="w-full">
     
           <CardHeader className="gap-4">
@@ -44,5 +54,7 @@ export default function SortableItem({ id, day, date, route, telefono, isDragEna
 
       </Card>
     </div>
+    </motion.div>
+  
   );
 }

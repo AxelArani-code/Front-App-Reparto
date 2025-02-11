@@ -19,7 +19,7 @@
     "@nextui-org/react": "^0.0.0-dev-v2-20230715020155",
     "@tanstack/react-query-devtools": "^4.36.1",
     "autoprefixer": "^10.4.20",
-    "framer-motion": "^12.0.6",
+    "framer-motion": "^12.4.2",
     "lucide-react": "^0.474.0",
     "next-themes": "^0.4.4",
     "postcss": "^8.5.1",

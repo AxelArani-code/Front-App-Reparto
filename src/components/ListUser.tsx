@@ -1,17 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SVGProps, useState } from "react";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import SortableItem from "./SortableItem";
 import { Button, Input,} from "@heroui/react";
 import NavBar from "./NavBar";
+import { JSX } from "react/jsx-runtime";
 
-const scheduleData = [
+// Nombre de la clave en localStorage
+const STORAGE_KEY = "scheduleOrder";
+
+// Datos iniciales si no hay nada en localStorage
+const defaultScheduleData = [
   { id: "1", day: "Axel Aranibar", date: "24/01/24", route: "Circumbalacion 1814", telefono: "2604134567" },
   { id: "2", day: "Cristian Cruz", date: "25/01/24", route: "Alem 1816", telefono: "2604134567" },
   { id: "3", day: "Maria Antonella", date: "26/01/24", route: "Av Rivadavia 186", telefono: "2604134567" },
-  { id: "4", day: "NIcolas Manzanares", date: "26/01/24", route: "Av Rivadavia 186", telefono: "2604134567" },
-  { id: "5", day: "Rodrigo Martinez", date: "26/01/24", route: "Av Rivadavia 186", telefono: "2604134567" },
 ];
+
 export const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -41,7 +46,7 @@ export const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGEleme
     </svg>
   );
 };
-export const CheckIcon = (props) => {
+export const CheckIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
       aria-hidden="true"
@@ -62,16 +67,30 @@ export const CheckIcon = (props) => {
 };
 export default function ListUser() {
   const [isDragEnabled, setIsDragEnabled] = useState(false);
-  const [schedule, setSchedule] = useState(scheduleData);
+  //const [schedule, setSchedule] = useState(scheduleData);
 
+  const [schedule, setSchedule] = useState(() => {
+    // Cargar datos desde localStorage si existen, si no, usar los datos por defecto
+    const savedSchedule = localStorage.getItem(STORAGE_KEY);
+    return savedSchedule ? JSON.parse(savedSchedule) : defaultScheduleData;
+  });
+   // Función para guardar en localStorage
+   const saveScheduleToStorage = (newSchedule: typeof schedule) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSchedule));
+  };
+
+  // Función que maneja el cambio de orden
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     if (active.id !== over.id) {
-      const oldIndex = schedule.findIndex((item) => item.id === active.id);
-      const newIndex = schedule.findIndex((item) => item.id === over.id);
+      const oldIndex = schedule.findIndex((item: { id: any; }) => item.id === active.id);
+      const newIndex = schedule.findIndex((item: { id: any; }) => item.id === over.id);
       const newOrder = [...schedule];
       newOrder.splice(newIndex, 0, newOrder.splice(oldIndex, 1)[0]);
-      setSchedule(newOrder);
+      
+      setSchedule(newOrder);  // Actualiza el estado
+      saveScheduleToStorage(newOrder);  // Guarda en localStorage
     }
   };
 
@@ -124,12 +143,11 @@ export default function ListUser() {
       
 
       
-   
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={schedule} strategy={verticalListSortingStrategy}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {schedule.map((item) => (
-              <SortableItem key={item.id} {...item} isDragEnabled={isDragEnabled} />
+            {schedule.map((item :  { id: any; }) => (
+              <SortableItem day={""} date={""} route={""} telefono={""} key={item.id} {...item} isDragEnabled={isDragEnabled} />
             ))}
           </div>
         </SortableContext>
