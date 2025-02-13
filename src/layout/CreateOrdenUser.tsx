@@ -25,6 +25,13 @@ import {
    
   
   ];
+  export const medioDePago = [
+    {key: "1", label: "Pagado"},
+    {key: "2", label: "Fiado"},
+ 
+   
+  
+  ];
   
   export default function CreateOrdenUser() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -127,6 +134,17 @@ import {
                 {(animal) => <SelectItem>{animal.label}</SelectItem>}
               </Select>
   
+              <Select
+                        size="lg"
+                         variant="bordered"
+                
+                items={medioDePago}
+                label="Se realizo"
+                placeholder="Selecione si la persona se le fio o lo pago"
+              >
+                {(animal) => <SelectItem>{animal.label}</SelectItem>}
+              </Select>
+
               <Input
           label="Total"
           labelPlacement="outside"

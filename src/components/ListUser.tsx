@@ -17,6 +17,9 @@ const defaultScheduleData = [
   { id: "1", day: "Axel Aranibar", date: "24/01/24", route: "Circumbalacion 1814", telefono: "2604134567" },
   { id: "2", day: "Cristian Cruz", date: "25/01/24", route: "Alem 1816", telefono: "2604134567" },
   { id: "3", day: "Maria Antonella", date: "26/01/24", route: "Av Rivadavia 186", telefono: "2604134567" },
+  { id: "4", day: "Maria Antonella", date: "26/01/24", route: "Av Rivadavia 186", telefono: "2604134567" },
+  { id: "5", day: "Maria Antonella", date: "26/01/24", route: "Av Rivadavia 186", telefono: "2604134567" },
+  { id: "6", day: "Maria Antonella", date: "26/01/24", route: "Av Rivadavia 186", telefono: "2604134567" },
 ];
 
 export const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {

@@ -25,3 +25,7 @@ Tareas Completadas
 
 Para mover elemntos 
 https://dndkit.com/
+
+
+Precuasion 
+Caundo tengas los datos ya ingresados de cada cliente el orden de los cliente tendria que actualizar o sacer mimsa peticion cuiando se creea uno nuevo y actualizar el store 

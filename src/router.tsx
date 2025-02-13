@@ -6,6 +6,7 @@ import ProfileView from "./view/Profile";
 
 import ListUser from "./components/ListUser";
 import ScheduleCard from "./view/ScheduleCard";
+import EditProfile from "./view/EditProfile";
 
 export default function router() {
   return (
@@ -17,6 +18,7 @@ export default function router() {
         <Route path="/profile" element={<ProfileView/>}></Route>
         <Route path="/viewListUsers" element={<ListUser/>} ></Route>
         <Route path="/viewOrdersUser" element={<ScheduleCard/>} ></Route>
+        <Route path="/EditProfile" element={<EditProfile/>} ></Route>
 
     </Routes>
     </BrowserRouter>
