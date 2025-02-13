@@ -104,8 +104,10 @@ export default function ListUser() {
     <div className="">
       <NavBar />
       <div className="flex flex-col items-center p-4  relative">
-      <h2 className="text-2xl mt-1 font-semibold text-center text-primary">Lunes, <p>Axel Aranibar</p></h2>
-      <p>Alem 12012</p>
+      <h2 className="text-2xl mt-1 font-semibold text-center text-primary">Lunes</h2>
+      <p className="text-default-500">
+                  Recorrido - <span className="font-semibold text-primary">Contitucion, salto de la roza </span>
+                </p>
       <div className="absolute top-2 right-2 flex space-x-2">
         
       <Button size="sm" onClick={() => setIsDragEnabled(!isDragEnabled)} className="mb-4">

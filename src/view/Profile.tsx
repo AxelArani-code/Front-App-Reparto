@@ -10,7 +10,7 @@ export default function ProfileView() {
   const menuItems = [
     { icon: "user", label: "Editar Perfil", path: "/EditProfile" },
     { icon: "heart", label: "Precios", path: "/favoritos" },
-    { icon: "help-circle", label: "Ayuda", path: "/ayuda" },
+    { icon: "help-circle", label: "Ayuda", path: "/HelpsSupport" },
     { icon: "log-out", label: "Cerrar Sesión", path: null },
   ];
   return (
