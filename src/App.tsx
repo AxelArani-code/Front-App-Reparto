@@ -1,13 +1,13 @@
 
 import { BrowserRouter,Routes,Route } from "react-router-dom";
-import Home from "./view/Home";
-import Login from "./view/Login";
-import ProfileView from "./view/Profile";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import ProfileView from "./pages/Profile";
 
 import ListUser from "./components/ListUser";
-import ScheduleCard from "./view/ScheduleCard";
-import EditProfile from "./view/EditProfile";
-import HelpSupport from "./view/HelpSupport";
+import ScheduleCard from "./pages/ScheduleCard";
+import EditProfile from "./pages/EditProfile";
+import HelpSupport from "./pages/HelpSupport";
 import NavBar from "./components/NavBar";
 
 export default function router() {
