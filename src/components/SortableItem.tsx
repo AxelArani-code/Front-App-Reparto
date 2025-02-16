@@ -55,7 +55,7 @@ export default function SortableItem({ id, day, date, route, telefono, isDragEna
             </div>
           ) : (
             // 🔹 Si el Drag & Drop está deshabilitado, se permite la navegación
-            <Link to="/viewOrdersUser" className="block">
+            <Link to="/view-orders-user" className="block">
               <CardHeader className="gap-4">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>

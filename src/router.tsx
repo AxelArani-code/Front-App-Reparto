@@ -8,19 +8,23 @@ import ListUser from "./components/ListUser";
 import ScheduleCard from "./view/ScheduleCard";
 import EditProfile from "./view/EditProfile";
 import HelpSupport from "./view/HelpSupport";
+import NavBar from "./components/NavBar";
 
 export default function router() {
   return (
     <BrowserRouter>
     <Routes>
-        <Route path="/" element={<Home/>}/>
-        
-        <Route path="/login" element={<Login/>}></Route>
+      <Route element={<NavBar/>}>
+
+      </Route>
+      
+     <Route  index={true}  path="/" element={<Home/>}></Route>     
+        <Route  path="/login" element={<Login/>}></Route>
         <Route path="/profile" element={<ProfileView/>}></Route>
-        <Route path="/viewListUsers" element={<ListUser/>} ></Route>
-        <Route path="/viewOrdersUser" element={<ScheduleCard/>} ></Route>
-        <Route path="/EditProfile" element={<EditProfile/>} ></Route>
-        <Route path="/HelpsSupport" element={<HelpSupport/>} ></Route>
+        <Route path="/view-list-users" element={<ListUser/>} ></Route>
+        <Route path="/view-orders-user" element={<ScheduleCard/>} ></Route>
+        <Route path="/edit-profile" element={<EditProfile/>} ></Route>
+        <Route path="/help-support" element={<HelpSupport/>} ></Route>
 
     </Routes>
     </BrowserRouter>

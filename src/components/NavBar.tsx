@@ -98,19 +98,29 @@ import { useEffect, useState } from "react";
             </DropdownTrigger>
 
             <DropdownMenu aria-label="Profile Actions" variant="flat">
+               
               <DropdownItem key="profile" className="h-14 gap-2">
-                <Link to="/profile">
-                <p className="font-semibold">Cuenta de </p>
+              <Link to="/profile" className="w-full block">
+              <p className="font-semibold">Cuenta de </p>
                 
                 <p className="font-semibold">zoey@example.com</p>
-                </Link>
+              </Link>
+                
+                
                 
               </DropdownItem>
-              
+             
+         
+              <DropdownItem key="profile-link">
+                <Link to="/profile" className="w-full block">Perfil</Link>
+              </DropdownItem>
+    
             
                <DropdownItem key="logout" color="danger">
-              <Link to="/login">Cerrar Session</Link>
-               
+                  <Link to="/login" className="w-full block">
+                  Cerrar Session 
+              </Link>
+              
               </DropdownItem>
              
              

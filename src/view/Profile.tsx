@@ -8,9 +8,9 @@ export default function ProfileView() {
   const { isOpen: isSessionOpen, onOpen: onOut, onOpenChange: onDeleteChange } = useDisclosure();
 
   const menuItems = [
-    { icon: "user", label: "Editar Perfil", path: "/EditProfile" },
+    { icon: "user", label: "Editar Perfil", path: "/edit-profile" },
     { icon: "heart", label: "Precios", path: "/favoritos" },
-    { icon: "help-circle", label: "Ayuda", path: "/HelpsSupport" },
+    { icon: "help-circle", label: "Ayuda", path: "/help-support" },
     { icon: "log-out", label: "Cerrar Sesión", path: null },
   ];
   return (

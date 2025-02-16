@@ -23,6 +23,7 @@ import {
   useDisclosure,
 
   Input,
+  Textarea,
 
 } from "@heroui/react";
 import NavBar from "./NavBar";
@@ -386,6 +387,14 @@ export default function CustomEdit() {
   const { isOpen: isDeleteOpen, onOpen: onOpenDelete, onOpenChange: onDeleteChange } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onOpenEdit, onOpenChange: onEditChange } = useDisclosure();
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleRowClick = () => {
+    
+    setIsOpen(true);
+  };
+
+
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
   
   const [selectedRow,] = useState(null);
@@ -508,7 +517,7 @@ export default function CustomEdit() {
         </TableHeader>
         <TableBody items={users}>
           {(user) => (
-            <TableRow className={`cursor-pointer transition-colors border-2 ${selectedRow === user.id ? "border-blue-500 bg-white" : "border-transparent hover:bg-gray-700  "
+            <TableRow onClick={() => handleRowClick()} className={`cursor-pointer transition-colors border-2 ${selectedRow === user.id ? "border-blue-500 bg-white" : "border-transparent hover:bg-gray-700  "
               }`} key={user.id}>
               {(columnKey) => (
                 <TableCell key={columnKey}>
@@ -591,6 +600,75 @@ export default function CustomEdit() {
           )}
         </ModalContent>
       </Modal>
+
+
+
+       {/* Modal View Component */}
+       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalContent>
+          <ModalHeader>Detalles del Usuario</ModalHeader>
+          <ModalBody>
+          <div className="flex justify-between mb-4">
+    <div className="flex items-center">
+      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
+      <div>
+        <h3 className="font-semibold">20L</h3>
+        <p className="text-muted-foreground">Dejaste 3 Unidad</p>
+      </div>
+    </div>
+    <span className="font-bold">$3.2000</span>
+    </div>
+
+    <div className="flex justify-between mb-4">
+    <div className="flex items-center">
+      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
+      <div>
+        <h3 className="font-semibold">12L</h3>
+        <p className="text-muted-foreground">Dejaste 1 Unidad</p>
+      </div>
+    </div>
+    <span className="font-bold">$1.6000</span>
+    </div>
+
+    <div className="flex justify-between mb-4">
+    <div className="flex items-center">
+      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-fire-extinguisher"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M18 3h-3"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2Z"/></svg></span>
+      <div>
+        <h3 className="font-semibold">Sifon</h3>
+        <p className="text-muted-foreground">Dejaste 20 Unidad</p>
+      </div>
+    </div>
+    <span className="font-bold">$9.8000</span>
+    </div>
+
+
+    <div className= "flex justify-between text-muted-foreground mb-4 font-bold">
+      <span>Total</span>
+      <span>$20.80</span>
+    </div>
+
+    <Textarea  isReadOnly
+      
+      defaultValue="Aqui van las notas"
+      label="Notas"
+      labelPlacement="outside"
+      placeholder="Aqui van las notas"
+      variant="bordered"/>
+
+          </ModalBody>
+          <ModalFooter>
+
+
+            <Button color="danger" onClick={() => setIsOpen(false)} variant="bordered" >
+                  Cerrar
+                </Button>
+                <Button color="success"  >
+                  Editar
+                </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
 
       <CreateOrdenUser  />
 
