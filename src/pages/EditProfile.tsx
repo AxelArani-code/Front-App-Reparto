@@ -1,14 +1,10 @@
 import { ArrowLeft, } from "lucide-react";
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@heroui/react";
 import NavBar from "../components/NavBar";
-
 import { Link } from "react-router-dom";
-
 export default function EditProfile() { 
   const { isOpen: isSessionOpen, onOpenChange: onDeleteChange } = useDisclosure();
-
  
-
   return (
     <div className="min-h-screen bg-background ">
       <NavBar />
@@ -19,15 +15,12 @@ export default function EditProfile() {
         </Button>
         </Link>
         
-
         <div className="flex flex-col items-center mb-8">
           <div className="relative">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-circle-user-round"><path d="M18 20a6 6 0 0 0-12 0" /><circle cx="12" cy="10" r="4" /><circle cx="12" cy="12" r="10" /></svg>
-
           </div>
           <h1 className="mt-4 text-xl font-semibold">User Name</h1>
         </div>
-
         <nav className="space-y-6 ">
         <Input
       isReadOnly
@@ -63,10 +56,6 @@ export default function EditProfile() {
     />
         </nav>
       </div>
-
-
-
-
        {/* Modal Eliminar */}
        <Modal
         isDismissable={false}
@@ -81,7 +70,6 @@ export default function EditProfile() {
             <>
               <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Cliente</ModalHeader>
               <ModalBody>
-
               <p>¿Estas seguro que quieres borrar el día?</p>
               </ModalBody>
               <ModalFooter>
@@ -96,7 +84,6 @@ export default function EditProfile() {
           )}
         </ModalContent>
       </Modal>
-
      
     </div>
   );

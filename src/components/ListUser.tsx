@@ -7,11 +7,8 @@ import { Button, Input, } from "@heroui/react";
 import NavBar from "./NavBar";
 import { JSX } from "react/jsx-runtime";
 import CreateClient from "../layout/CreateClient";
-
-
 // Nombre de la clave en localStorage
 const STORAGE_KEY = "scheduleOrder";
-
 // Datos iniciales si no hay nada en localStorage
 const defaultScheduleData = [
   { id: "1", day: "Axel Aranibar", date: "24/01/24", route: "Circumbalacion 1814", telefono: "2604134567" },
@@ -21,7 +18,6 @@ const defaultScheduleData = [
   { id: "5", day: "Maria Antonella", date: "26/01/24", route: "Av Rivadavia 186", telefono: "2604134567" },
   { id: "6", day: "Maria Antonella", date: "26/01/24", route: "Av Rivadavia 186", telefono: "2604134567" },
 ];
-
 export const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -73,7 +69,6 @@ export const CheckIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElemen
 export default function ListUser() {
   const [isDragEnabled, setIsDragEnabled] = useState(false);
   //const [schedule, setSchedule] = useState(scheduleData);
-
   const [schedule, setSchedule] = useState(() => {
     // Cargar datos desde localStorage si existen, si no, usar los datos por defecto
     const savedSchedule = localStorage.getItem(STORAGE_KEY);
@@ -83,7 +78,6 @@ export default function ListUser() {
    const saveScheduleToStorage = (newSchedule: typeof schedule) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newSchedule));
   };
-
   // Función que maneja el cambio de orden
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragEnd = (event: any) => {
@@ -98,8 +92,6 @@ export default function ListUser() {
       saveScheduleToStorage(newOrder);  // Guarda en localStorage
     }
   };
-
-
   return (
     <div className="">
       <NavBar />

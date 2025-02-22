@@ -1,27 +1,18 @@
 import { useState } from 'react';
-
-
-
 const UNISAVE_GAME_TOKEN = import.meta.env.VITE_UNISAVE_GAME_TOKEN;
 const UNISAVE_BACKEND_HASH = import.meta.env.VITE_UNISAVE_BACKEND_HASH;
 const UNISAVE_BUILD_GUID = import.meta.env.VITE_UNISAVE_BUILD_GUID;
 const UNISAVE_METHOD = 'POST'
 const UNISAVE_HEADERS = { 'Content-Type': 'application/json' }
-
-
-
 export const useApi = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const executeRequest = async (facetName: string, options: any = {}) => {
     setLoading(true);
     setError(null);
-
     try {
       const currentSessionId = localStorage.getItem('sessionId');
-
       const body = {
         facetName,
         methodName: options.methodName || 'Execute',
@@ -51,16 +42,13 @@ export const useApi = () => {
           versionString: 'none'
         }
       };
-
       const response = await fetch('https://unisave.cloud/_api/call-facet', {
         method: UNISAVE_METHOD ,
         headers: UNISAVE_HEADERS,
         body: JSON.stringify(body)
       });
-
       const result = await response.json();
       const newSessionId = result?.executionResult?.special?.sessionId;
-
       if (newSessionId && !currentSessionId) {
         localStorage.setItem('sessionId', newSessionId);
       }
@@ -73,6 +61,5 @@ export const useApi = () => {
       setLoading(false);
     }
   };
-
   return { executeRequest, loading, error };
 };

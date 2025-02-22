@@ -2,19 +2,14 @@ import { Description, Field, Input, Label } from '@headlessui/react'
 import clsx from 'clsx'
 import {  Dialog, DialogPanel,  } from '@headlessui/react';
 import { useState } from 'react';
-
 export default function Fieldset() {
   const [isOpen, setIsOpen] = useState(true);
-
-
   function close() {
     setIsOpen(false);
     // Opcional: ocultar Fieldset al cerrar el diálogo
   }
-
   return (
 <>
-
     <Dialog open={isOpen} as="div" className="relative z-10 focus:outline-none" onClose={close}>
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">

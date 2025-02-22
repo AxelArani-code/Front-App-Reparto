@@ -49,18 +49,11 @@ import {
           <ModalContent>
             {(onClose) => (
               <>
-
-
-
-
-
-
                 <ModalHeader className="flex flex-col gap-1">Crear Nuevo Pedido</ModalHeader>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
        
       
          <Card shadow="md" className="w-full" >
-
      
   
 <CardHeader className=" gap-4  ">
@@ -69,8 +62,6 @@ import {
                <h2 className="text-lg font-bold text-primary">Axel Aranibar</h2>
                <p className="text-default-500">Lunes</p>
              </div>
-
-
            </CardHeader>
              
           
@@ -82,8 +73,6 @@ import {
                Recorrido - <span className="font-semibold text-primary">Alem 1202</span>
              </p>
            </CardBody>
-
-
          </Card>
        
     
@@ -144,7 +133,6 @@ import {
               >
                 {(animal) => <SelectItem>{animal.label}</SelectItem>}
               </Select>
-
               <Input
           label="Total"
           labelPlacement="outside"

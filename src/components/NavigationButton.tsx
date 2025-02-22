@@ -6,15 +6,12 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-
   Input, 
   Select,
   SelectItem,
   DateInput
 } from "@heroui/react";
-
 import {CalendarDate, parseDate} from "@internationalized/date";
-
 export const day = [
   {key: "1", label: "Lunes"},
   {key: "2", label: "Martes"},
@@ -22,12 +19,9 @@ export const day = [
   {key: "4", label: "Jueves"},
   {key: "5", label: "Viernes"},
   {key: "6", label: "Sabado"},
-
 ];
-
 export default function NavigationButton() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
-
   return (
     <>
       <Button className="mt-5" onPress={onOpen} color="primary" size="lg" fullWidth >Crear Nuevo Día</Button>
@@ -42,7 +36,6 @@ export default function NavigationButton() {
             <>
               <ModalHeader className="flex flex-col gap-1">Crear dia de reparto</ModalHeader>
               <ModalBody>
-
               <Select
               size="lg"
                variant="bordered"
@@ -53,7 +46,6 @@ export default function NavigationButton() {
     >
       {(animal) => <SelectItem>{animal.label}</SelectItem>}
     </Select>
-
     <DateInput
    
         isDisabled
@@ -61,7 +53,6 @@ export default function NavigationButton() {
         label={"Dia Por Defecto"}
         placeholderValue={new CalendarDate(1995, 11, 6)}
       />
-
               <Input
       size="lg"
    

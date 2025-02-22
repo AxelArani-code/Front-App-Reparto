@@ -21,15 +21,12 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-
   Input,
   Textarea,
-
 } from "@heroui/react";
 import NavBar from "./NavBar";
 import { useState } from "react";
 import CreateOrdenUser from "../layout/CreateOrdenUser";
-
 export const columns = [
   { name: "FECHA", uid: "fecha" },
   { name: "20L", uid: "cantidad" },
@@ -40,7 +37,6 @@ export const columns = [
   { name: "TRAS", uid: "tras" },
   { name: "ACTIONS", uid: "actions" },
 ];
-
 export const users = [
   {
     id: 1,
@@ -52,7 +48,6 @@ export const users = [
     total: "10.000",
     ef: true,
     tras: false,
-
   },
   {
     id: 2,
@@ -64,7 +59,6 @@ export const users = [
     total: "23.000",
     ef: false,
     tras: true,
-
   },
   {
     id: 3,
@@ -76,7 +70,6 @@ export const users = [
     total: "37.000",
     ef: true,
     tras: true,
-
   },
   {
     id: 4,
@@ -88,7 +81,6 @@ export const users = [
     total: "27.000",
     ef: false,
     tras: false,
-
   },
   {
     id: 5,
@@ -100,7 +92,6 @@ export const users = [
     total: "33.000",
     ef: true,
     tras: false,
-
   },
   {
     id: 5,
@@ -112,7 +103,6 @@ export const users = [
     total: "33.000",
     ef: true,
     tras: false,
-
   },
   {
     id: 5,
@@ -124,7 +114,6 @@ export const users = [
     total: "33.000",
     ef: true,
     tras: false,
-
   },
   {
     id: 5,
@@ -136,7 +125,6 @@ export const users = [
     total: "33.000",
     ef: true,
     tras: false,
-
   },
   {
     id: 5,
@@ -148,7 +136,6 @@ export const users = [
     total: "33.000",
     ef: true,
     tras: false,
-
   },
   {
     id: 5,
@@ -160,7 +147,6 @@ export const users = [
     total: "33.000",
     ef: true,
     tras: false,
-
   },
   {
     id: 5,
@@ -172,7 +158,6 @@ export const users = [
     total: "33.000",
     ef: true,
     tras: false,
-
   },
   {
     id: 5,
@@ -184,10 +169,8 @@ export const users = [
     total: "33.000",
     ef: true,
     tras: false,
-
   },
 ];
-
 export const EyeIcon = () => {
   return (
     <svg
@@ -198,7 +181,6 @@ export const EyeIcon = () => {
       role="presentation"
       viewBox="0 0 20 20"
       width="1em"
-
     >
       <path
         d="M12.9833 10C12.9833 11.65 11.65 12.9833 10 12.9833C8.35 12.9833 7.01666 11.65 7.01666 10C7.01666 8.35 8.35 7.01666 10 7.01666C11.65 7.01666 12.9833 8.35 12.9833 10Z"
@@ -217,7 +199,6 @@ export const EyeIcon = () => {
     </svg>
   );
 };
-
 export const DeleteIcon = () => {
   return (
     <svg
@@ -228,7 +209,6 @@ export const DeleteIcon = () => {
       role="presentation"
       viewBox="0 0 20 20"
       width="1em"
-
     >
       <path
         d="M17.5 4.98332C14.725 4.70832 11.9333 4.56665 9.15 4.56665C7.5 4.56665 5.85 4.64998 4.2 4.81665L2.5 4.98332"
@@ -268,7 +248,6 @@ export const DeleteIcon = () => {
     </svg>
   );
 };
-
 export const EditIcon = () => {
   return (
     <svg
@@ -279,7 +258,6 @@ export const EditIcon = () => {
       role="presentation"
       viewBox="0 0 20 20"
       width="1em"
-
     >
       <path
         d="M11.05 3.00002L4.20835 10.2417C3.95002 10.5167 3.70002 11.0584 3.65002 11.4334L3.34169 14.1334C3.23335 15.1084 3.93335 15.775 4.90002 15.6084L7.58335 15.15C7.95835 15.0834 8.48335 14.8084 8.74168 14.525L15.5834 7.28335C16.7667 6.03335 17.3 4.60835 15.4583 2.86668C13.625 1.14168 12.2334 1.75002 11.05 3.00002Z"
@@ -312,7 +290,6 @@ export const EditIcon = () => {
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00ff4c" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-circle-check"><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
   );
 };
-
 export const CameraIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
@@ -342,7 +319,6 @@ export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSV
     </svg>
   );
 };
-
 export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -373,44 +349,32 @@ export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVG
     </svg>
   );
 };
-
-
 export default function CustomEdit() {
-
   const handleCall = () => {
     window.location.href = `tel:2604278415`;
   };
   const handleWhatsApp = () => {
     window.open(`https://wa.me/2604278415?text=Hola, quiero más información!`, "_blank");
   };
-
   const { isOpen: isDeleteOpen, onOpen: onOpenDelete, onOpenChange: onDeleteChange } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onOpenEdit, onOpenChange: onEditChange } = useDisclosure();
-
   const [isOpen, setIsOpen] = useState(false);
-
   const handleRowClick = () => {
     
     setIsOpen(true);
   };
-
-
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
   
   const [selectedRow,] = useState(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
-
     switch (columnKey) { 
       case "fecha":
         return (
           <User
-
-
             name={cellValue}
           >
-
           </User>
         );
       case "cantidad":
@@ -423,7 +387,6 @@ export default function CustomEdit() {
         return cellValue ? <CheckIcon /> : null;
       case "actions":
         return (
-
           <div className="relative flex items-center gap-2">
             <Tooltip content="Details">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
@@ -437,7 +400,6 @@ export default function CustomEdit() {
             </Tooltip>
             <Tooltip color="danger" content="Delete user">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
-
                 <DeleteIcon />
               </span>
             </Tooltip>
@@ -447,19 +409,14 @@ export default function CustomEdit() {
         return cellValue;
     }
   }, []);
-
   return (
-
     <div>
-
       <NavBar />
-
       <div className="flex flex-col items-center p-4  relative">
          <h2 className="text-2xl mt-1 font-semibold text-center text-primary">Lunes, <p>Axel Aranibar</p></h2>
         <p>Alem 12012</p>
         <div className="absolute top-2 right-2 flex space-x-2">
        
-
         <Dropdown>
       <DropdownTrigger>
         <Button variant="light" size="sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-ellipsis-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></Button>
@@ -491,10 +448,8 @@ export default function CustomEdit() {
       </DropdownMenu>
     </Dropdown>
 </div>
-
 <div className="relative"> 
    <div className="flex space-x-4 mt-4">
-
           <Button variant="ghost"  color="success" onPress={handleCall} className="p-2 rounded-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
           </Button>
@@ -503,12 +458,8 @@ export default function CustomEdit() {
           </Button>
         </div>
 </div>
-
      
-
       </div>
-
-
       <Table className="mt-10">
         <TableHeader columns={columns}>
           {(column) => (
@@ -529,9 +480,6 @@ export default function CustomEdit() {
         </TableBody>
       </Table>
       
-
-
-
        {/* Modal Eliminar */}
        <Modal
         isDismissable={false}
@@ -546,7 +494,6 @@ export default function CustomEdit() {
             <>
               <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Cliente</ModalHeader>
               <ModalBody>
-
               <p>¿Estas seguro que quieres borrar el día?</p>
               </ModalBody>
               <ModalFooter>
@@ -575,9 +522,7 @@ export default function CustomEdit() {
             <>
               <ModalHeader className="flex flex-col gap-1 text-success " >Editar Cliente</ModalHeader>
               <ModalBody>
-
               <p>¿Estas seguro que quieres editar el día?</p>
-
               <Input
       size="lg"
    
@@ -600,9 +545,6 @@ export default function CustomEdit() {
           )}
         </ModalContent>
       </Modal>
-
-
-
        {/* Modal View Component */}
        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalContent>
@@ -618,7 +560,6 @@ export default function CustomEdit() {
     </div>
     <span className="font-bold">$3.2000</span>
     </div>
-
     <div className="flex justify-between mb-4">
     <div className="flex items-center">
       <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
@@ -629,7 +570,6 @@ export default function CustomEdit() {
     </div>
     <span className="font-bold">$1.6000</span>
     </div>
-
     <div className="flex justify-between mb-4">
     <div className="flex items-center">
       <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-fire-extinguisher"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M18 3h-3"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2Z"/></svg></span>
@@ -640,13 +580,10 @@ export default function CustomEdit() {
     </div>
     <span className="font-bold">$9.8000</span>
     </div>
-
-
     <div className= "flex justify-between text-muted-foreground mb-4 font-bold">
       <span>Total</span>
       <span>$20.80</span>
     </div>
-
     <Textarea  isReadOnly
       
       defaultValue="Aqui van las notas"
@@ -654,11 +591,8 @@ export default function CustomEdit() {
       labelPlacement="outside"
       placeholder="Aqui van las notas"
       variant="bordered"/>
-
           </ModalBody>
           <ModalFooter>
-
-
             <Button color="danger" onClick={() => setIsOpen(false)} variant="bordered" >
                   Cerrar
                 </Button>
@@ -668,11 +602,7 @@ export default function CustomEdit() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-
-
       <CreateOrdenUser  />
-
     </div>
-
   );
 }

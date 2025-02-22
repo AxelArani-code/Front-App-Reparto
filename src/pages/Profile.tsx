@@ -1,12 +1,9 @@
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@heroui/react";
 import NavBar from "../components/NavBar";
-
 import { Link } from "react-router-dom";
-
 export default function ProfileView() { 
   const { isOpen: isSessionOpen, onOpen: onOut, onOpenChange: onDeleteChange } = useDisclosure();
-
   const menuItems = [
     { icon: "user", label: "Editar Perfil", path: "/edit-profile" },
     { icon: "heart", label: "Precios", path: "/favoritos" },
@@ -23,15 +20,12 @@ export default function ProfileView() {
         </Button>
         </Link>
         
-
         <div className="flex flex-col items-center mb-8">
           <div className="relative">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-circle-user-round"><path d="M18 20a6 6 0 0 0-12 0" /><circle cx="12" cy="10" r="4" /><circle cx="12" cy="12" r="10" /></svg>
-
           </div>
           <h1 className="mt-4 text-xl font-semibold">User Name</h1>
         </div>
-
         <nav className="space-y-5">
         {menuItems.map((item) => (
             item.path ? (
@@ -47,7 +41,6 @@ export default function ProfileView() {
                     {item.icon === "heart" && (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-dollar-sign"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>)}
                   
                     {item.icon === "help-circle" && (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-circle-help"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></svg>)}
-
                  
                       </span>
                     </div>
@@ -72,10 +65,6 @@ export default function ProfileView() {
           ))}
         </nav>
       </div>
-
-
-
-
        {/* Modal Eliminar */}
        <Modal
         isDismissable={false}
@@ -90,7 +79,6 @@ export default function ProfileView() {
             <>
               <ModalHeader className="flex flex-col gap-1 ">Cerrar Session</ModalHeader>
               <ModalBody>
-
               <p>¿Estas seguro que quieres salir?</p>
               </ModalBody>
               <ModalFooter>
@@ -105,7 +93,6 @@ export default function ProfileView() {
           )}
         </ModalContent>
       </Modal>
-
      
     </div>
   );

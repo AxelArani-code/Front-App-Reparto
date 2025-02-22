@@ -1,26 +1,19 @@
 // src/components/AddUser.tsx
 import React, { useState } from "react";
-
 import {Button, Input, Checkbox, Link, Form} from "@heroui/react";
-
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../config/useUnisave";
-
 const Login = () => {
   const [isVisible, setIsVisible] = useState(false); // Para mostrar/ocultar contraseña
   const [loading, setLoading] = useState(false); // Estado de carga
   const [message, setMessage] = useState(''); // Mensajes de éxito/error
   const navigate = useNavigate();
   const { executeRequest,  } = useApi();
-
   // Función para alternar visibilidad de la contraseña
   const toggleVisibility = () => {
     setIsVisible((prev) => !prev);
   };
-
-
-
   // Función para manejar el envío del formulario
   const handleAddUser = async (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Evitar recarga de página
@@ -29,12 +22,9 @@ const Login = () => {
     const form = e.currentTarget;
     const email = (form.elements.namedItem('email') as HTMLInputElement).value;
   const password = (form.elements.namedItem('password') as HTMLInputElement).value;
-
 // Obtener sessionId desde localStorage
 const sessionId = localStorage.getItem('sessionId');
 console.log("Session ID recuperado:", sessionId);
-
-
     try {
       const result = await  executeRequest('Backend.Actions.LoginFacet', {
         parameters: [{ Email: email, Password: password }],
@@ -48,8 +38,6 @@ console.log("Session ID recuperado:", sessionId);
         navigate('/')
       }
       
-
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error:any) {
       toast.error(error.message+"Error al autenticar el usuario.")
@@ -59,8 +47,6 @@ console.log("Session ID recuperado:", sessionId);
     }
   };
   return (
-
-
     <div className="flex h-full w-full items-center justify-center">
       <div className="flex w-full max-w-sm flex-col gap-4 rounded-large px-8 pb-10 pt-6">
         <p className="pb-4 text-left text-3xl font-semibold">
@@ -70,7 +56,6 @@ console.log("Session ID recuperado:", sessionId);
           </span>
         </p>
         
-
 <Form className="flex flex-col gap-4" validationBehavior="native" onSubmit={handleAddUser}>
   <Input
     isRequired
@@ -112,5 +97,4 @@ console.log("Session ID recuperado:", sessionId);
 </div>
   );
 };
-
 export default Login;

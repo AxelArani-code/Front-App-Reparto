@@ -3,7 +3,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
 interface SortableItemProps {
   id: string;
   day: string;
@@ -12,16 +11,13 @@ interface SortableItemProps {
   telefono: string;
   isDragEnabled: boolean;
 }
-
 export default function SortableItem({ id, day, date, route, telefono, isDragEnabled }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
-
   const style: React.CSSProperties = {
     transform: transform ? CSS.Transform.toString(transform) : undefined,
     transition: transition || undefined,
     touchAction: isDragEnabled ? "none" : "auto", // Bloquea el scroll si drag está activo
   };
-
   return (
     <motion.div
       ref={setNodeRef}

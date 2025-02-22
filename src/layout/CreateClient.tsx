@@ -8,7 +8,6 @@ import {
     useDisclosure,
   
     Input, 
-
     DateInput
   } from "@heroui/react";
   
@@ -43,7 +42,6 @@ import {
                 <ModalHeader className="flex flex-col gap-1">Crear Cliente Nuevo</ModalHeader>
                 <ModalBody>
   
-
                 <Input
         size="lg"
      
@@ -80,7 +78,6 @@ import {
          pattern="string"
         variant="bordered"
       />
-
       
   
       <DateInput

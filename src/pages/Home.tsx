@@ -2,11 +2,9 @@ import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, 
 import NavBar from "../components/NavBar";
 import {CalendarDate, parseDate} from "@internationalized/date";
 import { Link, useNavigate } from "react-router-dom";
-import { SVGProps, useEffect } from "react";
+import { SVGProps,  } from "react";
 import { JSX } from "react/jsx-runtime";
 import CreateDay from "../layout/CreateDay";
-import {  useApi } from "../config/useUnisave";
-
 
 const schedule = [
   { day: "Lunes", date: "24/01/24", route: "Sarmiento, Toledano, Constitución, etc" },
@@ -23,10 +21,7 @@ export const day = [
   {key: "4", label: "Jueves"},
   {key: "5", label: "Viernes"},
   {key: "6", label: "Sabado"},
-
 ];
-
-
 export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -51,7 +46,6 @@ export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSV
     </svg>
   );
 };
-
 export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -82,35 +76,12 @@ export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVG
     </svg>
   );
 };
-
 export default function Home() {
   const { isOpen: isDeleteOpen, onOpen: onOpenDelete, onOpenChange: onDeleteChange } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onOpenEdit, onOpenChange: onEditChange } = useDisclosure();
   const navigate = useNavigate();
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
-
-  const { executeRequest,  } = useApi();
-  useEffect(() => {
-    // Hacer una solicitud al cargar el componente
-    const fetchData = async () => {
-      try {
-        
-
-        
-        const result = await  executeRequest('Backend.Actions.GetMyUserFacet', {
-      sessionId:""
-    });
-              console.log(result)
-      } catch (err) {
-        
-        console.error('API Request Error:', err);
-      }
-   
-    };
-    
-    fetchData();
-  }, []); // El array vacío asegura que solo se ejecute una vez al cargar el componente
-
+  
   return (
     <div className="container mx-auto p-4 ">
       <NavBar />
@@ -120,7 +91,6 @@ export default function Home() {
           {schedule.map(({ day, date, route }) => (
             <Card shadow="md" className="w-full" onPress={() => navigate("/scheduleCard")}
             >
-
         
               <Link to="/view-list-users" >    
 <CardHeader className=" gap-4  ">
@@ -129,8 +99,6 @@ export default function Home() {
                   <h2 className="text-lg font-bold text-primary">{`Día - ${day}`}</h2>
                   <p className="text-default-500">{date}</p>
                 </div>
-
-
               </CardHeader>
                 
              
@@ -180,9 +148,7 @@ export default function Home() {
           ))}
         </div>   
     
-
       <CreateDay/>
-
        {/* Modal Eliminar */}
        <Modal
         isDismissable={false}
@@ -197,7 +163,6 @@ export default function Home() {
             <>
               <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Día De Reparto</ModalHeader>
               <ModalBody>
-
               <p>¿Estas seguro que quieres borrar el día?</p>
               </ModalBody>
               <ModalFooter>
@@ -226,9 +191,7 @@ export default function Home() {
             <>
               <ModalHeader className="flex flex-col gap-1 text-success">Editar Dia De Reparto</ModalHeader>
               <ModalBody>
-
               <p>¿Estas seguro que quieres editar el día?</p>
-
               <Select
               size="lg"
                variant="bordered"
@@ -239,7 +202,6 @@ export default function Home() {
     >
       {(animal) => <SelectItem>{animal.label}</SelectItem>}
     </Select>
-
     <DateInput
    
         isDisabled
@@ -247,7 +209,6 @@ export default function Home() {
         label={"Dia Por Defecto"}
         placeholderValue={new CalendarDate(1995, 11, 6)}
       />
-
               <Input
       size="lg"
    
@@ -271,6 +232,5 @@ export default function Home() {
         </ModalContent>
       </Modal>
     </div>
-
   )
 }
