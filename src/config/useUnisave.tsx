@@ -1,34 +1,33 @@
+import { useState } from 'react';
 
-export const callFacet = async ({ facetName, arguments: args }: {
-  facetName: string;
 
-  arguments: any[];
-}) => {
-  const UNISAVE_GAME_TOKEN = import.meta.env.VITE_UNISAVE_GAME_TOKEN;
-  const UNISAVE_BACKEND_HASH = import.meta.env.VITE_UNISAVE_BACKEND_HASH;
-  const UNISAVE_BUILD_GUID = import.meta.env.VITE_UNISAVE_BUILD_GUID;
 
-  const url = "https://unisave.cloud/_api/call-facet";
+const UNISAVE_GAME_TOKEN = import.meta.env.VITE_UNISAVE_GAME_TOKEN;
+const UNISAVE_BACKEND_HASH = import.meta.env.VITE_UNISAVE_BACKEND_HASH;
+const UNISAVE_BUILD_GUID = import.meta.env.VITE_UNISAVE_BUILD_GUID;
+const UNISAVE_METHOD = 'POST'
+const UNISAVE_HEADERS = { 'Content-Type': 'application/json' }
 
- // Funciones para manejar la sessionId en localStorage
- const loadSessionId = () => localStorage.getItem("unisave_sessionId") || "";
- const storeSessionId = (sessionId: string) => localStorage.setItem("unisave_sessionId", sessionId);
 
- // Obtener sessionId guardado (si existe)
- //const sessionId = loadSessionId();
 
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
+export const useApi = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<null | string>(null);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const executeRequest = async (facetName: string, options: any = {}) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const currentSessionId = localStorage.getItem('sessionId');
+
+      const body = {
         facetName,
-        methodName:"Execute",
-        arguments: args,
-         sessionId: loadSessionId,
-        deviceId: "nodeJsDeviceId",
+        methodName: options.methodName || 'Execute',
+        arguments: options.parameters || [],
+        sessionId: currentSessionId,
+        deviceId: UNISAVE_BUILD_GUID,
         device: {
           platform: 'Custom',
           deviceModel: null,
@@ -47,40 +46,33 @@ export const callFacet = async ({ facetName, arguments: args }: {
         client: {
           backendHash: UNISAVE_BACKEND_HASH,
           buildGuid: UNISAVE_BUILD_GUID,
-          frameworkVersion: "none",
-          assetVersion: "1.0.0",
-          versionString: "1.0.0"
+          frameworkVersion: 'none',
+          assetVersion: 'none',
+          versionString: 'none'
         }
-      })
-    });
+      };
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP Error ${response.status}: ${errorText}`);
+      const response = await fetch('https://unisave.cloud/_api/call-facet', {
+        method: UNISAVE_METHOD ,
+        headers: UNISAVE_HEADERS,
+        body: JSON.stringify(body)
+      });
+
+      const result = await response.json();
+      const newSessionId = result?.executionResult?.special?.sessionId;
+
+      if (newSessionId && !currentSessionId) {
+        localStorage.setItem('sessionId', newSessionId);
+      }
+      return result;
+    } catch (err) {
+      console.error('API Request Error:', err);
+      setError('API request failed');
+      throw err;
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const body = await response.json();
-    const executionResult = body["executionResult"];
-
-    const result = executionResult["result"];
-    const exception = executionResult["exception"];
-    const returned = executionResult["returned"];
-    const special = executionResult["special"];
-
-    console.log("Json", body)
-  // Guardar la sessionId si viene en la respuesta
-  if (special?.sessionId) {
-    storeSessionId(special.sessionId);
-    console.log("Session ID guardado:", special.sessionId);
-  }
-    if (result === "exception") {
-      throw new Error(`[${exception["ClassName"]}] ${exception["Message"]}`);
-    }
-
-    return returned;
-
-  } catch (error) {
-    console.error("Error al llamar a Unisave:", error);
-    throw error;
-  }
+  return { executeRequest, loading, error };
 };

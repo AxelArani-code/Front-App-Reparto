@@ -1,17 +1,18 @@
 // src/components/AddUser.tsx
 import React, { useState } from "react";
-import { callFacet } from "../config/useUnisave";
+
 import {Button, Input, Checkbox, Link, Form} from "@heroui/react";
 
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useApi } from "../config/useUnisave";
 
 const Login = () => {
   const [isVisible, setIsVisible] = useState(false); // Para mostrar/ocultar contraseña
   const [loading, setLoading] = useState(false); // Estado de carga
   const [message, setMessage] = useState(''); // Mensajes de éxito/error
   const navigate = useNavigate();
-
+  const { executeRequest,  } = useApi();
 
   // Función para alternar visibilidad de la contraseña
   const toggleVisibility = () => {
@@ -30,27 +31,23 @@ const Login = () => {
   const password = (form.elements.namedItem('password') as HTMLInputElement).value;
 
 // Obtener sessionId desde localStorage
-const sessionId = localStorage.getItem('unisave_sessionId');
+const sessionId = localStorage.getItem('sessionId');
 console.log("Session ID recuperado:", sessionId);
 
 
     try {
-      const result = await callFacet({
-        facetName: "Backend.Actions.LoginFacet",
-        arguments: [{ Email: email, Password: password }],
-          // Enviando sessionId en la petición
+      const result = await  executeRequest('Backend.Actions.LoginFacet', {
+        parameters: [{ Email: email, Password: password }],
+        sessionId: sessionId
       });
-
-    
-    if (result.IsSuccessful==true) {
-      toast.success(result.Message)
-      // Aquí podrías redirigir al usuario si el login es exitoso
-      // navigate('/dashboard');
-      navigate('/')
-    } else {
-      toast.error(result.Message)
-    
-    }
+      const isSuccess = result?.executionResult?.returned?.IsSuccessful      ;
+      if (!isSuccess) {
+        toast.error(result?.executionResult?.returned?.Message|| 'Login failed')
+      }else{
+        toast.success(result?.executionResult?.returned?.Message)
+        navigate('/')
+      }
+      
 
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -2,9 +2,10 @@ import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, 
 import NavBar from "../components/NavBar";
 import {CalendarDate, parseDate} from "@internationalized/date";
 import { Link, useNavigate } from "react-router-dom";
-import { SVGProps } from "react";
+import { SVGProps, useEffect } from "react";
 import { JSX } from "react/jsx-runtime";
 import CreateDay from "../layout/CreateDay";
+import {  useApi } from "../config/useUnisave";
 
 
 const schedule = [
@@ -87,6 +88,28 @@ export default function Home() {
   const { isOpen: isEditOpen, onOpen: onOpenEdit, onOpenChange: onEditChange } = useDisclosure();
   const navigate = useNavigate();
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
+
+  const { executeRequest,  } = useApi();
+  useEffect(() => {
+    // Hacer una solicitud al cargar el componente
+    const fetchData = async () => {
+      try {
+        
+
+        
+        const result = await  executeRequest('Backend.Actions.GetMyUserFacet', {
+      sessionId:""
+    });
+              console.log(result)
+      } catch (err) {
+        
+        console.error('API Request Error:', err);
+      }
+   
+    };
+    
+    fetchData();
+  }, []); // El array vacío asegura que solo se ejecute una vez al cargar el componente
 
   return (
     <div className="container mx-auto p-4 ">
