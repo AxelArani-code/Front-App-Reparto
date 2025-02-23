@@ -6,14 +6,16 @@ import {
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
-  Switch
+  Switch,
+
 } from "@heroui/react";
 import { SVGProps } from "react";
-import { Link } from "react-router-dom";
+import { Link,  } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useApi } from "../config/useUnisave";
+import toast from "react-hot-toast";
 export const AcmeLogo = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
@@ -64,6 +66,7 @@ export default function NavBar() {
   const [lastName, setLastName] = useState('');
   const [Email, setEmail] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(true);
+
   // Asegurar que el tema se aplica correctamente en el cliente
   useEffect(() => {
     // Hacer una solicitud al cargar el componente
@@ -98,6 +101,61 @@ export default function NavBar() {
     
     setMounted(true);
   }, []);
+  
+  const saveSettings = (settings: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const isSuccess = Math.random() > 0.3; // 70% de éxito
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        isSuccess 
+          ? resolve(`Guardado correctamente: ${settings}`) 
+          : reject(`Error al guardar: ${settings}`);
+      }, 2000); // Simula retraso de 2 segundos
+    });
+  };
+  
+  const handleAddUser=async ()=>{
+    // Obtener sessionId desde localStorage
+    const sessionId = localStorage.getItem('sessionId');
+    console.log("Session ID recuperado:", sessionId);
+    try {
+      const result = await  executeRequest('Backend.Actions.LogoutFacet', {
+        sessionId: sessionId
+      });
+      const isSuccess = result?.executionResult?.returned?.IsSuccessful      ;
+      const message = result?.executionResult?.returned?.Message ;
+
+      if (!isSuccess) {
+        toast.promise(
+          saveSettings(message),
+           {
+             loading: 'Cargando...',
+             error: <b>{message|| 'Login failed'}</b>,
+           }
+         );
+      }else{
+        toast.promise(
+          saveSettings(message),
+           {
+             loading: 'Cargando...',
+             success: <b>{message}</b>,
+             
+           }
+         );
+
+        localStorage.removeItem('sessionId');
+
+      }
+      
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error:any) {
+      toast.error(error.message+"Error al autenticar el usuario.")
+      
+    }
+    setTimeout(() => {
+      window.location.reload();
+  }, 4200);
+  }
   if (!mounted) return null; // Evita el error de SSR en Next.js
   return (
     <Navbar>
@@ -132,10 +190,10 @@ export default function NavBar() {
                 </Link>
               </DropdownItem>
               
-              <DropdownItem key="logout" color="danger">
-                <Link to="/login" className="w-full block">
+              <DropdownItem  onPress={handleAddUser} key="logout" color="danger">
+                
                   Cerrar Session
-                </Link>
+             
               </DropdownItem>
             </DropdownMenu>
           )}
@@ -148,6 +206,9 @@ export default function NavBar() {
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
+    
+    
     </Navbar>
+    
   );
 }
