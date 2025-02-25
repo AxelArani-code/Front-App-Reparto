@@ -1,27 +1,17 @@
-import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, useDisclosure, cn, } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader,  useDisclosure, cn,  Calendar, } from "@heroui/react";
 import NavBar from "../components/NavBar";
-import {CalendarDate, parseDate} from "@internationalized/date";
+import { CalendarDate,  parseDate,  } from "@internationalized/date";
 import { Link, useNavigate } from "react-router-dom";
-import { SVGProps,  } from "react";
+import { SVGProps, useEffect, useState, } from "react";
 import { JSX } from "react/jsx-runtime";
 import CreateDay from "../layout/CreateDay";
+import { useApi } from "../config/useUnisave";
+import { DayItem } from "../interface/DayItem";
 
-const schedule = [
-  { day: "Lunes", date: "24/01/24", route: "Sarmiento, Toledano, Constitución, etc" },
-  { day: "Martes", date: "25/01/24", route: "Belgrano, Mitre, San Martín, etc" },
-  { day: "Miércoles", date: "26/01/24", route: "Av. Siempre Viva, Independencia, Rivadavia, etc" },
-  { day: "Jueves", date: "27/01/24", route: "Ruta 9, Av. Central, 25 de Mayo, etc" },
-  { day: "Viernes", date: "28/01/24", route: "Las Heras, San Juan, Mendoza, etc" },
-  { day: "Sabado", date: "28/01/24", route: "Las Heras, San Juan, Mendoza, etc" },
-];
-export const day = [
-  {key: "1", label: "Lunes"},
-  {key: "2", label: "Martes"},
-  {key: "3", label: "Miercoles"},
-  {key: "4", label: "Jueves"},
-  {key: "5", label: "Viernes"},
-  {key: "6", label: "Sabado"},
-];
+
+import toast from "react-hot-toast";
+
+
 export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -81,76 +71,233 @@ export default function Home() {
   const { isOpen: isEditOpen, onOpen: onOpenEdit, onOpenChange: onEditChange } = useDisclosure();
   const navigate = useNavigate();
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
+
+  const { executeRequest, } = useApi();
+  const sessionId = localStorage.getItem('sessionId');
+  const [schedule, setSchedule] = useState<DayItem[]>([]); // Manejar el estado del schedule
+
+  const saveSettings = (settings: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const isSuccess = Math.random() > 0.3; // 70% de éxito
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        isSuccess
+          ? resolve(`Guardado correctamente: ${settings}`)
+          : reject(`Error al guardar: ${settings}`);
+      }, 2000); // Simula retraso de 2 segundos
+    });
+  };
+  // Asegurar que el tema se aplica correctamente en el cliente
+  useEffect(() => {
+    // Hacer una solicitud al cargar el componente
+    const fetchData = async () => {
+      try {
+        const result = await executeRequest('Backend.Actions.Days.GetDaysFacet', {
+          sessionId: sessionId
+        });
+        setSchedule(result?.executionResult?.returned)
+
+        console.log(result)
+      } catch (err) {
+        console.error('API Request Error:', err);
+      }
+    };
+    fetchData();
+
+  }, []);
+
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  // Make sure to clear the selectedDayId after deletion if needed:
+  const handleDelete = async () => {
   
+      try {
+        // Obtener sessionId desde localStorage
+        const sessionId = localStorage.getItem('sessionId');
+        console.log(selectedId)
+        const result = await executeRequest('Backend.Actions.Days.DeleteDayFacet', {
+          parameters: [{ Id: selectedId }],
+          sessionId: sessionId
+        });
+        const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+        const message = result?.executionResult?.returned?.Message;
+
+        if (!isSuccess) {
+          toast.promise(
+            saveSettings(message),
+            {
+              loading: 'Cargando...',
+              error: <b>{message || 'Error Database'}</b>,
+            }
+          );
+        } else {
+          toast.promise(
+            saveSettings(message),
+            {
+              loading: 'Cargando...',
+              success: <b>{message}</b>,
+
+            }
+          );
+        }
+
+        console.log(result)
+      } catch (err) {
+        console.error('API Request Error:', err);
+      }
+      setTimeout(() => {
+        window.location.reload();
+    }, 4200);
+    
+
+  };
+  if (schedule.length === 0) {
+    return (
+      <div className="">
+        <NavBar />
+
+        <div className="flex flex-col items-center justify-center h-screen bg-background p-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
+          <h1 className="text-3xl font-bold text-foreground">AppRepart</h1>
+          <Card className="mt-5">
+            <CardHeader>
+              <div className="flex items-start mr-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-notebook-tabs"><path d="M2 6h4" /><path d="M2 10h4" /><path d="M2 14h4" /><path d="M2 18h4" /><rect width="16" height="20" x="4" y="2" rx="2" /><path d="M15 2v20" /><path d="M15 7h5" /><path d="M15 12h5" /><path d="M15 17h5" /></svg>
+              </div>
+              <div className="flex flex-col gap-1">
+
+                <p className="text-medium">Registro de pedido</p>
+                <p className="text-tiny text-default-400">
+                  Es es espesificamente para repartidores
+                </p>
+              </div>
+
+            </CardHeader>
+          </Card>
+
+          <Card className="mt-5">
+            <CardHeader>
+              <div className="flex items-start mr-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" /></svg>
+              </div>
+              <div className="flex flex-col gap-1">
+
+                <p className="text-medium">Menos tiempo</p>
+                <p className="text-tiny text-default-400">
+                  Lleva los registro con una facilidad mas rapida asi, haces los recorrido mas factible
+                </p>
+              </div>
+
+            </CardHeader>
+
+          </Card>
+
+          <Card className="mt-5">
+            <CardHeader>
+              <div className="flex items-start mr-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-list-checks"><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></svg>
+              </div>
+              <div className="flex flex-col gap-1">
+
+                <p className="text-medium">Oraniza Cliente </p>
+                <p className="text-tiny text-default-400">
+                  Vas a tener un orden de tus cliente los que debe o los que estan al día
+                </p>
+              </div>
+
+            </CardHeader>
+
+          </Card>
+
+
+        </div>
+
+        <CreateDay />
+      </div>
+    );
+  }
+
+
   return (
     <div className="container mx-auto p-4 ">
       <NavBar />
-   
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
-       
-          {schedule.map(({ day, date, route }) => (
-            <Card shadow="md" className="w-full" onPress={() => navigate("/scheduleCard")}
-            >
-        
-              <Link to="/view-list-users" >    
-<CardHeader className=" gap-4  ">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
+
+        {schedule.map(({ _id, Date: dateStr, Route, CreatedAt }, index) => (
+
+          <Card key={index} shadow="md" className="w-full" onPress={() => navigate("/scheduleCard")}
+          >
+
+            <Link to="/view-list-users" >
+              <CardHeader className=" gap-4  ">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>
-                  <h2 className="text-lg font-bold text-primary">{`Día - ${day}`}</h2>
-                  <p className="text-default-500">{date}</p>
+                  <h2 className="text-lg font-bold text-primary">
+                    {`Dia - ${new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
+                      .toLocaleDateString('es-ES', { weekday: 'long', timeZone: 'America/Argentina/Buenos_Aires' })
+                      .charAt(0).toUpperCase() + new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
+                        .toLocaleDateString('es-ES', { weekday: 'long', timeZone: 'America/Argentina/Buenos_Aires' })
+                        .slice(1)}`}
+                  </h2>
+                  <p className="text-default-500">{`Dia Creación - ${new Date(CreatedAt).toLocaleDateString()}`}</p>
+           
                 </div>
               </CardHeader>
-                
-             
-             
-              
-              
-               <CardBody>
+
+
+
+
+
+              <CardBody>
                 <p className="text-default-500">
-                  Recorrido - <span className="font-semibold text-primary">{route}</span>
+                  Recorrido - <span className="font-semibold text-primary">{Route}</span>
                 </p>
               </CardBody>
-</Link>
-              
-<Dropdown>
-      <DropdownTrigger>
-        <Button variant="bordered">Modificación</Button>
-      </DropdownTrigger>
-      <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
-        <DropdownSection showDivider title="Acción">
-         
-          <DropdownItem
-            key="edit"
-            description="Vas a poder editar el reparto"
-           onPress={onOpenEdit}
-            startContent={<EditDocumentIcon className={iconClasses} />}
-          >
-            Editar Reparto
-          </DropdownItem>
-        </DropdownSection>
-        <DropdownSection title="Precausión">
-          <DropdownItem
-            key="delete"
-            className="text-danger"
-            color="danger"
-            description="Eliminaras los clientes de ese día"
-          onPress={onOpenDelete}
-            startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
-          >
-            Eliminar Reparto
-          </DropdownItem>
-        </DropdownSection>
-      </DropdownMenu>
-    </Dropdown>
-             
-            </Card>
-          
-          ))}
-        </div>   
-    
-      <CreateDay/>
-       {/* Modal Eliminar */}
-       <Modal
+            </Link>
+
+            <Dropdown>
+              <DropdownTrigger>
+                <Button variant="bordered">Modificación</Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
+                <DropdownSection showDivider title="Acción">
+
+                  <DropdownItem
+                    key="edit"
+                    description="Vas a poder editar el reparto"
+                    onPress={onOpenEdit}
+                    startContent={<EditDocumentIcon className={iconClasses} />}
+                  >
+                    Editar Reparto
+                  </DropdownItem>
+                </DropdownSection>
+                <DropdownSection title="Precausión">
+                  <DropdownItem
+                    key="delete"
+                    className="text-danger"
+                    color="danger"
+                    description="Eliminaras los clientes de ese día"
+                    onPress={() => {
+                      setSelectedId(_id);
+
+                      onOpenDelete();      // Abre el modal
+                    }}
+                    startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
+                  >
+                    Eliminar Reparto
+                  </DropdownItem>
+                </DropdownSection>
+              </DropdownMenu>
+            </Dropdown>
+
+          </Card>
+
+        ))}
+      </div>
+
+
+      {/* Modal Eliminar */}
+      <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
         isOpen={isDeleteOpen}
@@ -163,13 +310,13 @@ export default function Home() {
             <>
               <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Día De Reparto</ModalHeader>
               <ModalBody>
-              <p>¿Estas seguro que quieres borrar el día?</p>
+                <p>¿Estas seguro que quieres borrar el día?</p>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger"  onPress={onClose}>
+                <Button color="danger" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" variant="bordered" onPress={onClose}>
+                <Button color="primary" variant="bordered" onPress={handleDelete}>
                   Aceptar
                 </Button>
               </ModalFooter>
@@ -190,37 +337,28 @@ export default function Home() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-success">Editar Dia De Reparto</ModalHeader>
-              <ModalBody>
-              <p>¿Estas seguro que quieres editar el día?</p>
-              <Select
-              size="lg"
-               variant="bordered"
-      
-      items={day}
-      label="Dias Semanal"
-      placeholder="Selecionar Dias"
-    >
-      {(animal) => <SelectItem>{animal.label}</SelectItem>}
-    </Select>
-    <DateInput
-   
-        isDisabled
-        defaultValue={parseDate("2024-04-04")}
-        label={"Dia Por Defecto"}
-        placeholderValue={new CalendarDate(1995, 11, 6)}
-      />
-              <Input
-      size="lg"
-   
-      placeholder="Escribe los luegares por donde recorres"
-      label="Recorrrido"
-      type="text"
-       pattern="string"
-      variant="bordered"
-    />
+              <ModalBody className="items-center">
+                <p>¿Estas seguro que quieres editar el día?</p>
+                <Calendar aria-label="Date (Uncontrolled)" defaultValue={parseDate("2020-02-03")} />
+                <DateInput
+
+                  isDisabled
+                  defaultValue={parseDate("2024-04-04")}
+                  label={"Dia Por Defecto"}
+                  placeholderValue={new CalendarDate(1995, 11, 6)}
+                />
+                <Input
+                  size="lg"
+
+                  placeholder="Escribe los luegares por donde recorres"
+                  label="Recorrrido"
+                  type="text"
+                  pattern="string"
+                  variant="bordered"
+                />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger"  onPress={onClose}>
+                <Button color="danger" onPress={onClose}>
                   Cerrar
                 </Button>
                 <Button color="primary" variant="bordered" onPress={onClose}>
@@ -231,6 +369,7 @@ export default function Home() {
           )}
         </ModalContent>
       </Modal>
+      <CreateDay />
     </div>
   )
 }
