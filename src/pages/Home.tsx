@@ -1,6 +1,6 @@
 import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader,  useDisclosure, cn,  Calendar, } from "@heroui/react";
 import NavBar from "../components/NavBar";
-import { CalendarDate,  parseDate,  } from "@internationalized/date";
+import { CalendarDate,   } from "@internationalized/date";
 import { Link, useNavigate } from "react-router-dom";
 import { SVGProps, useEffect, useState, } from "react";
 import { JSX } from "react/jsx-runtime";
@@ -75,7 +75,26 @@ export default function Home() {
   const { executeRequest, } = useApi();
   const sessionId = localStorage.getItem('sessionId');
   const [schedule, setSchedule] = useState<DayItem[]>([]); // Manejar el estado del schedule
+  
+       // Obtener la fecha actual
+       const today = new Date();
+       const initialDate = new CalendarDate(
+         today.getFullYear(),
+         today.getMonth() + 1,
+         today.getDate()
+       );
+       // Estados para la fecha seleccionada y el recorrido
+  const [selectedDate, setSelectedDate] = useState(initialDate);
+  const [route, setRoute] = useState("");
+  const formatDate = (date: CalendarDate) => {
+    const day = String(date.day).padStart(2, '0');
+    const month = String(date.month).padStart(2, '0');
+    const year = date.year;
+    return `${day}/${month}/${year}`;
+};
 
+
+  
   const saveSettings = (settings: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -106,6 +125,8 @@ export default function Home() {
 
   }, []);
 
+
+  //Elimnar Peticion 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   // Make sure to clear the selectedDayId after deletion if needed:
   const handleDelete = async () => {
@@ -150,6 +171,54 @@ export default function Home() {
     
 
   };
+  //Edit Facet 
+  const handleEdit = async () => {
+  
+    try {
+      // Obtener sessionId desde localStorage
+      const sessionId = localStorage.getItem('sessionId');
+      console.log(selectedId)
+      const formattedDate = formatDate(selectedDate);
+      const result = await executeRequest('Backend.Actions.Days.UpdateDayFacet', {
+        parameters: [{ 
+          Id: selectedId ,
+          Date: formattedDate,
+          Route: route
+        }],
+        sessionId: sessionId
+      });
+      const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+      const message = result?.executionResult?.returned?.Message;
+
+      if (!isSuccess) {
+        toast.promise(
+          saveSettings(message),
+          {
+            loading: 'Cargando...',
+            error: <b>{message || 'Error Database'}</b>,
+          }
+        );
+      } else {
+        toast.promise(
+          saveSettings(message),
+          {
+            loading: 'Cargando...',
+            success: <b>{message}</b>,
+
+          }
+        );
+      }
+
+      console.log(result)
+    } catch (err) {
+      console.error('API Request Error:', err);
+    }
+    setTimeout(() => {
+      window.location.reload();
+  }, 4200);
+  
+
+};
   if (schedule.length === 0) {
     return (
       <div className="">
@@ -265,7 +334,12 @@ export default function Home() {
                   <DropdownItem
                     key="edit"
                     description="Vas a poder editar el reparto"
-                    onPress={onOpenEdit}
+                   
+                    onPress={() => {
+                      setSelectedId(_id);
+
+                      onOpenEdit();      // Abre el modal
+                    }}
                     startContent={<EditDocumentIcon className={iconClasses} />}
                   >
                     Editar Reparto
@@ -339,29 +413,35 @@ export default function Home() {
               <ModalHeader className="flex flex-col gap-1 text-success">Editar Dia De Reparto</ModalHeader>
               <ModalBody className="items-center">
                 <p>¿Estas seguro que quieres editar el día?</p>
-                <Calendar aria-label="Date (Uncontrolled)" defaultValue={parseDate("2020-02-03")} />
+                <Calendar aria-label="Date (Uncontrolled)" 
+                value={selectedDate}
+                onChange={setSelectedDate} 
+                />
                 <DateInput
 
                   isDisabled
-                  defaultValue={parseDate("2024-04-04")}
+                  value={selectedDate}
+            
                   label={"Dia Por Defecto"}
                   placeholderValue={new CalendarDate(1995, 11, 6)}
                 />
                 <Input
                   size="lg"
 
-                  placeholder="Escribe los luegares por donde recorres"
+                  placeholder="Modificar El Recorrido"
                   label="Recorrrido"
                   type="text"
                   pattern="string"
                   variant="bordered"
+                  value={route}
+                  onChange={(e) => setRoute(e.target.value)}
                 />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" variant="bordered" onPress={onClose}>
+                <Button color="primary" variant="bordered" onPress={handleEdit}>
                   Aceptar
                 </Button>
               </ModalFooter>
