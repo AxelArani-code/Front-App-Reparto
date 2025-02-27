@@ -3,21 +3,53 @@ import { CSS } from "@dnd-kit/utilities";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+
+// Definir los props que recibirá SortableItem
 interface SortableItemProps {
   id: string;
-  day: string;
-  date: string;
-  route: string;
-  telefono: string;
+  Owner: string;
+  Day: string;
+  FirstName: string;
+  LastName: string;
+  Telephone: string;
+  Address: string;
+  Description: string;
+  AddressExtra: string;
   isDragEnabled: boolean;
 }
-export default function SortableItem({ id, day, date, route, telefono, isDragEnabled }: SortableItemProps) {
+
+export default function SortableItem({
+  id,
+  Owner,
+  Day,
+  FirstName,
+  LastName,
+  Telephone,
+  Address,
+  Description,
+  AddressExtra,
+  isDragEnabled,
+}: SortableItemProps) {
+  console.log("Datos en SortableItem:", {
+    id,
+    Owner,
+    Day,
+    FirstName,
+    LastName,
+    Telephone,
+    Address,
+    Description,
+    AddressExtra,
+    isDragEnabled,
+  });
+
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
   const style: React.CSSProperties = {
     transform: transform ? CSS.Transform.toString(transform) : undefined,
     transition: transition || undefined,
-    touchAction: isDragEnabled ? "none" : "auto", // Bloquea el scroll si drag está activo
+    touchAction: isDragEnabled ? "none" : "auto",
   };
+
   return (
     <motion.div
       ref={setNodeRef}
@@ -36,17 +68,20 @@ export default function SortableItem({ id, day, date, route, telefono, isDragEna
               <CardHeader className="gap-4">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>
-                  <h2 className="text-lg font-bold text-primary">{day}</h2>
-                  <p className="text-default-500">{date}</p>
+                  <h2 className="text-lg font-bold text-primary">{FirstName} {LastName}</h2>
+                  <p className="text-default-500">{Day}</p>
                 </div>
               </CardHeader>
               <CardBody>
                 <p className="text-default-500">
-                  Dirección - <span className="font-semibold text-primary">{route}</span>
+                  Dirección - <span className="font-semibold text-primary">{Address}</span>
                 </p>
                 <p className="text-default-500">
-                  Teléfono - <span className="font-semibold text-primary">{telefono}</span>
+                  Teléfono - <span className="font-semibold text-primary">{Telephone}</span>
                 </p>
+                <p className="text-default-500">
+                Descripción - <span className="font-semibold text-primary">{Description}</span>
+              </p>
               </CardBody>
             </div>
           ) : (
@@ -55,17 +90,20 @@ export default function SortableItem({ id, day, date, route, telefono, isDragEna
               <CardHeader className="gap-4">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>
-                  <h2 className="text-lg font-bold text-primary">{day}</h2>
-                  <p className="text-default-500">{date}</p>
+                  <h2 className="text-lg font-bold text-primary">{FirstName} {LastName}</h2>
+                  <p className="text-default-500">{Day}</p>
                 </div>
               </CardHeader>
               <CardBody>
                 <p className="text-default-500">
-                  Dirección - <span className="font-semibold text-primary">{route}</span>
+                  Dirección - <span className="font-semibold text-primary">{Address}</span>
                 </p>
                 <p className="text-default-500">
-                  Teléfono - <span className="font-semibold text-primary">{telefono}</span>
+                  Teléfono - <span className="font-semibold text-primary">{Telephone}</span>
                 </p>
+                <p className="text-default-500">
+                Descripción - <span className="font-semibold text-primary">{Description}</span>
+              </p>
               </CardBody>
             </Link>
           )}

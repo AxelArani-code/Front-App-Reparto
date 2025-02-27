@@ -219,6 +219,7 @@ export default function Home() {
   
 
 };
+
   if (schedule.length === 0) {
     return (
       <div className="">
@@ -297,7 +298,9 @@ export default function Home() {
           <Card key={index} shadow="md" className="w-full" onPress={() => navigate("/scheduleCard")}
           >
 
-            <Link to="/view-list-users" >
+            <Link to="/view-list-users" 
+            state={{ id: _id, date: dateStr, route: Route, createdAt: CreatedAt }}
+            >
               <CardHeader className=" gap-4  ">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>
@@ -311,6 +314,7 @@ export default function Home() {
                   <p className="text-default-500">{`Dia Creación - ${new Date(CreatedAt).toLocaleDateString()}`}</p>
            
                 </div>
+               
               </CardHeader>
 
 
@@ -318,6 +322,7 @@ export default function Home() {
 
 
               <CardBody>
+              <p>{_id}</p>
                 <p className="text-default-500">
                   Recorrido - <span className="font-semibold text-primary">{Route}</span>
                 </p>
