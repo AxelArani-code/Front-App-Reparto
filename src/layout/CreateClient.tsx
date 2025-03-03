@@ -152,7 +152,7 @@ const saveSettings = (settings: string): Promise<string> => {
 
                   placeholder="Escribe la calle del cliente"
                   label="Ubicación"
-                  type="tel"
+                  type="text"
                   pattern="string"
                   variant="bordered"
                   value={address} onChange={(e) => setAddress(e.target.value)}
@@ -162,7 +162,7 @@ const saveSettings = (settings: string): Promise<string> => {
 
                   placeholder="Escribe un pequeño de talle "
                   label="Descripción"
-                  type="tel"
+                  type="text"
                   pattern="string"
                   variant="bordered"
                   value={description} onChange={(e) => setDescription(e.target.value)}

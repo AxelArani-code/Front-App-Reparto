@@ -3,13 +3,14 @@ import { SVGProps, useEffect, useState } from "react";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import SortableItem from "./SortableItem";
-import { Button, Input, } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, Input, Skeleton, } from "@heroui/react";
 import NavBar from "./NavBar";
 import { JSX } from "react/jsx-runtime";
 import CreateClient from "../layout/CreateClient";
-import { useLocation,  } from "react-router-dom";
+import { Link, useLocation,  } from "react-router-dom";
 import { useApi } from "../config/useUnisave";
 import { ClientItem } from "../interface/ClientItem";
+import { ArrowLeft } from "lucide-react";
 
 export const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
@@ -72,6 +73,8 @@ export default function ListUser() {
       
 
   const sessionId = localStorage.getItem('sessionId');
+  const [isLoaded, setIsLoaded] = useState(false); // Estado para Skeleton
+
 
   const getStorageKey = (id: string) => `CLIENT_ORDER_${id}`;
   const fetchClients = async (id: string) => {
@@ -114,12 +117,15 @@ export default function ListUser() {
     } catch (err) {
       console.error("Error al obtener clientes:", err);
     }
+   
   };
   
   useEffect(() => {
     if (id) {
       fetchClients(id);
-    }
+    }  setTimeout(() => {
+      setIsLoaded(true); // Datos cargados, ocultar Skeleton
+  }, 3000);
   }, [id]); // Se ejecuta cada vez que `id` cambia
   
   
@@ -150,7 +156,13 @@ const saveScheduleToStorage = (id: string, newClient: typeof client) => {
   return (
     <div className="">
       <NavBar />
-      <div className="flex flex-col items-center p-4  relative">
+      <div className="px-4 py-1">
+      <Link to="/">
+        <Button variant="ghost" size="md" className="">
+          <ArrowLeft className="h-6 w-6" />
+        </Button>
+        </Link>
+         <div className="flex flex-col items-center p-4  relative">
         <h2 className="text-2xl mt-10 font-semibold text-center text-primary"> {`Dia - ${new Date(new Date(date).setDate(new Date(date).getDate() + 1))
                       .toLocaleDateString('es-ES', { weekday: 'long', timeZone: 'America/Argentina/Buenos_Aires' })
                       .charAt(0).toUpperCase() + new Date(new Date(date).setDate(new Date(date).getDate() + 1))
@@ -158,13 +170,13 @@ const saveScheduleToStorage = (id: string, newClient: typeof client) => {
                         .slice(1)}`}</h2>
         <p className="mt-2 text-default-500">
           Recorrido - <span className="font-semibold text-primary">{decodeURIComponent(route)} </span>
-          <p>{id}</p>
+       <span>{id}</span>
         </p>
         <div className="absolute top-6 right-2 flex space-x-2">
 
         <Button size="sm" onPress={() => setIsDragEnabled(!isDragEnabled)} className="mb-4">
         {isDragEnabled ? "Listo..." : "Organizar"}
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-notebook-pen"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-notebook-pen"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>
       </Button>
 
         </div>
@@ -202,11 +214,31 @@ const saveScheduleToStorage = (id: string, newClient: typeof client) => {
           }
         />
       </div>
+      </div>
+
+     
       {/* Botón para activar/desactivar el drag & drop */}
 
-      {client.length === 0 ? (
-        <p className="text-center text-gray-500 mt-4">No tienes clientes agregados</p>
-      ) : (
+{!isLoaded ?(
+Array.from({ length: client.length || 1 }).map((_, index) => (
+  <Card key={index} shadow="md" className="w-full mt-5">
+    <CardHeader className="gap-4">
+      <Skeleton className="w-3 h-10 bg-primary rounded" />
+      <div>
+        <Skeleton className="h-6 w-32" />
+        <Skeleton className="h-4 w-24 mt-1" />
+      </div>
+    </CardHeader>
+    <CardBody>
+      <Skeleton className="h-4 w-full mb-2" />
+      <Skeleton className="h-4 w-1/2" />
+    </CardBody>
+  </Card>
+))
+): client.length === 0 ?(
+   <p className="text-center text-gray-500 mt-4">No tienes clientes agregados</p>
+):(
+    
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 
           <SortableContext items={client.map((c) => c._id)}  strategy={verticalListSortingStrategy}>
@@ -215,6 +247,7 @@ const saveScheduleToStorage = (id: string, newClient: typeof client) => {
               <SortableItem
     key={item._id || index} // Usar _id como key
     id={item._id} // Pasar _id como id
+    Date={date}
     Owner={item.Owner}
     Day={item.Day || "Día no disponible"}
     FirstName={item.FirstName || "Nombre no disponible"}
@@ -231,9 +264,9 @@ const saveScheduleToStorage = (id: string, newClient: typeof client) => {
           </SortableContext>
 
         </DndContext>
-      )}
+)
 
-
+}
 
 
       <CreateClient id={id}/>

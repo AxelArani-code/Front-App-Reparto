@@ -15,6 +15,7 @@ interface SortableItemProps {
   Address: string;
   Description: string;
   AddressExtra: string;
+Date:string
   isDragEnabled: boolean;
 }
 
@@ -28,6 +29,7 @@ export default function SortableItem({
   Address,
   Description,
   AddressExtra,
+Date,
   isDragEnabled,
 }: SortableItemProps) {
   console.log("Datos en SortableItem:", {
@@ -40,6 +42,7 @@ export default function SortableItem({
     Address,
     Description,
     AddressExtra,
+Date,
     isDragEnabled,
   });
 
@@ -69,7 +72,7 @@ export default function SortableItem({
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>
                   <h2 className="text-lg font-bold text-primary">{FirstName} {LastName}</h2>
-                  <p className="text-default-500">{Day}</p>
+                  <p className="text-default-500">{id}</p>
                 </div>
               </CardHeader>
               <CardBody>
@@ -86,12 +89,12 @@ export default function SortableItem({
             </div>
           ) : (
             // 🔹 Si el Drag & Drop está deshabilitado, se permite la navegación
-            <Link to="/view-orders-user" className="block">
+            <Link to="/view-orders-user" className="block"  state={{getFirstName: FirstName, getLastName:LastName, getDayEntityId:id, getDay:Date, getAddress: Address}}>
               <CardHeader className="gap-4">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>
                   <h2 className="text-lg font-bold text-primary">{FirstName} {LastName}</h2>
-                  <p className="text-default-500">{Day}</p>
+                  <p className="text-default-500">{id}</p>
                 </div>
               </CardHeader>
               <CardBody>

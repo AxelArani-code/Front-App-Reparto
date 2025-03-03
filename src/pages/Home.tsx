@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader,  useDisclosure, cn,  Calendar, } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader,  useDisclosure, cn,  Calendar, Skeleton, } from "@heroui/react";
 import NavBar from "../components/NavBar";
 import { CalendarDate,   } from "@internationalized/date";
 import { Link, useNavigate } from "react-router-dom";
@@ -75,7 +75,8 @@ export default function Home() {
   const { executeRequest, } = useApi();
   const sessionId = localStorage.getItem('sessionId');
   const [schedule, setSchedule] = useState<DayItem[]>([]); // Manejar el estado del schedule
-  
+  const [isLoaded, setIsLoaded] = useState(false); // Estado para Skeleton
+
        // Obtener la fecha actual
        const today = new Date();
        const initialDate = new CalendarDate(
@@ -114,12 +115,24 @@ export default function Home() {
         const result = await executeRequest('Backend.Actions.Days.GetDaysFacet', {
           sessionId: sessionId
         });
-        setSchedule(result?.executionResult?.returned)
-
+         // Check if returned is null
+       
+         if (!result?.executionResult?.returned || result.executionResult.returned.length === 0) {
+          setSchedule([]);
+     
+        } else {
+          setSchedule(result.executionResult.returned);
+     
+        }
+        //setSchedule(result?.executionResult?.returned)
+     
         console.log(result)
       } catch (err) {
         console.error('API Request Error:', err);
       }
+      setTimeout(() => {
+        setIsLoaded(true); // Datos cargados, ocultar Skeleton
+    }, 3000);
     };
     fetchData();
 
@@ -173,7 +186,10 @@ export default function Home() {
   };
   //Edit Facet 
   const handleEdit = async () => {
-  
+    if (!route.trim() || !isNaN(Number(route))) {
+      toast.error("Por favor, ingrese un texto válido.");
+      return; // Evita ejecutar la petición si la entrada es inválida
+    }
     try {
       // Obtener sessionId desde localStorage
       const sessionId = localStorage.getItem('sessionId');
@@ -220,18 +236,43 @@ export default function Home() {
 
 };
 
-  if (schedule.length === 0) {
-    return (
-      <div className="">
-        <NavBar />
 
-        <div className="flex flex-col items-center justify-center h-screen bg-background p-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
+
+
+  return (
+    <div className="container  mx-auto p-4 ">
+      <NavBar />
+
+
+       
+      
+      {!isLoaded ? (
+        
+          Array.from({ length: schedule?.length || 1 }).map((_, index) => (
+            <Card key={index} shadow="md" className="w-full mt-5">
+              <CardHeader className="gap-4">
+                <Skeleton className="w-3 h-10 bg-primary rounded" />
+                <div>
+                  <Skeleton className="h-6 w-32" />
+                  <Skeleton className="h-4 w-24 mt-1" />
+                </div>
+              </CardHeader>
+              <CardBody>
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-4 w-1/2" />
+              </CardBody>
+            </Card>
+          ))
+          
+        ) : schedule?.length===0?(
+          <div className=" ">
+           <div className="flex flex-col items-center justify-center  bg-background p-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
           <h1 className="text-3xl font-bold text-foreground">AppRepart</h1>
           <Card className="mt-5">
             <CardHeader>
               <div className="flex items-start mr-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-notebook-tabs"><path d="M2 6h4" /><path d="M2 10h4" /><path d="M2 14h4" /><path d="M2 18h4" /><rect width="16" height="20" x="4" y="2" rx="2" /><path d="M15 2v20" /><path d="M15 7h5" /><path d="M15 12h5" /><path d="M15 17h5" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-notebook-tabs"><path d="M2 6h4" /><path d="M2 10h4" /><path d="M2 14h4" /><path d="M2 18h4" /><rect width="16" height="20" x="4" y="2" rx="2" /><path d="M15 2v20" /><path d="M15 7h5" /><path d="M15 12h5" /><path d="M15 17h5" /></svg>
               </div>
               <div className="flex flex-col gap-1">
 
@@ -247,7 +288,7 @@ export default function Home() {
           <Card className="mt-5">
             <CardHeader>
               <div className="flex items-start mr-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" /></svg>
               </div>
               <div className="flex flex-col gap-1">
 
@@ -264,7 +305,7 @@ export default function Home() {
           <Card className="mt-5">
             <CardHeader>
               <div className="flex items-start mr-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-list-checks"><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-list-checks"><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></svg>
               </div>
               <div className="flex flex-col gap-1">
 
@@ -278,101 +319,76 @@ export default function Home() {
 
           </Card>
 
+        </div>
+       
 
         </div>
-
-        <CreateDay />
-      </div>
-    );
-  }
-
-
-  return (
-    <div className="container mx-auto p-4 ">
-      <NavBar />
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
-
-        {schedule.map(({ _id, Date: dateStr, Route, CreatedAt }, index) => (
-
-          <Card key={index} shadow="md" className="w-full" onPress={() => navigate("/scheduleCard")}
-          >
-
-            <Link to="/view-list-users" 
-            state={{ id: _id, date: dateStr, route: Route, createdAt: CreatedAt }}
-            >
-              <CardHeader className=" gap-4  ">
-                <div className="w-2 h-10 bg-primary rounded" />
-                <div>
-                  <h2 className="text-lg font-bold text-primary">
-                    {`Dia - ${new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
-                      .toLocaleDateString('es-ES', { weekday: 'long', timeZone: 'America/Argentina/Buenos_Aires' })
-                      .charAt(0).toUpperCase() + new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
-                        .toLocaleDateString('es-ES', { weekday: 'long', timeZone: 'America/Argentina/Buenos_Aires' })
+      
+        ):(
+          schedule?.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
+            <Card key={_id} shadow="md" className="w-full mt-5" onPress={() => navigate("/scheduleCard")}>
+              <Link to="/view-list-users" state={{ id: _id, date: dateStr, route: Route, createdAt: CreatedAt }}>
+                <CardHeader className="gap-4">
+                  <div className="w-2 h-10 bg-primary rounded" />
+                  <div>
+                    <h2 className="text-lg font-bold text-primary">
+                      {`Día - ${new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
+                        .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
+                        .charAt(0)
+                        .toUpperCase() + new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
+                        .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
                         .slice(1)}`}
-                  </h2>
-                  <p className="text-default-500">{`Dia Creación - ${new Date(CreatedAt).toLocaleDateString()}`}</p>
-           
-                </div>
-               
-              </CardHeader>
-
-
-
-
-
-              <CardBody>
-              <p>{_id}</p>
-                <p className="text-default-500">
-                  Recorrido - <span className="font-semibold text-primary">{Route}</span>
-                </p>
-              </CardBody>
-            </Link>
-
-            <Dropdown>
-              <DropdownTrigger>
-                <Button variant="bordered">Modificación</Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
-                <DropdownSection showDivider title="Acción">
-
-                  <DropdownItem
-                    key="edit"
-                    description="Vas a poder editar el reparto"
-                   
+                    </h2>
+                    <p className="text-default-500">{`Día Creación - ${new Date(CreatedAt).toLocaleDateString()}`}</p>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  <p className="text-default-500">
+                    Recorrido - <span className="font-semibold text-primary">{Route}</span>
+                  </p>
+                </CardBody>
+              </Link>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button variant="bordered">Modificación</Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
+                  <DropdownSection showDivider title="Acción">
+                    <DropdownItem 
                     onPress={() => {
                       setSelectedId(_id);
-
                       onOpenEdit();      // Abre el modal
                     }}
                     startContent={<EditDocumentIcon className={iconClasses} />}
-                  >
-                    Editar Reparto
-                  </DropdownItem>
-                </DropdownSection>
-                <DropdownSection title="Precausión">
-                  <DropdownItem
-                    key="delete"
-                    className="text-danger"
-                    color="danger"
-                    description="Eliminaras los clientes de ese día"
+                    key="edit" description="Vas a poder editar el reparto">
+                      Editar Reparto
+                    </DropdownItem>
+                  </DropdownSection>
+                  <DropdownSection title="Precaución">
+                    <DropdownItem 
                     onPress={() => {
                       setSelectedId(_id);
-
                       onOpenDelete();      // Abre el modal
                     }}
                     startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
-                  >
-                    Eliminar Reparto
-                  </DropdownItem>
-                </DropdownSection>
-              </DropdownMenu>
-            </Dropdown>
-
-          </Card>
-
-        ))}
-      </div>
+                    key="delete" className="text-danger" color="danger" description="Eliminarás los clientes de ese día">
+                      Eliminar Reparto
+                    </DropdownItem>
+                  </DropdownSection>
+                </DropdownMenu>
+              </Dropdown>
+            </Card>
+            
+          )
+        
+        )
+      
+        )
+       
+        
+        }
+       
+     
 
 
       {/* Modal Eliminar */}
@@ -435,6 +451,8 @@ export default function Home() {
 
                   placeholder="Modificar El Recorrido"
                   label="Recorrrido"
+                  errorMessage="Por favor, ingrese un texto válido"
+                  isInvalid={!isNaN(Number(route)) && route.trim() !== ""} // Se invalida si es un número
                   type="text"
                   pattern="string"
                   variant="bordered"
@@ -446,15 +464,16 @@ export default function Home() {
                 <Button color="danger" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" variant="bordered" onPress={handleEdit}>
+                <Button color="primary" variant="bordered"  disabled={!route.trim() || !isNaN(Number(route))} onPress={handleEdit}>
                   Aceptar
                 </Button>
-              </ModalFooter>
+              </ModalFooter>  
             </>
           )}
         </ModalContent>
       </Modal>
-      <CreateDay />
+
+<CreateDay/>
     </div>
   )
 }

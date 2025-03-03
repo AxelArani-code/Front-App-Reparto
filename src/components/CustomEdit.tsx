@@ -27,6 +27,9 @@ import {
 import NavBar from "./NavBar";
 import { useState } from "react";
 import CreateOrdenUser from "../layout/CreateOrdenUser";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useApi } from "../config/useUnisave";
+import toast from "react-hot-toast";
 export const columns = [
   { name: "FECHA", uid: "fecha" },
   { name: "20L", uid: "cantidad" },
@@ -287,12 +290,12 @@ export const EditIcon = () => {
   );
 }; export const CheckIcon = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00ff4c" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-circle-check"><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00ff4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-circle-check"><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
   );
 };
 export const CameraIcon = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
   );
 };
 export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
@@ -350,6 +353,19 @@ export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVG
   );
 };
 export default function CustomEdit() {
+  //obtener Datos 
+  const location = useLocation();
+  const { getFirstName, getLastName, getDayEntityId, getDay ,getAddress  } = location.state || {}; // Obtener datos
+    const { executeRequest, } = useApi();
+
+    const navigate = useNavigate();
+      // Estados para capturar los valores de los inputs
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [address, setAddress] = useState("");
+  const [description, setDescription] = useState("");
+
   const handleCall = () => {
     window.location.href = `tel:2604278415`;
   };
@@ -363,6 +379,103 @@ export default function CustomEdit() {
     
     setIsOpen(true);
   };
+
+  const saveSettings = (settings: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const isSuccess = Math.random() > 0.3; // 70% de éxito
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        isSuccess
+          ? resolve(`Guardado correctamente: ${settings}`)
+          : reject(`Error al guardar: ${settings}`);
+      }, 2000); // Simula retraso de 2 segundos
+    });
+  };
+  const deleteClientFacet = async () => {
+      try {
+        const sessionId = localStorage.getItem('sessionId');
+        console.log(getDayEntityId)
+        // Llamar siempre a la API
+        const result = await executeRequest("Backend.Actions.Clients.DeleteClientFacet", {
+          parameters: [{ Id: getDayEntityId }],
+          sessionId: sessionId,
+        });
+        const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+        const message = result?.executionResult?.returned?.Message;
+
+        if (!isSuccess) {
+          toast.promise(
+            saveSettings(message),
+            {
+              loading: 'Cargando...',
+              error: <b>{message || 'Error Database'}</b>,
+            }
+          );
+        } else {
+          toast.promise(
+            saveSettings(message),
+            {
+              loading: 'Cargando...',
+              success: <b>{message}</b>,
+
+            }
+          );
+        }
+        console.log(result)
+           navigate('/')
+      } catch (err) {
+        console.error("Error al obtener clientes:", err);
+      }
+     
+    
+   
+    };   
+    const updateClientFacet= async () => {
+      try {
+        const sessionId = localStorage.getItem('sessionId');
+        // Llamar siempre a la API
+        const result = await executeRequest("Backend.Actions.Clients.UpdateClientFacet", {
+          parameters: [{ 
+            Id: getDayEntityId,
+            FirstName: firstName,
+            LastName: lastName,
+            Telephone: telephone,
+            Address: address,
+            Description: description
+          }],
+          sessionId: sessionId,
+        });
+        const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+        const message = result?.executionResult?.returned?.Message;
+
+        if (!isSuccess) {
+          toast.promise(
+            saveSettings(message),
+            {
+              loading: 'Cargando...',
+              error: <b>{message || 'Error Database'}</b>,
+            }
+          );
+        } else {
+          toast.promise(
+            saveSettings(message),
+            {
+              loading: 'Cargando...',
+              success: <b>{message}</b>,
+
+            }
+          );
+        }
+        console.log(result)
+           navigate('/')
+      } catch (err) {
+        console.error("Error al obtener clientes:", err);
+      }
+     
+    
+   
+    };   
+
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
   
   const [selectedRow,] = useState(null);
@@ -413,13 +526,21 @@ export default function CustomEdit() {
     <div>
       <NavBar />
       <div className="flex flex-col items-center p-4  relative">
-         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">Lunes, <p>Axel Aranibar</p></h2>
-        <p>Alem 12012</p>
+         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">   {`Dia - ${new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
+                      .toLocaleDateString('es-ES', { weekday: 'long', timeZone: 'America/Argentina/Buenos_Aires' })
+                      .charAt(0).toUpperCase() + new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
+                        .toLocaleDateString('es-ES', { weekday: 'long', timeZone: 'America/Argentina/Buenos_Aires' })
+                        .slice(1)}`} 
+                        
+                        </h2>
+                        <h2 className="text-2xl mt-1 font-semibold text-center text-primary">{getFirstName+getLastName}</h2>
+        <p>{getAddress}</p>
+        <p>{getDayEntityId}</p>
         <div className="absolute top-2 right-2 flex space-x-2">
        
         <Dropdown>
       <DropdownTrigger>
-        <Button variant="light" size="sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-ellipsis-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></Button>
+        <Button variant="light" size="sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-ellipsis-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></Button>
       </DropdownTrigger>
       <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
         <DropdownSection showDivider title="Acción">
@@ -451,10 +572,10 @@ export default function CustomEdit() {
 <div className="relative"> 
    <div className="flex space-x-4 mt-4">
           <Button variant="ghost"  color="success" onPress={handleCall} className="p-2 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
           </Button>
           <Button  variant="ghost"  color="success" onPress={handleWhatsApp} radius="full" className="p-2 left-4 rounded-full ">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
           </Button>
         </div>
 </div>
@@ -494,13 +615,13 @@ export default function CustomEdit() {
             <>
               <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Cliente</ModalHeader>
               <ModalBody>
-              <p>¿Estas seguro que quieres borrar el día?</p>
+              <p>¿Estas seguro que quieres borrar esté cliente?</p>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger"  onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" variant="bordered" onPress={onClose}>
+                <Button color="primary" variant="bordered" onPress={deleteClientFacet}>
                   Aceptar
                 </Button>
               </ModalFooter>
@@ -522,22 +643,64 @@ export default function CustomEdit() {
             <>
               <ModalHeader className="flex flex-col gap-1 text-success " >Editar Cliente</ModalHeader>
               <ModalBody>
-              <p>¿Estas seguro que quieres editar el día?</p>
+              <p>¿Estas seguro que quieres editar esté cliente?</p>
               <Input
-      size="lg"
-   
-      placeholder="Escribe los luegares por donde recorres"
-      label="Recorrrido"
-      type="text"
-       pattern="string"
-      variant="bordered"
-    />
+                  size="lg"
+
+                  placeholder="Escribe Nombre"
+                  label="Cambiar Nombre"
+                  type="text"
+                  pattern="string"
+                  variant="bordered"
+                  value={firstName} onChange={(e) => setFirstName(e.target.value)}
+                />
+                <Input
+                  size="lg"
+
+                  placeholder="Escribe Apellido"
+                  label="Cambiar Apellido"
+                  type="text"
+                  pattern="string"
+                  variant="bordered"
+                  value={lastName} onChange={(e) => setLastName(e.target.value)}
+                />
+                <Input
+                  size="lg"
+
+                  placeholder="Escribe Telefono"
+                  label="Cambiar Telefonó"
+                  type="tel"
+                  pattern="string"
+                  variant="bordered"
+                  value={telephone} onChange={(e) => setTelephone(e.target.value)} 
+                />
+                <Input
+                  size="lg"
+
+                  placeholder="Escribe la calle del cliente"
+                  label="Cambiar Ubicación"
+                  type="tel"
+                  pattern="string"
+                  variant="bordered"
+                  value={address} onChange={(e) => setAddress(e.target.value)}
+                />
+                <Input
+                  size="lg"
+
+                  placeholder="Escribe un pequeño de talle "
+                  label="Cambiar Descripción"
+                  type="tel"
+                  pattern="string"
+                  variant="bordered"
+                  value={description} onChange={(e) => setDescription(e.target.value)}
+                />
+
               </ModalBody>
               <ModalFooter>
                 <Button color="danger"  variant="bordered" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="success"  onPress={onClose}>
+                <Button color="success"  onPress={updateClientFacet}>
                   Aceptar
                 </Button>
               </ModalFooter>
@@ -552,7 +715,7 @@ export default function CustomEdit() {
           <ModalBody>
           <div className="flex justify-between mb-4">
     <div className="flex items-center">
-      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
+      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
       <div>
         <h3 className="font-semibold">20L</h3>
         <p className="text-muted-foreground">Dejaste 3 Unidad</p>
@@ -562,7 +725,7 @@ export default function CustomEdit() {
     </div>
     <div className="flex justify-between mb-4">
     <div className="flex items-center">
-      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
+      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
       <div>
         <h3 className="font-semibold">12L</h3>
         <p className="text-muted-foreground">Dejaste 1 Unidad</p>
@@ -572,7 +735,7 @@ export default function CustomEdit() {
     </div>
     <div className="flex justify-between mb-4">
     <div className="flex items-center">
-      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-fire-extinguisher"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M18 3h-3"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2Z"/></svg></span>
+      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-fire-extinguisher"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M18 3h-3"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2Z"/></svg></span>
       <div>
         <h3 className="font-semibold">Sifon</h3>
         <p className="text-muted-foreground">Dejaste 20 Unidad</p>
@@ -602,7 +765,7 @@ export default function CustomEdit() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <CreateOrdenUser  />
+      <CreateOrdenUser  getLastName={getLastName} getFirstName={getFirstName} getAddres={getAddress} getDay={getDay} id={getDayEntityId}/>
     </div>
   );
 }
