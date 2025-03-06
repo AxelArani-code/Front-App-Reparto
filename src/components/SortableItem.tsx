@@ -4,6 +4,7 @@ import { Card, CardBody, CardHeader } from "@heroui/react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
+
 // Definir los props que recibirá SortableItem
 interface SortableItemProps {
   id: string;
@@ -89,7 +90,7 @@ Date,
             </div>
           ) : (
             // 🔹 Si el Drag & Drop está deshabilitado, se permite la navegación
-            <Link to="/view-orders-user" className="block"  state={{getFirstName: FirstName, getLastName:LastName, getDayEntityId:id, getDay:Date, getAddress: Address}}>
+            <Link to="/view-orders-user" className="block"  state={{getFirstName: FirstName, getLastName:LastName, getClientEntityId:id, getDayEntityId:Day, getDay:Date, getAddress: Address}}>
               <CardHeader className="gap-4">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>
@@ -107,6 +108,7 @@ Date,
                 <p className="text-default-500">
                 Descripción - <span className="font-semibold text-primary">{Description}</span>
               </p>
+              <p>{Day}</p>
               </CardBody>
             </Link>
           )}

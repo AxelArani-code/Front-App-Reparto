@@ -62,117 +62,7 @@ export const users = [
     total: "23.000",
     ef: false,
     tras: true,
-  },
-  {
-    id: 3,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-03",
-    cantidad: "25",
-    doceLitros: "12",
-    sif: "17",
-    total: "37.000",
-    ef: true,
-    tras: true,
-  },
-  {
-    id: 4,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-04",
-    cantidad: "18",
-    doceLitros: "9",
-    sif: "20",
-    total: "27.000",
-    ef: false,
-    tras: false,
-  },
-  {
-    id: 5,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-05",
-    cantidad: "22",
-    doceLitros: "11",
-    sif: "10",
-    total: "33.000",
-    ef: true,
-    tras: false,
-  },
-  {
-    id: 5,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-05",
-    cantidad: "22",
-    doceLitros: "11",
-    sif: "10",
-    total: "33.000",
-    ef: true,
-    tras: false,
-  },
-  {
-    id: 5,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-05",
-    cantidad: "22",
-    doceLitros: "11",
-    sif: "10",
-    total: "33.000",
-    ef: true,
-    tras: false,
-  },
-  {
-    id: 5,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-05",
-    cantidad: "22",
-    doceLitros: "11",
-    sif: "10",
-    total: "33.000",
-    ef: true,
-    tras: false,
-  },
-  {
-    id: 5,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-05",
-    cantidad: "22",
-    doceLitros: "11",
-    sif: "10",
-    total: "33.000",
-    ef: true,
-    tras: false,
-  },
-  {
-    id: 5,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-05",
-    cantidad: "22",
-    doceLitros: "11",
-    sif: "10",
-    total: "33.000",
-    ef: true,
-    tras: false,
-  },
-  {
-    id: 5,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-05",
-    cantidad: "22",
-    doceLitros: "11",
-    sif: "10",
-    total: "33.000",
-    ef: true,
-    tras: false,
-  },
-  {
-    id: 5,
-    nombre: "Axel Aranibar",
-    fecha: "2025-01-05",
-    cantidad: "22",
-    doceLitros: "11",
-    sif: "10",
-    total: "33.000",
-    ef: true,
-    tras: false,
-  },
+  }
 ];
 export const EyeIcon = () => {
   return (
@@ -355,7 +245,7 @@ export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVG
 export default function CustomEdit() {
   //obtener Datos 
   const location = useLocation();
-  const { getFirstName, getLastName, getDayEntityId, getDay ,getAddress  } = location.state || {}; // Obtener datos
+  const { getFirstName, getLastName, getDayEntityId, getClientEntityId, getDay ,getAddress  } = location.state || {}; // Obtener datos
     const { executeRequest, } = useApi();
 
     const navigate = useNavigate();
@@ -536,6 +426,7 @@ export default function CustomEdit() {
                         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">{getFirstName+getLastName}</h2>
         <p>{getAddress}</p>
         <p>{getDayEntityId}</p>
+        <p>{getClientEntityId}</p>
         <div className="absolute top-2 right-2 flex space-x-2">
        
         <Dropdown>
@@ -765,7 +656,7 @@ export default function CustomEdit() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <CreateOrdenUser  getLastName={getLastName} getFirstName={getFirstName} getAddres={getAddress} getDay={getDay} id={getDayEntityId}/>
+      <CreateOrdenUser  DayEntityId={getDayEntityId} ClientEntityId={getClientEntityId}/>
     </div>
   );
 }

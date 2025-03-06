@@ -346,6 +346,7 @@ export default function Home() {
                   <p className="text-default-500">
                     Recorrido - <span className="font-semibold text-primary">{Route}</span>
                   </p>
+                  <p>{_id}</p>
                 </CardBody>
               </Link>
               <Dropdown>
