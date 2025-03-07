@@ -224,7 +224,8 @@ export default function CustomEdit() {
   const [description, setDescription] = useState("");
   const sessionId = localStorage.getItem('sessionId');
     const [delivery, setDelivery] = useState<DeliveryItems[]>([]); // Manejar el estado del schedule
-
+    const [selectedRow, setSelectedRow] = useState<DeliveryItems | null>(null);
+    const { isOpen: isDeleteOpenDelivery, onOpen: onOpenDeleteDelivery, onOpenChange: onDeleteChangeDelivery } = useDisclosure();
   const handleCall = () => {
     window.location.href = `tel:2604278415`;
   };
@@ -234,10 +235,11 @@ export default function CustomEdit() {
   const { isOpen: isDeleteOpen, onOpen: onOpenDelete, onOpenChange: onDeleteChange } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onOpenEdit, onOpenChange: onEditChange } = useDisclosure();
   const [isOpen, setIsOpen] = useState(false);
-  const handleRowClick = () => {
-    
+  const handleRowClick = (item: DeliveryItems) => {
+    setSelectedRow(item);
     setIsOpen(true);
   };
+  
 
    // Asegurar que el tema se aplica correctamente en el cliente
     useEffect(() => {
@@ -368,10 +370,54 @@ export default function CustomEdit() {
     
    
     };   
+    const deleteDeliveryFacet= async (id: string) => {
+      if (!id) return;
+      try {
+        const sessionId = localStorage.getItem('sessionId');
+        // Llamar siempre a la API
+        const result = await executeRequest("Backend.Actions.Deliveries.DeleteDeliveryFacet", {
+          parameters: [{ 
+            Id: id,
+          
+         
+          }],
+          sessionId: sessionId,
+        });
+        const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+        const message = result?.executionResult?.returned?.Message;
+
+        if (!isSuccess) {
+          toast.promise(
+            saveSettings(message),
+            {
+              loading: 'Cargando...',
+              error: <b>{message || 'Error Database'}</b>,
+            }
+          );
+        } else {
+          toast.promise(
+            saveSettings(message),
+            {
+              loading: 'Cargando...',
+              success: <b>{message}</b>,
+
+            }
+          );
+        }
+        console.log(result)
+    
+          // navigate('/')
+      } catch (err) {
+        console.error("Error al obtener clientes:", err);
+      }
+      setTimeout(() => {
+        window.location.reload();
+      }, 3200);
+   
+    };   
 
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
-  
-  const [selectedRow,] = useState(null);
+
 
   return (
     <div>
@@ -444,12 +490,12 @@ export default function CustomEdit() {
   <TableBody>
     {delivery.length > 0 ? (
       delivery.map((item) => (
-        <TableRow key={item._id} onClick={() => handleRowClick()} 
-          className={`cursor-pointer transition-colors border-2 ${
-            selectedRow === item._id
-              ? "border-blue-500 bg-white"
-              : "border-transparent hover:bg-gray-700"
-          }`}
+        <TableRow key={item._id} onClick={() => handleRowClick(item)} 
+        className={`cursor-pointer transition-colors border-2 ${
+          selectedRow?._id === item._id
+            ? "border-blue-500 bg-gray-700"
+            : "border-transparent hover:bg-gray-700"
+        }`}
         >
            <TableCell>{`${new Date(item.DeliveryTime) .toLocaleDateString("es-ES", {
     day: "2-digit",
@@ -496,35 +542,7 @@ export default function CustomEdit() {
 </Table>
 
 
-      
-       {/* Modal Eliminar */}
-       <Modal
-        isDismissable={false}
-        isKeyboardDismissDisabled={true}
-        isOpen={isDeleteOpen}
-        onOpenChange={onDeleteChange}
-        placement="center"
-        backdrop="blur"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Cliente</ModalHeader>
-              <ModalBody>
-              <p>¿Estas seguro que quieres borrar esté cliente?</p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger"  onPress={onClose}>
-                  Cerrar
-                </Button>
-                <Button color="primary" variant="bordered" onPress={deleteClientFacet}>
-                  Aceptar
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+    
       {/* Modal Editar */}
       <Modal
         isDismissable={false}
@@ -609,39 +627,57 @@ export default function CustomEdit() {
         <ModalContent>
           <ModalHeader>Detalles del Usuario</ModalHeader>
           <ModalBody>
-          <div className="flex justify-between mb-4">
+
+{selectedRow && (
+  <div>
+              <div className="flex justify-between mb-4">
     <div className="flex items-center">
       <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
       <div>
-        <h3 className="font-semibold">20L</h3>
-        <p className="text-muted-foreground">Dejaste 3 Unidad</p>
+        <h3 className="font-semibold"><strong>Bidones 20L</strong></h3>
+        <p className="text-muted-foreground">{`Dejaste ${selectedRow.Drum20LQuantity} Unidad`}</p>
+
       </div>
     </div>
-    <span className="font-bold">$3.2000</span>
+    <span className="font-bold">  {`$ ${new Intl.NumberFormat("es-ES", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(selectedRow.Drum20LPrice)}`}</span>
     </div>
     <div className="flex justify-between mb-4">
     <div className="flex items-center">
       <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
       <div>
-        <h3 className="font-semibold">12L</h3>
-        <p className="text-muted-foreground">Dejaste 1 Unidad</p>
+        <h3 className="font-semibold"><strong>Bidones 12L</strong></h3>
+        <p className="text-muted-foreground">{`Dejaste ${selectedRow.Drum12LQuantity} Unidad`}</p>
       </div>
     </div>
-    <span className="font-bold">$1.6000</span>
+    <span className="font-bold">{`$ ${new Intl.NumberFormat("es-ES", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(selectedRow.Drum12LPrice)}`}</span>
     </div>
     <div className="flex justify-between mb-4">
     <div className="flex items-center">
       <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-fire-extinguisher"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M18 3h-3"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2Z"/></svg></span>
       <div>
-        <h3 className="font-semibold">Sifon</h3>
-        <p className="text-muted-foreground">Dejaste 20 Unidad</p>
+        <h3 className="font-semibold"><strong>Sifones</strong></h3>
+        <p className="text-muted-foreground">{`Dejaste ${selectedRow.SiphonQuantity} Unidad`}</p>
       </div>
     </div>
-    <span className="font-bold">$9.8000</span>
+    <span className="font-bold">{`$ ${new Intl.NumberFormat("es-ES", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(selectedRow.SiphonPrice)}`}</span>
     </div>
     <div className= "flex justify-between text-muted-foreground mb-4 font-bold">
       <span>Total</span>
-      <span>$20.80</span>
+      <span>
+      {`$ ${new Intl.NumberFormat("es-ES", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(selectedRow.SiphonPrice + selectedRow.Drum12LPrice + selectedRow.Drum20LPrice)}`}
+      </span>
     </div>
     <Textarea  isReadOnly
       
@@ -650,10 +686,15 @@ export default function CustomEdit() {
       labelPlacement="outside"
       placeholder="Aqui van las notas"
       variant="bordered"/>
+  </div>
+  
+)}
+
+
           </ModalBody>
           <ModalFooter>
-            <Button color="danger" onClick={() => setIsOpen(false)} variant="bordered" >
-                  Cerrar
+            <Button color="danger" onPress={ onOpenDeleteDelivery} variant="bordered" >
+                  Borrar
                 </Button>
                 <Button color="success"  >
                   Editar
@@ -661,6 +702,63 @@ export default function CustomEdit() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+        
+       {/* Modal Eliminar Cliente */}
+       <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        isOpen={isDeleteOpen}
+        onOpenChange={onDeleteChange}
+        placement="center"
+        backdrop="blur"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Cliente</ModalHeader>
+              <ModalBody>
+              <p>¿Estas seguro que quieres borrar esté cliente?</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger"  onPress={onClose}>
+                  Cerrar
+                </Button>
+                <Button color="primary" variant="bordered" onPress={deleteClientFacet}>
+                  Aceptar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      {/* Modal Eliminar Deliviry  */}
+            <Modal
+              isDismissable={false}
+              isKeyboardDismissDisabled={true}
+              isOpen={isDeleteOpenDelivery}
+              onOpenChange={onDeleteChangeDelivery}
+              placement="center"
+              backdrop="blur"
+            >
+              <ModalContent>
+                {(onCloseDelivery) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Pedido</ModalHeader>
+                    <ModalBody>
+                      <p>¿Estas seguro que quieres borrar el pedido?</p>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="danger" onPress={onCloseDelivery}>
+                        Cerrar
+                      </Button>
+                      <Button color="primary" variant="bordered" onPress={() => selectedRow?._id && deleteDeliveryFacet(selectedRow._id)} >
+                        Aceptar
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
       <CreateOrdenUser  DayEntityId={getDayEntityId} ClientEntityId={getClientEntityId}/>
     </div>
   );
