@@ -32,6 +32,7 @@ export default function CreateOrdenUser({ DayEntityId, ClientEntityId}: CreateOr
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { executeRequest } = useApi();
 
+  
   // Estado para manejar los valores de los inputs
   const [drum20LQuantity, setDrum20LQuantity] = useState("");
   const [drum12LQuantity, setDrum12LQuantity] = useState("");
@@ -43,14 +44,19 @@ export default function CreateOrdenUser({ DayEntityId, ClientEntityId}: CreateOr
 // Estado para la fecha y hora
 const [dateTime, setDateTime] = useState("");
 
-  useEffect(() => {
-    // Obtener fecha y hora actual en el formato requerido
+useEffect(() => {
     const now = new Date();
     const formattedDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes().toString().padStart(2, "0")}`;
     setDateTime(formattedDate);
+    console.log(now.toISOString())
   }, []);
+  const handlePriceChange = (value: string, setValue: (val: string) => void) => {
+    const sanitizedValue = value.replace(/\./g, ""); // Elimina los puntos
+    setValue(sanitizedValue);
+  };
+  
+  const AddDeliveryFacet = async (onClose: { (): void; (): void; }) => {
 
-  const AddDeliveryFacet = async () => {
     try {
       const sessionId = localStorage.getItem("sessionId");
       const result = await executeRequest("Backend.Actions.Deliveries.AddDeliveryFacet", {
@@ -58,12 +64,12 @@ const [dateTime, setDateTime] = useState("");
           {
             DayEntityId:DayEntityId, 
             ClientEntityId:ClientEntityId,
-            Drum20LQuantity: Number(drum20LQuantity), // Convertir a número antes de enviarlo
-            Drum12LQuantity: Number(drum12LQuantity),
-            SiphonQuantity: Number(siphonQuantity),
-            Drum20LPrice: Number(drum20LPrice),
-            Drum12LPrice: Number(drum12LPrice),
-            SiphonPrice: Number(siphonPrice),
+            Drum20LQuantity: drum20LQuantity, // Convertir a número antes de enviarlo
+            Drum12LQuantity: drum12LQuantity,
+            SiphonQuantity: siphonQuantity,
+            Drum20LPrice: drum20LPrice,
+            Drum12LPrice:drum12LPrice,
+            SiphonPrice: siphonPrice,
             Time: dateTime
           },
         ],
@@ -77,13 +83,16 @@ const [dateTime, setDateTime] = useState("");
         toast.error(message || "Error en la base de datos");
       } else {
         toast.success(message);
+        onClose();
       }
 
       console.log(result);
     } catch (err) {
       console.error("API Request Error:", err);
     }
-
+    setTimeout(() => {
+      window.location.reload();
+    }, 3200);
     
   };
 
@@ -108,16 +117,16 @@ const [dateTime, setDateTime] = useState("");
                   value={drum20LQuantity}
                   onChange={(e) => setDrum20LQuantity(e.target.value)}
                 />
-                <Input
-                  label="Precio de 20-L"
-                  labelPlacement="outside"
-                  placeholder="0.00"
-                  startContent={<span className="text-default-400 text-small">$</span>}
-                  type="number"
-                  size="sm"
-                  value={drum20LPrice}
-                  onChange={(e) => setDrum20LPrice(e.target.value)}
-                />
+               <Input
+  label="Precio de 20-L"
+  labelPlacement="outside"
+  placeholder="0.00"
+  startContent={<span className="text-default-400 text-small">$</span>}
+  type="text"
+  size="sm"
+  value={drum20LPrice}
+  onChange={(e) => handlePriceChange(e.target.value, setDrum20LPrice)}
+/>
                 <Input
                   label="Bidones de 12-L"
                   labelPlacement="outside"
@@ -128,16 +137,16 @@ const [dateTime, setDateTime] = useState("");
                   value={drum12LQuantity}
                   onChange={(e) => setDrum12LQuantity(e.target.value)}
                 />
-                <Input
-                  label="Precio de 12-L"
-                  labelPlacement="outside"
-                  placeholder="0.00"
-                  startContent={<span className="text-default-400 text-small">$</span>}
-                  type="number"
-                  size="sm"
-                  value={drum12LPrice}
-                  onChange={(e) => setDrum12LPrice(e.target.value)}
-                />
+               <Input
+  label="Precio de 12-L"
+  labelPlacement="outside"
+  placeholder="0.00"
+  startContent={<span className="text-default-400 text-small">$</span>}
+  type="text"
+  size="sm"
+  value={drum12LPrice}
+  onChange={(e) => handlePriceChange(e.target.value, setDrum12LPrice)}
+/>
                 <Input
                   label="Sifon De Soda"
                   labelPlacement="outside"
@@ -147,6 +156,16 @@ const [dateTime, setDateTime] = useState("");
                   value={siphonQuantity}
                   onChange={(e) => setSiphonQuantity(e.target.value)}
                 />
+                                <Input
+  label="Precio De Sifon"
+  labelPlacement="outside"
+  placeholder="0.00"
+  startContent={<span className="text-default-400 text-small">$</span>}
+  type="text"
+  size="sm"
+  value={siphonPrice}
+  onChange={(e) => handlePriceChange(e.target.value, setSiphonPrice)}
+/>
                 <Select
                   size="sm"
                   variant="bordered"
@@ -168,22 +187,13 @@ const [dateTime, setDateTime] = useState("");
                 >
                   {(animal) => <SelectItem>{animal.label}</SelectItem>}
                 </Select>
-                <Input
-                  label="Precio De Sifon"
-                  labelPlacement="outside"
-                  placeholder="0.00"
-                  startContent={<span className="text-default-400 text-small">$</span>}
-                  type="number"
-                  size="sm"
-                  value={siphonPrice}
-                  onChange={(e) => setSiphonPrice(e.target.value)}
-                />
+
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" onPress={AddDeliveryFacet}>
+                <Button color="primary"  onPress={() => AddDeliveryFacet(onClose)} >
                   Confirmar
                 </Button>
               </ModalFooter>
