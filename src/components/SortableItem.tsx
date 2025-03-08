@@ -90,7 +90,7 @@ Date,
             </div>
           ) : (
             // 🔹 Si el Drag & Drop está deshabilitado, se permite la navegación
-            <Link to="/view-orders-user" className="block"  state={{getFirstName: FirstName, getLastName:LastName, getClientEntityId:id, getDayEntityId:Day, getDay:Date, getAddress: Address}}>
+            <Link to="/view-orders-user" className="block"  state={{getFirstName: FirstName, getLastName:LastName, getTelephone:Telephone ,getClientEntityId:id, getDayEntityId:Day, getDay:Date, getAddress: Address}}>
               <CardHeader className="gap-4">
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>

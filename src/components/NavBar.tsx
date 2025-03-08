@@ -10,7 +10,7 @@ import {
 
 } from "@heroui/react";
 import { SVGProps } from "react";
-import { Link,  } from "react-router-dom";
+import { Link, useNavigate,  } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -61,6 +61,7 @@ export default function NavBar() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { executeRequest, } = useApi();
+    const navigate = useNavigate();
   //Variables String 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -156,6 +157,12 @@ export default function NavBar() {
       window.location.reload();
   }, 4200);
   }
+  const routerProfile =()=>{
+    navigate("/profile");
+  }
+  const routerLogin =()=>{
+    navigate("/Login");
+  }
   if (!mounted) return null; // Evita el error de SSR en Next.js
   return (
     <Navbar>
@@ -183,11 +190,11 @@ export default function NavBar() {
           </DropdownTrigger>
           {isAuthenticated && (
             <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="profile" className="h-14 gap-2">
-                <Link to="/profile" className="w-full block">
-                  <p className="font-semibold">Cuenta de </p>
-                  <p className="font-semibold">{Email}</p>
-                </Link>
+              <DropdownItem key="profile" onPress={routerProfile} className="h-14 gap-2">
+              <p className="font-semibold">Cuenta de </p>
+              <p className="font-semibold">{Email}</p>
+                
+                
               </DropdownItem>
               
               <DropdownItem  onPress={handleAddUser} key="logout" color="danger">
@@ -198,10 +205,8 @@ export default function NavBar() {
             </DropdownMenu>
           )}
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="logout" color="primary">
-              <Link to="/login" className="w-full block">
-                Login
-              </Link>
+            <DropdownItem key="logout" onPress={routerLogin} color="primary">
+             Login
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

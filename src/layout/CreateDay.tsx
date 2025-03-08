@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 import { useApi } from "../config/useUnisave";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
   
 
   export default function CreateDay() {
@@ -26,6 +26,7 @@ import { Link } from "react-router-dom";
     const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure(); // Modal de no autenticado
      // Obtener la fecha actual
   const today = new Date();
+    const navigate = useNavigate();
   const initialDate = new CalendarDate(
     today.getFullYear(),
     today.getMonth() + 1,
@@ -115,6 +116,9 @@ const formattedDate = formatDate(selectedDate);
   }
 
 };
+const routerLogin = () => {
+  navigate("/login");
+}
     return (
       <>
         <Button className="mt-5 w-full bg-blue-500 text-white py-4 text-center text-lg font-semibold " onPress={onOpen} color="primary" size="lg" fullWidth >Crear Nuevo Día</Button>
@@ -125,10 +129,8 @@ const formattedDate = formatDate(selectedDate);
           <ModalHeader>Acceso Denegado</ModalHeader>
           <ModalBody>Debes iniciar sesión para poder crear un día.</ModalBody>
           <ModalFooter>
-            <Button onClick={closeModal} color="primary">
-              <Link to="/login">
+            <Button onPress={routerLogin} color="primary">
               Login
-              </Link>
              
             </Button>
           </ModalFooter>

@@ -1,4 +1,3 @@
-
 import {
   Table,
   TableHeader,
@@ -22,6 +21,7 @@ import {
   useDisclosure,
   Input,
   Textarea,
+
 } from "@heroui/react";
 import NavBar from "./NavBar";
 import { SVGProps, useEffect, useState } from "react";
@@ -145,17 +145,48 @@ export const EditIcon = () => {
       />
     </svg>
   );
-}; export const CheckIcon = () => {
+};
+export const CheckIcon = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00ff4c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-circle-check"><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#00ff4c"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="lucide lucide-circle-check"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
   );
 };
 export const CameraIcon = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="lucide lucide-user"
+    >
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
   );
 };
-export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+export const EditDocumentIcon = (
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) => {
   return (
     <svg
       aria-hidden="true"
@@ -179,7 +210,9 @@ export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSV
     </svg>
   );
 };
-export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+export const DeleteDocumentIcon = (
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) => {
   return (
     <svg
       aria-hidden="true"
@@ -210,70 +243,120 @@ export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVG
   );
 };
 export default function CustomEdit() {
-  //obtener Datos 
+  //obtener Datos
   const location = useLocation();
-  const { getFirstName, getLastName, getDayEntityId, getClientEntityId, getDay ,getAddress  } = location.state || {}; // Obtener datos
-    const { executeRequest, } = useApi();
+  const {
+    getFirstName,
+    getLastName,
+    getDayEntityId,
+    getClientEntityId,
+    getDay,
+    getTelephone,
+    getAddress,
+  } = location.state || {}; // Obtener datos
+  const { executeRequest } = useApi();
 
-    const navigate = useNavigate();
-      // Estados para capturar los valores de los inputs
+  const navigate = useNavigate();
+  // Estados para capturar los valores de los inputs
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [telephone, setTelephone] = useState("");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
-  const sessionId = localStorage.getItem('sessionId');
-    const [delivery, setDelivery] = useState<DeliveryItems[]>([]); // Manejar el estado del schedule
-    const [selectedRow, setSelectedRow] = useState<DeliveryItems | null>(null);
-    const { isOpen: isDeleteOpenDelivery, onOpen: onOpenDeleteDelivery, onOpenChange: onDeleteChangeDelivery } = useDisclosure();
+  const sessionId = localStorage.getItem("sessionId");
+  const [delivery, setDelivery] = useState<DeliveryItems[]>([]); // Manejar el estado del schedule
+  const [selectedRow, setSelectedRow] = useState<DeliveryItems | null>(null);
+  const {
+    isOpen: isDeleteOpenDelivery,
+    onOpen: onOpenDeleteDelivery,
+    onOpenChange: onDeleteChangeDelivery,
+  } = useDisclosure();
   const handleCall = () => {
-    window.location.href = `tel:2604278415`;
+    window.location.href = `tel:${getTelephone}`;
   };
   const handleWhatsApp = () => {
-    window.open(`https://wa.me/2604278415?text=Hola, quiero más información!`, "_blank");
+    window.open(
+      `https://wa.me/${getTelephone}?text=Hola, quiero más información!`,
+      "_blank"
+    );
+
   };
-  const { isOpen: isDeleteOpen, onOpen: onOpenDelete, onOpenChange: onDeleteChange } = useDisclosure();
-  const { isOpen: isEditOpen, onOpen: onOpenEdit, onOpenChange: onEditChange } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onOpenDelete,
+    onOpenChange: onDeleteChange,
+  } = useDisclosure();
+  const {
+    isOpen: isEditOpen,
+    onOpen: onOpenEdit,
+    onOpenChange: onEditChange,
+  } = useDisclosure();
   const [isOpen, setIsOpen] = useState(false);
+
+  const {
+    isOpen: isEditOpenDelivery,
+    onOpen: onOpenEditDelivery,
+    onOpenChange: onEditChangeDelivery,
+  } = useDisclosure();
+  // Estado para manejar los valores de los inputs
+  const [drum20LQuantity, setDrum20LQuantity] = useState("");
+  const [drum12LQuantity, setDrum12LQuantity] = useState("");
+  const [siphonQuantity, setSiphonQuantity] = useState("");
+
+  const [drum20LPrice, setDrum20LPrice] = useState("");
+  const [drum12LPrice, setDrum12LPrice] = useState("");
+  const [siphonPrice, setSiphonPrice] = useState("");
+  // Estado para la fecha y hora
+  const [dateTime, setDateTime] = useState("");
+  const handlePriceChange = (value: string, setValue: (val: string) => void) => {
+    const sanitizedValue = value.replace(/\./g, ""); // Elimina los puntos
+    setValue(sanitizedValue);
+  };
   const handleRowClick = (item: DeliveryItems) => {
     setSelectedRow(item);
     setIsOpen(true);
   };
-  
 
-   // Asegurar que el tema se aplica correctamente en el cliente
-    useEffect(() => {
-      // Hacer una solicitud al cargar el componente
-      const fetchData = async () => {
-        try {
-          const result = await executeRequest('Backend.Actions.Deliveries.GetDeliveriesFromDayFacet', {
+  // Asegurar que el tema se aplica correctamente en el cliente
+  useEffect(() => {
+    // Hacer una solicitud al cargar el componente
+    const fetchData = async () => {
+      try {
+        const result = await executeRequest(
+          "Backend.Actions.Deliveries.GetDeliveriesFromDayFacet",
+          {
             parameters: [
               {
-               Id:getDayEntityId
+                Id: getDayEntityId,
               },
             ],
-            sessionId: sessionId
-          });
-           // Check if returned is null
-         
-           if (!result?.executionResult?.returned || result.executionResult.returned.length === 0) {
-            setDelivery([]);
-       
-          } else {
-            setDelivery(result.executionResult.returned);
-       
+            sessionId: sessionId,
           }
-          //setSchedule(result?.executionResult?.returned)
-    
-          console.log(result)
-        } catch (err) {
-          console.error('API Request Error:', err);
+        );
+        // Check if returned is null
+
+        if (
+          !result?.executionResult?.returned ||
+          result.executionResult.returned.length === 0
+        ) {
+          setDelivery([]);
+        } else {
+          setDelivery(result.executionResult.returned);
         }
-      
-      };
-      fetchData();
-  
-    }, []);
+        //setSchedule(result?.executionResult?.returned)
+
+        console.log(result);
+      } catch (err) {
+        console.error("API Request Error:", err);
+      }
+    };
+    //Hora y fecha 
+    const now = new Date();
+    const formattedDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes().toString().padStart(2, "0")}`;
+    setDateTime(formattedDate);
+    console.log(now.toISOString())
+    fetchData();
+  }, []);
 
   const saveSettings = (settings: string): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -287,262 +370,369 @@ export default function CustomEdit() {
     });
   };
   const deleteClientFacet = async () => {
-      try {
-        const sessionId = localStorage.getItem('sessionId');
-        console.log(getDayEntityId)
-        // Llamar siempre a la API
-        const result = await executeRequest("Backend.Actions.Clients.DeleteClientFacet", {
+    try {
+      const sessionId = localStorage.getItem("sessionId");
+      console.log(getDayEntityId);
+      // Llamar siempre a la API
+      const result = await executeRequest(
+        "Backend.Actions.Clients.DeleteClientFacet",
+        {
           parameters: [{ Id: getDayEntityId }],
           sessionId: sessionId,
-        });
-        const isSuccess = result?.executionResult?.returned?.IsSuccessful;
-        const message = result?.executionResult?.returned?.Message;
-
-        if (!isSuccess) {
-          toast.promise(
-            saveSettings(message),
-            {
-              loading: 'Cargando...',
-              error: <b>{message || 'Error Database'}</b>,
-            }
-          );
-        } else {
-          toast.promise(
-            saveSettings(message),
-            {
-              loading: 'Cargando...',
-              success: <b>{message}</b>,
-
-            }
-          );
         }
-        console.log(result)
-           navigate('/')
-      } catch (err) {
-        console.error("Error al obtener clientes:", err);
+      );
+      const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+      const message = result?.executionResult?.returned?.Message;
+
+      if (!isSuccess) {
+        toast.promise(saveSettings(message), {
+          loading: "Cargando...",
+          error: <b>{message || "Error Database"}</b>,
+        });
+      } else {
+        toast.promise(saveSettings(message), {
+          loading: "Cargando...",
+          success: <b>{message}</b>,
+        });
       }
-     
-    
-   
-    };   
-    const updateClientFacet= async () => {
-      try {
-        const sessionId = localStorage.getItem('sessionId');
-        // Llamar siempre a la API
-        const result = await executeRequest("Backend.Actions.Clients.UpdateClientFacet", {
-          parameters: [{ 
-            Id: getDayEntityId,
-            FirstName: firstName,
-            LastName: lastName,
-            Telephone: telephone,
-            Address: address,
-            Description: description
-          }],
+      console.log(result);
+      navigate("/");
+    } catch (err) {
+      console.error("Error al obtener clientes:", err);
+    }
+  };
+  const updateClientFacet = async () => {
+    try {
+      const sessionId = localStorage.getItem("sessionId");
+      // Llamar siempre a la API
+      const result = await executeRequest(
+        "Backend.Actions.Clients.UpdateClientFacet",
+        {
+          parameters: [
+            {
+              Id: getDayEntityId,
+              FirstName: firstName,
+              LastName: lastName,
+              Telephone: telephone,
+              Address: address,
+              Description: description,
+            },
+          ],
           sessionId: sessionId,
-        });
-        const isSuccess = result?.executionResult?.returned?.IsSuccessful;
-        const message = result?.executionResult?.returned?.Message;
-
-        if (!isSuccess) {
-          toast.promise(
-            saveSettings(message),
-            {
-              loading: 'Cargando...',
-              error: <b>{message || 'Error Database'}</b>,
-            }
-          );
-        } else {
-          toast.promise(
-            saveSettings(message),
-            {
-              loading: 'Cargando...',
-              success: <b>{message}</b>,
-
-            }
-          );
         }
-        console.log(result)
-           navigate('/')
-      } catch (err) {
-        console.error("Error al obtener clientes:", err);
+      );
+      const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+      const message = result?.executionResult?.returned?.Message;
+
+      if (!isSuccess) {
+        toast.promise(saveSettings(message), {
+          loading: "Cargando...",
+          error: <b>{message || "Error Database"}</b>,
+        });
+      } else {
+        toast.promise(saveSettings(message), {
+          loading: "Cargando...",
+          success: <b>{message}</b>,
+        });
       }
-     
-    
-   
-    };   
-    const deleteDeliveryFacet= async (id: string) => {
-      if (!id) return;
-      try {
-        const sessionId = localStorage.getItem('sessionId');
-        // Llamar siempre a la API
-        const result = await executeRequest("Backend.Actions.Deliveries.DeleteDeliveryFacet", {
-          parameters: [{ 
-            Id: id,
-          
-         
-          }],
+      console.log(result);
+      navigate("/");
+    } catch (err) {
+      console.error("Error al obtener clientes:", err);
+    }
+  };
+  const deleteDeliveryFacet = async (id: string) => {
+    if (!id) return;
+    try {
+      const sessionId = localStorage.getItem("sessionId");
+      // Llamar siempre a la API
+      const result = await executeRequest(
+        "Backend.Actions.Deliveries.DeleteDeliveryFacet",
+        {
+          parameters: [
+            {
+              Id: id,
+            },
+          ],
           sessionId: sessionId,
-        });
-        const isSuccess = result?.executionResult?.returned?.IsSuccessful;
-        const message = result?.executionResult?.returned?.Message;
-
-        if (!isSuccess) {
-          toast.promise(
-            saveSettings(message),
-            {
-              loading: 'Cargando...',
-              error: <b>{message || 'Error Database'}</b>,
-            }
-          );
-        } else {
-          toast.promise(
-            saveSettings(message),
-            {
-              loading: 'Cargando...',
-              success: <b>{message}</b>,
-
-            }
-          );
         }
-        console.log(result)
-    
-          // navigate('/')
-      } catch (err) {
-        console.error("Error al obtener clientes:", err);
+      );
+      const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+      const message = result?.executionResult?.returned?.Message;
+
+      if (!isSuccess) {
+        toast.promise(saveSettings(message), {
+          loading: "Cargando...",
+          error: <b>{message || "Error Database"}</b>,
+        });
+      } else {
+        toast.promise(saveSettings(message), {
+          loading: "Cargando...",
+          success: <b>{message}</b>,
+        });
       }
-      setTimeout(() => {
-        window.location.reload();
-      }, 3200);
+      console.log(result);
+
+      // navigate('/')
+    } catch (err) {
+      console.error("Error al obtener clientes:", err);
+    }
+    setTimeout(() => {
+      window.location.reload();
+    }, 3200);
+  };
+//Editar Delivery 
+const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; (): void; }) => {
+  if (!id) return;
+  console.log(id)
+    try {
+      const sessionId = localStorage.getItem("sessionId");
+      const result = await executeRequest("Backend.Actions.Deliveries.UpdateDeliveryFacet", {
+        parameters: [
+          {
+           Id:"e_DeliveryEntity/12400571499",
+           
+            Drum20LQuantity: drum20LQuantity, // Convertir a número antes de enviarlo
+            Drum12LQuantity: drum12LQuantity,
+            SiphonQuantity: siphonQuantity,
+            Drum20LPrice: drum20LPrice,
+            Drum12LPrice:drum12LPrice,
+            SiphonPrice: siphonPrice,
+            Time: dateTime
+          },
+        ],
+        sessionId: sessionId,
+      });
+
+      const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+      const message = result?.executionResult?.returned?.Message;
+
+      if (!isSuccess) {
+        toast.error(message || "Error en la base de datos");
+      } else {
+        toast.success(message);
+        onCloseEditDelivery();
+      }
+
+      console.log(result);
+    } catch (err) {
+      console.error("API Request Error:", err);
+    }
    
-    };   
+    
+  };
 
-  const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
+  const iconClasses =
+    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   return (
     <div>
       <NavBar />
       <div className="flex flex-col items-center p-4  relative">
-         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">   {`Dia - ${new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
-                      .toLocaleDateString('es-ES', { weekday: 'long', timeZone: 'America/Argentina/Buenos_Aires' })
-                      .charAt(0).toUpperCase() + new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
-                        .toLocaleDateString('es-ES', { weekday: 'long', timeZone: 'America/Argentina/Buenos_Aires' })
-                        .slice(1)}`} 
-                        
-                        </h2>
-                        <h2 className="text-2xl mt-1 font-semibold text-center text-primary">{getFirstName+getLastName}</h2>
+        <h2 className="text-2xl mt-1 font-semibold text-center text-primary">
+          {" "}
+          {`Dia - ${
+            new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
+              .toLocaleDateString("es-ES", {
+                weekday: "long",
+                timeZone: "America/Argentina/Buenos_Aires",
+              })
+              .charAt(0)
+              .toUpperCase() +
+            new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
+              .toLocaleDateString("es-ES", {
+                weekday: "long",
+                timeZone: "America/Argentina/Buenos_Aires",
+              })
+              .slice(1)
+          }`}
+        </h2>
+        <h2 className="text-2xl mt-1 font-semibold text-center text-primary">
+          {getFirstName + getLastName}
+        </h2>
         <p>{getAddress}</p>
         <p>{getDayEntityId}</p>
         <p>{getClientEntityId}</p>
+        <p>{getTelephone}</p>
         <div className="absolute top-2 right-2 flex space-x-2">
-       
-        <Dropdown>
-      <DropdownTrigger>
-        <Button variant="light" size="sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-ellipsis-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></Button>
-      </DropdownTrigger>
-      <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
-        <DropdownSection showDivider title="Acción">
-         
-          <DropdownItem
-            key="edit"
-            description="Vas a poder editar el cliente"
-            onPress={onOpenEdit}
-            startContent={<EditDocumentIcon className={iconClasses} />}
-          >
-            Editar Cliente
-          </DropdownItem>
-        </DropdownSection>
-        <DropdownSection title="Precausión">
-          <DropdownItem
-            key="delete"
-            className="text-danger"
-            color="danger"
-            description="Eliminar por completo el cliente"
-            onPress={onOpenDelete}
-            startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
-          >
-            Eliminar Cliente
-          </DropdownItem>
-        </DropdownSection>
-      </DropdownMenu>
-    </Dropdown>
-</div>
-<div className="relative"> 
-   <div className="flex space-x-4 mt-4">
-          <Button variant="ghost"  color="success" onPress={handleCall} className="p-2 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-          </Button>
-          <Button  variant="ghost"  color="success" onPress={handleWhatsApp} radius="full" className="p-2 left-4 rounded-full ">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-          </Button>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button variant="light" size="sm">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-ellipsis-vertical"
+                >
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg>
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Dropdown menu with description"
+              variant="faded"
+            >
+              <DropdownSection showDivider title="Acción">
+                <DropdownItem
+                  key="edit"
+                  description="Vas a poder editar el cliente"
+                  onPress={onOpenEdit}
+                  startContent={<EditDocumentIcon className={iconClasses} />}
+                >
+                  Editar Cliente
+                </DropdownItem>
+              </DropdownSection>
+              <DropdownSection title="Precausión">
+                <DropdownItem
+                  key="delete"
+                  className="text-danger"
+                  color="danger"
+                  description="Eliminar por completo el cliente"
+                  onPress={onOpenDelete}
+                  startContent={
+                    <DeleteDocumentIcon
+                      className={cn(iconClasses, "text-danger")}
+                    />
+                  }
+                >
+                  Eliminar Cliente
+                </DropdownItem>
+              </DropdownSection>
+            </DropdownMenu>
+          </Dropdown>
         </div>
-</div>
-     
+        <div className="relative">
+          <div className="flex space-x-4 mt-4">
+            <Button
+              variant="ghost"
+              color="success"
+              onPress={handleCall}
+              className="p-2 rounded-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-phone"
+              >
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+            </Button>
+            <Button
+              variant="ghost"
+              color="success"
+              onPress={handleWhatsApp}
+              radius="full"
+              className="p-2 left-4 rounded-full "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-message-circle"
+              >
+                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+              </svg>
+            </Button>
+          </div>
+        </div>
       </div>
       <Table className="mt-10">
-  <TableHeader>
-  <TableColumn>Fecha</TableColumn>
-    <TableColumn>Bidones 20-L</TableColumn>
-    <TableColumn>Bidones 12-L</TableColumn>
-    <TableColumn>Sifones</TableColumn>
-    <TableColumn>Accion</TableColumn>
-  </TableHeader>
-  <TableBody>
-    {delivery.length > 0 ? (
-      delivery.map((item) => (
-        <TableRow key={item._id} onClick={() => handleRowClick(item)} 
-        className={`cursor-pointer transition-colors border-2 ${
-          selectedRow?._id === item._id
-            ? "border-blue-500 bg-gray-700"
-            : "border-transparent hover:bg-gray-700"
-        }`}
-        >
-           <TableCell>{`${new Date(item.DeliveryTime) .toLocaleDateString("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "America/Argentina/Buenos_Aires",
-  })}`}</TableCell>
-          <TableCell>{item.Drum20LQuantity}</TableCell>
-          <TableCell>{item.Drum12LQuantity}</TableCell>
-          <TableCell>{item.SiphonQuantity}</TableCell>
-          <TableCell>
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete user">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </span>
-            </Tooltip>
-          </div>
-          </TableCell>
-        </TableRow>
-      ))
-    ) : (
-      <TableRow>
-        <TableCell children={undefined}>{/** Celda vacía para alinear con la cantidad de columnas */}</TableCell>
-        <TableCell children={undefined}>{/** Celda vacía para alinear con la cantidad de columnas */}</TableCell>
-        <TableCell children={undefined}>{/** Celda vacía para alinear con la cantidad de columnas */}</TableCell>
-        <TableCell children={undefined}>{/** Celda vacía para alinear con la cantidad de columnas */}</TableCell>
-        <TableCell className="text-center py-4">
-          No tiene ninguna entrega
-        </TableCell>
-      </TableRow>
-    )}
-  </TableBody>
-</Table>
+        <TableHeader>
+          <TableColumn>Fecha</TableColumn>
+          <TableColumn>Bidones 20-L</TableColumn>
+          <TableColumn>Bidones 12-L</TableColumn>
+          <TableColumn>Sifones</TableColumn>
+          <TableColumn>Accion</TableColumn>
+        </TableHeader>
+        <TableBody>
+          {delivery.length > 0 ? (
+            delivery.map((item) => (
+              <TableRow
+                key={item._id}
+                onClick={() => handleRowClick(item)}
+                className={`cursor-pointer transition-colors border-2 ${
+                  selectedRow?._id === item._id
+                    ? "border-blue-500 bg-gray-700"
+                    : "border-transparent hover:bg-gray-700"
+                }`}
+              >
+                <TableCell>{`${new Date(item.DeliveryTime).toLocaleDateString(
+                  "es-ES",
+                  {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    timeZone: "America/Argentina/Buenos_Aires",
+                  }
+                )}`}</TableCell>
+                <TableCell>{item.Drum20LQuantity}</TableCell>
+                <TableCell>{item.Drum12LQuantity}</TableCell>
+                <TableCell>{item.SiphonQuantity}</TableCell>
+                <TableCell>
+                  <div className="relative flex items-center gap-2">
+                    <Tooltip content="Details">
+                      <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                        <EyeIcon />
+                      </span>
+                    </Tooltip>
+                    <Tooltip content="Edit user">
+                      <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                        <EditIcon />
+                      </span>
+                    </Tooltip>
+                    <Tooltip color="danger" content="Delete user">
+                      <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                        <DeleteIcon />
+                      </span>
+                    </Tooltip>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell children={undefined}>
+                {/** Celda vacía para alinear con la cantidad de columnas */}
+              </TableCell>
+              <TableCell children={undefined}>
+                {/** Celda vacía para alinear con la cantidad de columnas */}
+              </TableCell>
+              <TableCell children={undefined}>
+                {/** Celda vacía para alinear con la cantidad de columnas */}
+              </TableCell>
+              <TableCell children={undefined}>
+                {/** Celda vacía para alinear con la cantidad de columnas */}
+              </TableCell>
+              <TableCell className="text-center py-4">
+                No tiene ninguna entrega
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
 
-
-    
       {/* Modal Editar */}
       <Modal
         isDismissable={false}
@@ -555,66 +745,67 @@ export default function CustomEdit() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-success " >Editar Cliente</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-success ">
+                Editar Cliente
+              </ModalHeader>
               <ModalBody>
-              <p>¿Estas seguro que quieres editar esté cliente?</p>
-              <Input
+                <p>¿Estas seguro que quieres editar esté cliente?</p>
+                <Input
                   size="lg"
-
                   placeholder="Escribe Nombre"
                   label="Cambiar Nombre"
                   type="text"
                   pattern="string"
                   variant="bordered"
-                  value={firstName} onChange={(e) => setFirstName(e.target.value)}
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
                 <Input
                   size="lg"
-
                   placeholder="Escribe Apellido"
                   label="Cambiar Apellido"
                   type="text"
                   pattern="string"
                   variant="bordered"
-                  value={lastName} onChange={(e) => setLastName(e.target.value)}
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                 />
                 <Input
                   size="lg"
-
                   placeholder="Escribe Telefono"
                   label="Cambiar Telefonó"
                   type="tel"
                   pattern="string"
                   variant="bordered"
-                  value={telephone} onChange={(e) => setTelephone(e.target.value)} 
+                  value={telephone}
+                  onChange={(e) => setTelephone(e.target.value)}
                 />
                 <Input
                   size="lg"
-
                   placeholder="Escribe la calle del cliente"
                   label="Cambiar Ubicación"
                   type="tel"
                   pattern="string"
                   variant="bordered"
-                  value={address} onChange={(e) => setAddress(e.target.value)}
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
                 <Input
                   size="lg"
-
                   placeholder="Escribe un pequeño de talle "
                   label="Cambiar Descripción"
                   type="tel"
                   pattern="string"
                   variant="bordered"
-                  value={description} onChange={(e) => setDescription(e.target.value)}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
-
               </ModalBody>
               <ModalFooter>
-                <Button color="danger"  variant="bordered" onPress={onClose}>
+                <Button color="danger" variant="bordered" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="success"  onPress={updateClientFacet}>
+                <Button color="success" onPress={updateClientFacet}>
                   Aceptar
                 </Button>
               </ModalFooter>
@@ -622,89 +813,160 @@ export default function CustomEdit() {
           )}
         </ModalContent>
       </Modal>
-       {/* Modal View Component */}
-       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      {/* Modal View Component */}
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalContent>
           <ModalHeader>Detalles del Usuario</ModalHeader>
           <ModalBody>
-
-{selectedRow && (
-  <div>
-              <div className="flex justify-between mb-4">
-    <div className="flex items-center">
-      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
-      <div>
-        <h3 className="font-semibold"><strong>Bidones 20L</strong></h3>
-        <p className="text-muted-foreground">{`Dejaste ${selectedRow.Drum20LQuantity} Unidad`}</p>
-
-      </div>
-    </div>
-    <span className="font-bold">  {`$ ${new Intl.NumberFormat("es-ES", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(selectedRow.Drum20LPrice)}`}</span>
-    </div>
-    <div className="flex justify-between mb-4">
-    <div className="flex items-center">
-      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-milk"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg></span>
-      <div>
-        <h3 className="font-semibold"><strong>Bidones 12L</strong></h3>
-        <p className="text-muted-foreground">{`Dejaste ${selectedRow.Drum12LQuantity} Unidad`}</p>
-      </div>
-    </div>
-    <span className="font-bold">{`$ ${new Intl.NumberFormat("es-ES", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(selectedRow.Drum12LPrice)}`}</span>
-    </div>
-    <div className="flex justify-between mb-4">
-    <div className="flex items-center">
-      <span className="text-accent mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-fire-extinguisher"><path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5"/><path d="M9 18h8"/><path d="M18 3h-3"/><path d="M11 3a6 6 0 0 0-6 6v11"/><path d="M5 13h4"/><path d="M17 10a4 4 0 0 0-8 0v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2Z"/></svg></span>
-      <div>
-        <h3 className="font-semibold"><strong>Sifones</strong></h3>
-        <p className="text-muted-foreground">{`Dejaste ${selectedRow.SiphonQuantity} Unidad`}</p>
-      </div>
-    </div>
-    <span className="font-bold">{`$ ${new Intl.NumberFormat("es-ES", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(selectedRow.SiphonPrice)}`}</span>
-    </div>
-    <div className= "flex justify-between text-muted-foreground mb-4 font-bold">
-      <span>Total</span>
-      <span>
-      {`$ ${new Intl.NumberFormat("es-ES", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(selectedRow.SiphonPrice + selectedRow.Drum12LPrice + selectedRow.Drum20LPrice)}`}
-      </span>
-    </div>
-    <Textarea  isReadOnly
-      
-      defaultValue="Aqui van las notas"
-      label="Notas"
-      labelPlacement="outside"
-      placeholder="Aqui van las notas"
-      variant="bordered"/>
-  </div>
-  
-)}
-
-
+            {selectedRow && (
+              <div>
+                <div className="flex justify-between mb-4">
+                  <div className="flex items-center">
+                    <span className="text-accent mr-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-milk"
+                      >
+                        <path d="M8 2h8" />
+                        <path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2" />
+                        <path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0" />
+                      </svg>
+                    </span>
+                    <div>
+                      <h3 className="font-semibold">
+                        <strong>Bidones 20L</strong>
+                      </h3>
+                      <p className="text-muted-foreground">{`Dejaste ${selectedRow.Drum20LQuantity} Unidad`}</p>
+                    </div>
+                  </div>
+                  <span className="font-bold">
+                    {" "}
+                    {`$ ${new Intl.NumberFormat("es-ES", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(selectedRow.Drum20LPrice)}`}
+                  </span>
+                </div>
+                <div className="flex justify-between mb-4">
+                  <div className="flex items-center">
+                    <span className="text-accent mr-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-milk"
+                      >
+                        <path d="M8 2h8" />
+                        <path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2" />
+                        <path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0" />
+                      </svg>
+                    </span>
+                    <div>
+                      <h3 className="font-semibold">
+                        <strong>Bidones 12L</strong>
+                      </h3>
+                      <p className="text-muted-foreground">{`Dejaste ${selectedRow.Drum12LQuantity} Unidad`}</p>
+                    </div>
+                  </div>
+                  <span className="font-bold">{`$ ${new Intl.NumberFormat(
+                    "es-ES",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  ).format(selectedRow.Drum12LPrice)}`}</span>
+                </div>
+                <div className="flex justify-between mb-4">
+                  <div className="flex items-center">
+                    <span className="text-accent mr-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-fire-extinguisher"
+                      >
+                        <path d="M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5" />
+                        <path d="M9 18h8" />
+                        <path d="M18 3h-3" />
+                        <path d="M11 3a6 6 0 0 0-6 6v11" />
+                        <path d="M5 13h4" />
+                        <path d="M17 10a4 4 0 0 0-8 0v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2Z" />
+                      </svg>
+                    </span>
+                    <div>
+                      <h3 className="font-semibold">
+                        <strong>Sifones</strong>
+                      </h3>
+                      <p className="text-muted-foreground">{`Dejaste ${selectedRow.SiphonQuantity} Unidad`}</p>
+                    </div>
+                  </div>
+                  <span className="font-bold">{`$ ${new Intl.NumberFormat(
+                    "es-ES",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  ).format(selectedRow.SiphonPrice)}`}</span>
+                </div>
+                <div className="flex justify-between text-muted-foreground mb-4 font-bold">
+                  <span>Total</span>
+                  <span>
+                    {`$ ${new Intl.NumberFormat("es-ES", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(
+                      selectedRow.SiphonPrice +
+                        selectedRow.Drum12LPrice +
+                        selectedRow.Drum20LPrice
+                    )}`}
+                  </span>
+                </div>
+                <Textarea
+                  isReadOnly
+                  defaultValue="Aqui van las notas"
+                  label="Notas"
+                  labelPlacement="outside"
+                  placeholder="Aqui van las notas"
+                  variant="bordered"
+                />
+              </div>
+            )}
           </ModalBody>
           <ModalFooter>
-            <Button color="danger" onPress={ onOpenDeleteDelivery} variant="bordered" >
-                  Borrar
-                </Button>
-                <Button color="success"  >
-                  Editar
-                </Button>
+            <Button
+              color="danger"
+              onPress={onOpenDeleteDelivery}
+              variant="bordered"
+            >
+              Borrar
+            </Button>
+            <Button color="success" onPress={onOpenEditDelivery}>Editar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-        
-       {/* Modal Eliminar Cliente */}
-       <Modal
+
+      {/* Modal Eliminar Cliente */}
+      <Modal
         isDismissable={false}
         isKeyboardDismissDisabled={true}
         isOpen={isDeleteOpen}
@@ -715,15 +977,21 @@ export default function CustomEdit() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Cliente</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-danger">
+                Borrar Cliente
+              </ModalHeader>
               <ModalBody>
-              <p>¿Estas seguro que quieres borrar esté cliente?</p>
+                <p>¿Estas seguro que quieres borrar esté cliente?</p>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger"  onPress={onClose}>
+                <Button color="danger" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" variant="bordered" onPress={deleteClientFacet}>
+                <Button
+                  color="primary"
+                  variant="bordered"
+                  onPress={deleteClientFacet}
+                >
                   Aceptar
                 </Button>
               </ModalFooter>
@@ -732,34 +1000,125 @@ export default function CustomEdit() {
         </ModalContent>
       </Modal>
       {/* Modal Eliminar Deliviry  */}
-            <Modal
-              isDismissable={false}
-              isKeyboardDismissDisabled={true}
-              isOpen={isDeleteOpenDelivery}
-              onOpenChange={onDeleteChangeDelivery}
-              placement="center"
-              backdrop="blur"
-            >
-              <ModalContent>
-                {(onCloseDelivery) => (
-                  <>
-                    <ModalHeader className="flex flex-col gap-1 text-danger">Borrar Pedido</ModalHeader>
-                    <ModalBody>
-                      <p>¿Estas seguro que quieres borrar el pedido?</p>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="danger" onPress={onCloseDelivery}>
-                        Cerrar
-                      </Button>
-                      <Button color="primary" variant="bordered" onPress={() => selectedRow?._id && deleteDeliveryFacet(selectedRow._id)} >
-                        Aceptar
-                      </Button>
-                    </ModalFooter>
-                  </>
-                )}
-              </ModalContent>
-            </Modal>
-      <CreateOrdenUser  DayEntityId={getDayEntityId} ClientEntityId={getClientEntityId}/>
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        isOpen={isDeleteOpenDelivery}
+        onOpenChange={onDeleteChangeDelivery}
+        placement="center"
+        backdrop="blur"
+      >
+        <ModalContent>
+          {(onCloseDelivery) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-danger">
+                Borrar Pedido
+              </ModalHeader>
+              <ModalBody>
+                <p>¿Estas seguro que quieres borrar el pedido?</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" onPress={onCloseDelivery}>
+                  Cerrar
+                </Button>
+                <Button
+                  color="primary"
+                  variant="bordered"
+                  onPress={() =>
+                    selectedRow?._id && deleteDeliveryFacet(selectedRow._id)
+                  }
+                >
+                  Aceptar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+            {/* Modal Editar Deliviry  */}
+            <Modal isDismissable={false} isKeyboardDismissDisabled={true} isOpen={isEditOpenDelivery} onOpenChange={onEditChangeDelivery}>
+                    <ModalContent>
+                      {(onCloseEditDelivery) => (
+                        <>
+                          <ModalHeader className="flex flex-col gap-1 text-success">Editar Pedido</ModalHeader>
+                          <ModalBody>
+                            <Input
+                              label="Bidones de 20-L"
+                              labelPlacement="outside"
+                              placeholder="0"
+                              startContent={<span className="text-default-400 te  xt-small">N°</span>}
+                              type="number"
+                              size="md"
+                              value={drum20LQuantity}
+                              onChange={(e) => setDrum20LQuantity(e.target.value)}
+                            />
+                           <Input
+              label="Precio de 20-L"
+              labelPlacement="outside"
+              placeholder="0.00"
+              startContent={<span className="text-default-400 text-small">$</span>}
+              type="text"
+              size="sm"
+              value={drum20LPrice}
+              onChange={(e) => handlePriceChange(e.target.value, setDrum20LPrice)}
+            />
+                            <Input
+                              label="Bidones de 12-L"
+                              labelPlacement="outside"
+                              placeholder="0"
+                              startContent={<span className="text-default-400 text-small">N°</span>}
+                              type="number"
+                              size="md"
+                              value={drum12LQuantity}
+                              onChange={(e) => setDrum12LQuantity(e.target.value)}
+                            />
+                           <Input
+              label="Precio de 12-L"
+              labelPlacement="outside"
+              placeholder="0.00"
+              startContent={<span className="text-default-400 text-small">$</span>}
+              type="text"
+              size="sm"
+              value={drum12LPrice}
+              onChange={(e) => handlePriceChange(e.target.value, setDrum12LPrice)}
+            />
+                            <Input
+                              label="Sifon De Soda"
+                              labelPlacement="outside"
+                              placeholder="0"
+                              startContent={<span className="text-default-400 text-small">N°</span>}
+                              type="number"
+                              value={siphonQuantity}
+                              onChange={(e) => setSiphonQuantity(e.target.value)}
+                            />
+                                            <Input
+              label="Precio De Sifon"
+              labelPlacement="outside"
+              placeholder="0.00"
+              startContent={<span className="text-default-400 text-small">$</span>}
+              type="text"
+              size="sm"
+              value={siphonPrice}
+              onChange={(e) => handlePriceChange(e.target.value, setSiphonPrice)}
+            />
+                          
+                          </ModalBody>
+                          <ModalFooter>
+                            <Button color="danger" variant="light" onPress={onCloseEditDelivery}>
+                              Cerrar
+                            </Button>
+                            <Button color="primary"  onPress={() =>  selectedRow?._id && updateDeliveryFacet( selectedRow._id, onCloseEditDelivery)} >
+                              Confirmar
+                            </Button>
+                          </ModalFooter>
+                        </>
+                      )}
+                    </ModalContent>
+                  </Modal>
+      <CreateOrdenUser
+        DayEntityId={getDayEntityId}
+        ClientEntityId={getClientEntityId}
+      />
     </div>
   );
 }
