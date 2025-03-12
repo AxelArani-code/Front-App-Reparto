@@ -7,10 +7,9 @@ import {
   Dropdown,
   DropdownMenu,
   Switch,
-
 } from "@heroui/react";
 import { SVGProps } from "react";
-import { Link, useNavigate,  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { JSX } from "react/jsx-runtime";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -18,10 +17,30 @@ import { useApi } from "../config/useUnisave";
 import toast from "react-hot-toast";
 export const AcmeLogo = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="lucide lucide-clipboard-list"
+    >
+      <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+      <path d="M12 11h4" />
+      <path d="M12 16h4" />
+      <path d="M8 11h.01" />
+      <path d="M8 16h.01" />
+    </svg>
   );
 };
-export const MoonIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+export const MoonIcon = (
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) => {
   return (
     <svg
       aria-hidden="true"
@@ -39,7 +58,9 @@ export const MoonIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement
     </svg>
   );
 };
-export const SunIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+export const SunIcon = (
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) => {
   return (
     <svg
       aria-hidden="true"
@@ -60,109 +81,102 @@ export const SunIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
 export default function NavBar() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { executeRequest, } = useApi();
-    const navigate = useNavigate();
-  //Variables String 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [Email, setEmail] = useState('');
+  const { executeRequest } = useApi();
+  const navigate = useNavigate();
+  //Variables String
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [Email, setEmail] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false); // Estado para validar si es admin
+
 
   // Asegurar que el tema se aplica correctamente en el cliente
   useEffect(() => {
     // Hacer una solicitud al cargar el componente
     const fetchData = async () => {
       try {
-        const result = await executeRequest('Backend.Actions.GetMyUserFacet', {
-          sessionId: ""
+        const result = await executeRequest("Backend.Actions.GetMyUserFacet", {
+          sessionId: "",
         });
         if (result?.executionResult?.returned == null) {
-          setIsAuthenticated(false);  
-        
+          setIsAuthenticated(false);
+        } else {
+          const firstName = result?.executionResult?.returned?.FirstName || "";
+          setFirstName(firstName);
+          const lastName = result?.executionResult?.returned?.LastName || "";
+          setLastName(lastName);
+          const Email = result?.executionResult?.returned?.Email || "";
+          setEmail(Email);
           
-        }else{
-               
-          const firstName = result?.executionResult?.returned?.FirstName || '';
-          setFirstName(firstName)
-          const lastName = result?.executionResult?.returned?.LastName || '';
-          setLastName(lastName)
-          const Email = result?.executionResult?.returned?.Email || '';
-          setEmail(Email)
-    
+          // Validar si el usuario es administrador
+          setIsAdmin(result?.executionResult?.returned?.IsAdmin === true);
         }
 
-       
-        
-        console.log(result)
+        console.log(result);
       } catch (err) {
-        console.error('API Request Error:', err);
+        console.error("API Request Error:", err);
       }
     };
     fetchData();
-    
+
     setMounted(true);
   }, []);
-  
+
   const saveSettings = (settings: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const isSuccess = Math.random() > 0.3; // 70% de éxito
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        isSuccess 
-          ? resolve(`Guardado correctamente: ${settings}`) 
+        isSuccess
+          ? resolve(`Guardado correctamente: ${settings}`)
           : reject(`Error al guardar: ${settings}`);
       }, 2000); // Simula retraso de 2 segundos
     });
   };
-  
-  const handleAddUser=async ()=>{
+
+  const handleAddUser = async () => {
     // Obtener sessionId desde localStorage
-    const sessionId = localStorage.getItem('sessionId');
+    const sessionId = localStorage.getItem("sessionId");
     console.log("Session ID recuperado:", sessionId);
     try {
-      const result = await  executeRequest('Backend.Actions.LogoutFacet', {
-        sessionId: sessionId
+      const result = await executeRequest("Backend.Actions.LogoutFacet", {
+        sessionId: sessionId,
       });
-      const isSuccess = result?.executionResult?.returned?.IsSuccessful      ;
-      const message = result?.executionResult?.returned?.Message ;
+      const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+      const message = result?.executionResult?.returned?.Message;
 
       if (!isSuccess) {
-        toast.promise(
-          saveSettings(message),
-           {
-             loading: 'Cargando...',
-             error: <b>{message|| 'Login failed'}</b>,
-           }
-         );
-      }else{
-        toast.promise(
-          saveSettings(message),
-           {
-             loading: 'Cargando...',
-             success: <b>{message}</b>,
-             
-           }
-         );
+        toast.promise(saveSettings(message), {
+          loading: "Cargando...",
+          error: <b>{message || "Login failed"}</b>,
+        });
+      } else {
+        toast.promise(saveSettings(message), {
+          loading: "Cargando...",
+          success: <b>{message}</b>,
+        });
 
-        localStorage.removeItem('sessionId');
-
+        localStorage.removeItem("sessionId");
       }
-      
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error:any) {
-      toast.error(error.message+"Error al autenticar el usuario.")
-      
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.message + "Error al autenticar el usuario.");
     }
     setTimeout(() => {
-      window.location.reload();
-  }, 4200);
-  }
-  const routerProfile =()=>{
+      navigate("/");
+    }, 4200);
+  };
+  const routerProfile = () => {
     navigate("/profile");
-  }
-  const routerLogin =()=>{
+  };
+  const routerLogin = () => {
     navigate("/Login");
-  }
+  };
+  const handleAddAdmin = () => {
+    navigate("/admin-user");
+  };
   if (!mounted) return null; // Evita el error de SSR en Next.js
   return (
     <Navbar>
@@ -186,34 +200,52 @@ export default function NavBar() {
         />
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-circle-user-round"><path d="M18 20a6 6 0 0 0-12 0" /><circle cx="12" cy="10" r="4" /><circle cx="12" cy="12" r="10" /></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-circle-user-round"
+            >
+              <path d="M18 20a6 6 0 0 0-12 0" />
+              <circle cx="12" cy="10" r="4" />
+              <circle cx="12" cy="12" r="10" />
+            </svg>
           </DropdownTrigger>
-          {isAuthenticated && (
-            <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="profile" onPress={routerProfile} className="h-14 gap-2">
-              <p className="font-semibold">Cuenta de </p>
-              <p className="font-semibold">{Email}</p>
-                
-                
-              </DropdownItem>
-              
-              <DropdownItem  onPress={handleAddUser} key="logout" color="danger">
-                
-                  Cerrar Session
-             
-              </DropdownItem>
-            </DropdownMenu>
-          )}
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="logout" onPress={routerLogin} color="primary">
-             Login
-            </DropdownItem>
-          </DropdownMenu>
+          {isAuthenticated ? (
+  <DropdownMenu aria-label="Profile Actions" variant="flat">
+    <DropdownItem key="profile" onPress={routerProfile} className="h-14 gap-2">
+      <p className="font-semibold">Cuenta de </p>
+      <p className="font-semibold">{Email}</p>
+    </DropdownItem>
+
+    {/* ✅ Se usa el operador ternario para evitar errores */}
+    {isAdmin ? (
+      <DropdownItem onPress={handleAddAdmin} key="admin" color="warning">
+        Admin
+      </DropdownItem>
+    ) : null}
+
+    <DropdownItem onPress={handleAddUser} key="logout" color="danger">
+      Cerrar Sesión
+    </DropdownItem>
+  </DropdownMenu>
+) : (
+  <DropdownMenu aria-label="Profile Actions" variant="flat">
+    <DropdownItem key="login" onPress={routerLogin} color="primary">
+      Login
+    </DropdownItem>
+  </DropdownMenu>
+)}
+
+
         </Dropdown>
       </NavbarContent>
-    
-    
     </Navbar>
-    
   );
 }

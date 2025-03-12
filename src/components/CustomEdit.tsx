@@ -490,8 +490,9 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
       const result = await executeRequest("Backend.Actions.Deliveries.UpdateDeliveryFacet", {
         parameters: [
           {
-           Id:"e_DeliveryEntity/12400571499",
-           
+           Id:id,
+           DayEntityId: getDayEntityId,
+           ClientEntityId: getClientEntityId,
             Drum20LQuantity: drum20LQuantity, // Convertir a número antes de enviarlo
             Drum12LQuantity: drum12LQuantity,
             SiphonQuantity: siphonQuantity,
@@ -519,7 +520,9 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
       console.error("API Request Error:", err);
     }
    
-    
+    setTimeout(() => {
+      window.location.reload();
+    }, 3200);
   };
 
 

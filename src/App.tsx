@@ -8,6 +8,8 @@ import EditProfile from "./pages/EditProfile";
 import HelpSupport from "./pages/HelpSupport";
 import NavBar from "./components/NavBar";
 import { Toaster } from "react-hot-toast";
+import UserAdmin from "./admin/intex";
+
 export default function Router() {
   return (
     <>
@@ -22,9 +24,11 @@ export default function Router() {
           <Route path="/view-orders-user" element={<ScheduleCard />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/help-support" element={<HelpSupport />} />
-           {/* 
+        
             <Route path="/admin-user" element={<UserAdmin />} />
-           */}
+       
+          
+
          
         </Routes>
       </BrowserRouter>
