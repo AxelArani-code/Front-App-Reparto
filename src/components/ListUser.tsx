@@ -165,7 +165,7 @@ export default function ListUser() {
           </h2>
           <p className="mt-2 text-default-500">
             Recorrido - <span className="font-semibold text-primary">{decodeURIComponent(route)} </span>
-            <span>{id}</span>
+            
           </p>
           <div className="absolute top-6 right-2 flex space-x-2">
             <Button size="sm" onPress={() => setIsDragEnabled(!isDragEnabled)} className="mb-4">

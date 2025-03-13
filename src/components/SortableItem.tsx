@@ -95,7 +95,7 @@ Date,
                 <div className="w-2 h-10 bg-primary rounded" />
                 <div>
                   <h2 className="text-lg font-bold text-primary">{FirstName} {LastName}</h2>
-                  <p className="text-default-500">{id}</p>
+                 
                 </div>
               </CardHeader>
               <CardBody>
@@ -108,7 +108,7 @@ Date,
                 <p className="text-default-500">
                 Descripción - <span className="font-semibold text-primary">{Description}</span>
               </p>
-              <p>{Day}</p>
+          
               </CardBody>
             </Link>
           )}

@@ -183,7 +183,7 @@ export default function NavBar() {
       <Link to="/">
         <NavbarBrand className="mx-px">
           <AcmeLogo />
-          <p className="font-bold  text-inherit">AppRepart</p>
+          <p className="font-bold  text-inherit">AppRepart-Beta</p>
         </NavbarBrand>
         <NavbarBrand className="mx-px">
           <p className="text-sm">{firstName + lastName}</p>

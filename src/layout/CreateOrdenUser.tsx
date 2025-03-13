@@ -20,17 +20,20 @@ type CreateOrdenUserProps = {
   ClientEntityId:string
 };
 export const day = [
-  { key: "1", label: "Efectivo" },
-  { key: "2", label: "Trasferencia" },
-  { key: "3", label: "No Pago" },
+  { key: "1", label: "Efectivo", value: "Efectivo" },
+  { key: "2", label: "Transferencia", value: "Transferencia" },
+  { key: "3", label: "No Pago", value: "No Pago" },
 ];
 export const medioDePago = [
-  { key: "1", label: "Pagado" },
-  { key: "2", label: "Fiado" },
+  { key: "1", label: "Pagado", value: "true" },
+  { key: "2", label: "Fiado", value: "false" },
 ];
 export default function CreateOrdenUser({ DayEntityId, ClientEntityId}: CreateOrdenUserProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { executeRequest } = useApi();
+  // Estados para almacenar los valores seleccionados en los Select
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
+  const [isPaid, setIsPaid] = useState<boolean | null>(null);
 
   
   // Estado para manejar los valores de los inputs
@@ -59,6 +62,10 @@ useEffect(() => {
 
     try {
       const sessionId = localStorage.getItem("sessionId");
+      if (!selectedPaymentMethod || isPaid === null) {
+        toast.error("Por favor, seleccione el método de pago y el estado del pago.");
+        return;
+      }
       const result = await executeRequest("Backend.Actions.Deliveries.AddDeliveryFacet", {
         parameters: [
           {
@@ -70,6 +77,8 @@ useEffect(() => {
             Drum20LPrice: drum20LPrice,
             Drum12LPrice:drum12LPrice,
             SiphonPrice: siphonPrice,
+            PaymentMethod: selectedPaymentMethod,
+            IsPaid: isPaid,
             Time: dateTime
           },
         ],
@@ -90,9 +99,7 @@ useEffect(() => {
     } catch (err) {
       console.error("API Request Error:", err);
     }
-    setTimeout(() => {
-      window.location.reload();
-    }, 3200);
+ 
     
   };
 
@@ -166,6 +173,7 @@ useEffect(() => {
   value={siphonPrice}
   onChange={(e) => handlePriceChange(e.target.value, setSiphonPrice)}
 />
+  {/* Select para Tipo de Pago */}
                 <Select
                   size="sm"
                   variant="bordered"
@@ -173,10 +181,16 @@ useEffect(() => {
                   items={day}
                   label="Pagado"
                   placeholder="Selecione Tipo De Pago"
+                  selectedKeys={selectedPaymentMethod ? [selectedPaymentMethod] : []}
+                  onSelectionChange={(keys) => setSelectedPaymentMethod(Array.from(keys)[0] as string)}
                 >
-                  {(animal) => <SelectItem>{animal.label}</SelectItem>}
+                   {day.map((option) => (
+                    <SelectItem key={option.key} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
                 </Select>
-
+ {/* Select para Estado del Pago (Booleano) */}
                 <Select
                   size="sm"
                   variant="bordered"
@@ -184,8 +198,17 @@ useEffect(() => {
                   items={medioDePago}
                   label="Se realizo"
                   placeholder="Selecione si la persona se le fio o lo pago"
+                  selectedKeys={isPaid !== null ? [String(isPaid)] : []}
+                  onSelectionChange={(keys) => {
+                    const value = Array.from(keys)[0]; // Obtiene el primer valor del Set
+                    setIsPaid(value === "true"); // Convierte el string en boolean
+                  }}
                 >
-                  {(animal) => <SelectItem>{animal.label}</SelectItem>}
+                 {medioDePago.map((option) => (
+    <SelectItem key={option.value} value={option.value}>
+      {option.label}
+    </SelectItem>
+  ))}
                 </Select>
 
               </ModalBody>

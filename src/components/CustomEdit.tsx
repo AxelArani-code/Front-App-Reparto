@@ -21,6 +21,8 @@ import {
   useDisclosure,
   Input,
   Textarea,
+  Select,
+  SelectItem,
 
 } from "@heroui/react";
 import NavBar from "./NavBar";
@@ -242,6 +244,20 @@ export const DeleteDocumentIcon = (
     </svg>
   );
 };
+const paymentMethods: Record<string, string> = {
+  "1": "Efectivo",
+  "2": "Transferencia",
+  "3": "No Pago"
+};
+export const day = [
+  { key: "1", label: "Efectivo", value: "Efectivo" },
+  { key: "2", label: "Transferencia", value: "Transferencia" },
+  { key: "3", label: "No Pago", value: "No Pago" },
+];
+export const medioDePago = [
+  { key: "1", label: "Pagado", value: "true" },
+  { key: "2", label: "Fiado", value: "false" },
+];
 export default function CustomEdit() {
   //obtener Datos
   const location = useLocation();
@@ -308,6 +324,10 @@ export default function CustomEdit() {
   const [siphonPrice, setSiphonPrice] = useState("");
   // Estado para la fecha y hora
   const [dateTime, setDateTime] = useState("");
+    // Estados para almacenar los valores seleccionados en los Select
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
+    const [isPaid, setIsPaid] = useState<boolean | null>(null);
+  
   const handlePriceChange = (value: string, setValue: (val: string) => void) => {
     const sanitizedValue = value.replace(/\./g, ""); // Elimina los puntos
     setValue(sanitizedValue);
@@ -499,6 +519,8 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
             Drum20LPrice: drum20LPrice,
             Drum12LPrice:drum12LPrice,
             SiphonPrice: siphonPrice,
+            PaymentMethod: selectedPaymentMethod,
+            IsPaid: isPaid,
             Time: dateTime
           },
         ],
@@ -532,6 +554,10 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
   return (
     <div>
       <NavBar />
+      <Button variant="ghost" size="md" className="mb-6">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-book-user"><path d="M15 13a3 3 0 1 0-6 0"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><circle cx="12" cy="8" r="2"/></svg>
+    Stock
+        </Button>
       <div className="flex flex-col items-center p-4  relative">
         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">
           {" "}
@@ -555,10 +581,12 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
           {getFirstName + getLastName}
         </h2>
         <p>{getAddress}</p>
-        <p>{getDayEntityId}</p>
-        <p>{getClientEntityId}</p>
+
         <p>{getTelephone}</p>
+       
         <div className="absolute top-2 right-2 flex space-x-2">
+     
+      
           <Dropdown>
             <DropdownTrigger>
               <Button variant="light" size="sm">
@@ -613,6 +641,7 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
             </DropdownMenu>
           </Dropdown>
         </div>
+        
         <div className="relative">
           <div className="flex space-x-4 mt-4">
             <Button
@@ -931,6 +960,34 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
                     }
                   ).format(selectedRow.SiphonPrice)}`}</span>
                 </div>
+                <div className="flex justify-between mb-4">
+                  <div className="flex items-center">
+                    <span className="text-accent mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-hand-coins"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="9" r="2.9"/><circle cx="6" cy="5" r="3"/></svg>
+                    </span>
+                    <div>
+                      <h3 className="font-semibold">
+                        <strong>Medio De Pago</strong>
+                      </h3>
+                      <p className="text-muted-foreground">    {`Te pagaron como, ${paymentMethods[selectedRow?.PaymentMethod] || "Método desconocido"}`}</p>
+                    </div>
+                  </div>
+            
+                </div>
+                <div className="flex justify-between mb-4">
+                  <div className="flex items-center">
+                    <span className="text-accent mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-circle-dollar-sign"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                    </span>
+                    <div>
+                      <h3 className="font-semibold">
+                        <strong>Accion</strong>
+                      </h3>
+                      <p className="text-muted-foreground">{`Dejaste como, ${selectedRow?.IsPaid ? "Pagado" : "Fiado"}`}</p>
+                    </div>
+                  </div>
+                  
+                </div>
                 <div className="flex justify-between text-muted-foreground mb-4 font-bold">
                   <span>Total</span>
                   <span>
@@ -1104,6 +1161,43 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
               value={siphonPrice}
               onChange={(e) => handlePriceChange(e.target.value, setSiphonPrice)}
             />
+             {/* Select para Tipo de Pago */}
+                            <Select
+                              size="sm"
+                              variant="bordered"
+            
+                              items={day}
+                              label="Pagado"
+                              placeholder="Selecione Tipo De Pago"
+                              selectedKeys={selectedPaymentMethod ? [selectedPaymentMethod] : []}
+                              onSelectionChange={(keys) => setSelectedPaymentMethod(Array.from(keys)[0] as string)}
+                            >
+                               {day.map((option) => (
+                                <SelectItem key={option.key} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </Select>
+             {/* Select para Estado del Pago (Booleano) */}
+                            <Select
+                              size="sm"
+                              variant="bordered"
+            
+                              items={medioDePago}
+                              label="Se realizo"
+                              placeholder="Selecione si la persona se le fio o lo pago"
+                              selectedKeys={isPaid !== null ? [String(isPaid)] : []}
+                              onSelectionChange={(keys) => {
+                                const value = Array.from(keys)[0]; // Obtiene el primer valor del Set
+                                setIsPaid(value === "true"); // Convierte el string en boolean
+                              }}
+                            >
+                             {medioDePago.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+                            </Select>
                           
                           </ModalBody>
                           <ModalFooter>
