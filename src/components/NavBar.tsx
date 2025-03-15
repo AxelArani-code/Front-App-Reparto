@@ -165,8 +165,8 @@ export default function NavBar() {
       toast.error(error.message + "Error al autenticar el usuario.");
     }
     setTimeout(() => {
-      navigate("/");
-    }, 4200);
+      window.location.reload();
+    }, 3000);
   };
   const routerProfile = () => {
     navigate("/profile");

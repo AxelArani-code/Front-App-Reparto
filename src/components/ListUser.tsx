@@ -1,18 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SVGProps, useEffect, useState } from "react";
 import { DndContext, closestCenter } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import SortableItem from "./SortableItem";
-import { Button, Card, CardBody, CardHeader, Input, Skeleton, } from "@heroui/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+  Skeleton,
+} from "@heroui/react";
 import NavBar from "./NavBar";
 import { JSX } from "react/jsx-runtime";
 import CreateClient from "../layout/CreateClient";
-import { Link, useLocation,  } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useApi } from "../config/useUnisave";
 import { ClientItem } from "../interface/ClientItem";
 import { ArrowLeft } from "lucide-react";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
-export const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+export const SearchIcon = (
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) => {
   return (
     <svg
       aria-hidden="true"
@@ -41,7 +55,9 @@ export const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGEleme
     </svg>
   );
 };
-export const CheckIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+export const CheckIcon = (
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) => {
   return (
     <svg
       aria-hidden="true"
@@ -75,7 +91,7 @@ export default function ListUser() {
 
   const fetchClients = async (id: string) => {
     if (!id) return;
-
+    const hasVisited = localStorage.getItem("hasVisited");
     const storageKey = getStorageKey(id);
     let storedClients: ClientItem[] = [];
 
@@ -85,10 +101,13 @@ export default function ListUser() {
     }
 
     try {
-      const result = await executeRequest("Backend.Actions.Clients.GetDayClientsFacet", {
-        parameters: [{ Id: id }],
-        sessionId: sessionId,
-      });
+      const result = await executeRequest(
+        "Backend.Actions.Clients.GetDayClientsFacet",
+        {
+          parameters: [{ Id: id }],
+          sessionId: sessionId,
+        }
+      );
 
       if (result?.executionResult?.returned) {
         const apiClients = result.executionResult.returned;
@@ -105,6 +124,51 @@ export default function ListUser() {
 
         setClient(updatedClients);
         saveScheduleToStorage(id, updatedClients);
+        setTimeout(() => {
+          setIsLoaded(true);
+          if (!hasVisited) {
+              const driverObj = driver({
+            showProgress: true,
+            steps: [
+              {
+                element: "#create-cliente",
+                popover: {
+                  title: "Crear Clientes",
+                  description:
+                    "Crear los cliente de ese dia que dejas agua y soda para tener una mayor organización.",
+                },
+              },
+    
+              {
+                element: "#view-client",
+                popover: {
+                  title: "Clientes",
+                  description:
+                    "Podras ver todo los cliente y su dirección para que luego anotes los pedidos.  ",
+                },
+              },
+              {
+                element: "#button-organizar",
+                popover: {
+                  title: "Ordena Los Clientes",
+                  description:
+                    "Puedes ordenar cada cliente a tu gusto para que tenga mas comodidad.",
+                },
+              },
+              {
+                element: "#button-busqueda",
+                popover: {
+                  title: "Busqueda Cliente",
+                  description:
+                    "Puedes escribir la palabra de un cliente para poder encontrarlo mas rapido.",
+                },
+              },
+            ],
+          });
+          driverObj.drive();
+          }
+        
+        }, 3000);
       }
     } catch (err) {
       console.error("Error al obtener clientes:", err);
@@ -112,12 +176,11 @@ export default function ListUser() {
   };
 
   useEffect(() => {
+    
     if (id) {
       fetchClients(id);
     }
-    setTimeout(() => {
-      setIsLoaded(true);
-    }, 3000);
+   
   }, [id]);
 
   const saveScheduleToStorage = (id: string, newClient: typeof client) => {
@@ -141,7 +204,9 @@ export default function ListUser() {
 
   // Filtrar clientes en base al término de búsqueda
   const filteredClients = client.filter((c) =>
-    `${c.FirstName} ${c.LastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+    `${c.FirstName} ${c.LastName}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -155,38 +220,66 @@ export default function ListUser() {
         </Link>
         <div className="flex flex-col items-center p-4 relative">
           <h2 className="text-2xl mt-10 font-semibold text-center text-primary">
-            {`Día - ${new Date(new Date(date).setDate(new Date(date).getDate() + 1))
-              .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
-              .charAt(0)
-              .toUpperCase() +
+            {`Día - ${
               new Date(new Date(date).setDate(new Date(date).getDate() + 1))
-                .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
-                .slice(1)}`}
+                .toLocaleDateString("es-ES", {
+                  weekday: "long",
+                  timeZone: "America/Argentina/Buenos_Aires",
+                })
+                .charAt(0)
+                .toUpperCase() +
+              new Date(new Date(date).setDate(new Date(date).getDate() + 1))
+                .toLocaleDateString("es-ES", {
+                  weekday: "long",
+                  timeZone: "America/Argentina/Buenos_Aires",
+                })
+                .slice(1)
+            }`}
           </h2>
           <p className="mt-2 text-default-500">
-            Recorrido - <span className="font-semibold text-primary">{decodeURIComponent(route)} </span>
-            
+            Recorrido -{" "}
+            <span className="font-semibold text-primary">
+              {decodeURIComponent(route)}{" "}
+            </span>
           </p>
           <div className="absolute top-6 right-2 flex space-x-2">
-            <Button size="sm" onPress={() => setIsDragEnabled(!isDragEnabled)} className="mb-4">
+            <Button id="button-organizar"
+              size="sm"
+              onPress={() => setIsDragEnabled(!isDragEnabled)}
+              className="mb-4"
+            >
               {isDragEnabled ? "Listo..." : "Organizar"}
             </Button>
           </div>
           {/* Campo de búsqueda */}
+        
           <Input
+          id="button-busqueda"
             isClearable
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)} // Maneja la entrada
             classNames={{
               label: "text-black/50 dark:text-white/90",
-              input: ["bg-transparent", "text-black/90 dark:text-white/90", "placeholder:text-default-700/50 dark:placeholder:text-white/60"],
+              input: [
+                "bg-transparent",
+                "text-black/90 dark:text-white/90",
+                "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+              ],
               innerWrapper: "bg-transparent",
-              inputWrapper: ["shadow-xl", "bg-default-200/50", "dark:bg-default/60", "backdrop-blur-xl", "hover:bg-default-200/70"],
+              inputWrapper: [
+                "shadow-xl",
+                "bg-default-200/50",
+                "dark:bg-default/60",
+                "backdrop-blur-xl",
+                "hover:bg-default-200/70",
+              ],
             }}
             label="Buscar"
             placeholder="Escribe el cliente..."
             radius="lg"
-            startContent={<SearchIcon className="text-slate-400 flex-shrink-0" />}
+            startContent={
+              <SearchIcon className="text-slate-400 flex-shrink-0" />
+            }
           />
         </div>
       </div>
@@ -209,11 +302,19 @@ export default function ListUser() {
           </Card>
         ))
       ) : filteredClients.length === 0 ? (
-        <p className="text-center text-gray-500 mt-4">No se encontraron clientes</p>
+        <p className="text-center text-gray-500 mt-4">
+          No se encontraron clientes
+        </p>
       ) : (
-        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={filteredClients.map((c) => c._id)} strategy={verticalListSortingStrategy}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={filteredClients.map((c) => c._id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div id="view-client" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredClients.map((item, index) => (
                 <SortableItem
                   key={item._id || index}
@@ -234,8 +335,10 @@ export default function ListUser() {
           </SortableContext>
         </DndContext>
       )}
-
-      <CreateClient id={id} />
+<div id="create-cliente">
+     <CreateClient id={id} />
+</div>
+   
     </div>
   );
 }

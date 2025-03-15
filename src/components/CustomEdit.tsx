@@ -23,7 +23,6 @@ import {
   Textarea,
   Select,
   SelectItem,
-
 } from "@heroui/react";
 import NavBar from "./NavBar";
 import { SVGProps, useEffect, useState } from "react";
@@ -32,6 +31,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useApi } from "../config/useUnisave";
 import toast from "react-hot-toast";
 import { DeliveryItems } from "../interface/DeliveryItems";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 export const EyeIcon = () => {
   return (
@@ -247,7 +248,7 @@ export const DeleteDocumentIcon = (
 const paymentMethods: Record<string, string> = {
   "1": "Efectivo",
   "2": "Transferencia",
-  "3": "No Pago"
+  "3": "No Pago",
 };
 export const day = [
   { key: "1", label: "Efectivo", value: "Efectivo" },
@@ -295,7 +296,6 @@ export default function CustomEdit() {
       `https://wa.me/${getTelephone}?text=Hola, quiero más información!`,
       "_blank"
     );
-
   };
   const {
     isOpen: isDeleteOpen,
@@ -314,6 +314,12 @@ export default function CustomEdit() {
     onOpen: onOpenEditDelivery,
     onOpenChange: onEditChangeDelivery,
   } = useDisclosure();
+
+  const {
+    isOpen: isOpenStock,
+    onOpen: onOpenStock,
+    onOpenChange: onChangeStock,
+  } = useDisclosure();
   // Estado para manejar los valores de los inputs
   const [drum20LQuantity, setDrum20LQuantity] = useState("");
   const [drum12LQuantity, setDrum12LQuantity] = useState("");
@@ -324,11 +330,16 @@ export default function CustomEdit() {
   const [siphonPrice, setSiphonPrice] = useState("");
   // Estado para la fecha y hora
   const [dateTime, setDateTime] = useState("");
-    // Estados para almacenar los valores seleccionados en los Select
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
-    const [isPaid, setIsPaid] = useState<boolean | null>(null);
-  
-  const handlePriceChange = (value: string, setValue: (val: string) => void) => {
+  // Estados para almacenar los valores seleccionados en los Select
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    string | null
+  >(null);
+  const [isPaid, setIsPaid] = useState<boolean | null>(null);
+
+  const handlePriceChange = (
+    value: string,
+    setValue: (val: string) => void
+  ) => {
     const sanitizedValue = value.replace(/\./g, ""); // Elimina los puntos
     setValue(sanitizedValue);
   };
@@ -339,6 +350,8 @@ export default function CustomEdit() {
 
   // Asegurar que el tema se aplica correctamente en el cliente
   useEffect(() => {
+    const hasVisited = localStorage.getItem("hasVisited");
+
     // Hacer una solicitud al cargar el componente
     const fetchData = async () => {
       try {
@@ -362,6 +375,50 @@ export default function CustomEdit() {
           setDelivery([]);
         } else {
           setDelivery(result.executionResult.returned);
+
+          if (!hasVisited) {
+            //Driver.Js
+            const driverObj = driver({
+              showProgress: true,
+              steps: [
+                {
+                  element: "#create-new-delivery",
+                  popover: {
+                    title: "Crear Pedidos",
+                    description:
+                      "Vas a poder crear el pedido de ese cliente. Ej dejaste 1 bidon de 20L y 4 sodas",
+                  },
+                },
+
+                {
+                  element: "#tablet-delivery",
+                  popover: {
+                    title: "Tabla De Registro",
+                    description:
+                      "Tiene todo el historial de entregas que lleva el cliente.",
+                  },
+                },
+
+                {
+                  element: "#button-whatsapp",
+                  popover: {
+                    title: "Contactarse Con Cliente",
+                    description:
+                      "Te facilitamos el contacto con el cliente en donde vas a poder llamarlo o mandarl un mensaje. ",
+                  },
+                },
+                {
+                  element: "#button-detell",
+                  popover: {
+                    title: "Modificaciones",
+                    description:
+                      "Vas a poder modificar el cliente, la dirección, nombre, telefono, etc. Pero tambien eliminarlo",
+                  },
+                },
+              ],
+            });
+            driverObj.drive();
+          }
         }
         //setSchedule(result?.executionResult?.returned)
 
@@ -370,11 +427,17 @@ export default function CustomEdit() {
         console.error("API Request Error:", err);
       }
     };
-    //Hora y fecha 
+    //Hora y fecha
     const now = new Date();
-    const formattedDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes().toString().padStart(2, "0")}`;
+    const formattedDate = `${now.getDate()}/${
+      now.getMonth() + 1
+    }/${now.getFullYear()} ${now.getHours()}:${now
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
     setDateTime(formattedDate);
-    console.log(now.toISOString())
+    console.log(now.toISOString());
+
     fetchData();
   }, []);
 
@@ -501,31 +564,37 @@ export default function CustomEdit() {
       window.location.reload();
     }, 3200);
   };
-//Editar Delivery 
-const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; (): void; }) => {
-  if (!id) return;
-  console.log(id)
+  //Editar Delivery
+  const updateDeliveryFacet = async (
+    id: string,
+    onCloseEditDelivery: { (): void; (): void }
+  ) => {
+    if (!id) return;
+    console.log(id);
     try {
       const sessionId = localStorage.getItem("sessionId");
-      const result = await executeRequest("Backend.Actions.Deliveries.UpdateDeliveryFacet", {
-        parameters: [
-          {
-           Id:id,
-           DayEntityId: getDayEntityId,
-           ClientEntityId: getClientEntityId,
-            Drum20LQuantity: drum20LQuantity, // Convertir a número antes de enviarlo
-            Drum12LQuantity: drum12LQuantity,
-            SiphonQuantity: siphonQuantity,
-            Drum20LPrice: drum20LPrice,
-            Drum12LPrice:drum12LPrice,
-            SiphonPrice: siphonPrice,
-            PaymentMethod: selectedPaymentMethod,
-            IsPaid: isPaid,
-            Time: dateTime
-          },
-        ],
-        sessionId: sessionId,
-      });
+      const result = await executeRequest(
+        "Backend.Actions.Deliveries.UpdateDeliveryFacet",
+        {
+          parameters: [
+            {
+              Id: id,
+              DayEntityId: getDayEntityId,
+              ClientEntityId: getClientEntityId,
+              Drum20LQuantity: drum20LQuantity, // Convertir a número antes de enviarlo
+              Drum12LQuantity: drum12LQuantity,
+              SiphonQuantity: siphonQuantity,
+              Drum20LPrice: drum20LPrice,
+              Drum12LPrice: drum12LPrice,
+              SiphonPrice: siphonPrice,
+              PaymentMethod: selectedPaymentMethod,
+              IsPaid: isPaid,
+              Time: dateTime,
+            },
+          ],
+          sessionId: sessionId,
+        }
+      );
 
       const isSuccess = result?.executionResult?.returned?.IsSuccessful;
       const message = result?.executionResult?.returned?.Message;
@@ -541,12 +610,11 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
     } catch (err) {
       console.error("API Request Error:", err);
     }
-   
+
     setTimeout(() => {
       window.location.reload();
     }, 3200);
   };
-
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -554,10 +622,28 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
   return (
     <div>
       <NavBar />
-      <Button variant="ghost" size="md" className="mb-6">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-book-user"><path d="M15 13a3 3 0 1 0-6 0"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><circle cx="12" cy="8" r="2"/></svg>
-    Stock
-        </Button>
+      <div className="mt-5 ml-3">
+<Button onPress={onOpenStock} variant="ghost" size="md" className="">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          className="lucide lucide-book-user"
+        >
+          <path d="M15 13a3 3 0 1 0-6 0" />
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+          <circle cx="12" cy="8" r="2" />
+        </svg>
+        Stock
+      </Button>
+      </div>
+      
       <div className="flex flex-col items-center p-4  relative">
         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">
           {" "}
@@ -583,12 +669,10 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
         <p>{getAddress}</p>
 
         <p>{getTelephone}</p>
-       
+
         <div className="absolute top-2 right-2 flex space-x-2">
-     
-      
           <Dropdown>
-            <DropdownTrigger>
+            <DropdownTrigger id="button-detell">
               <Button variant="light" size="sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -641,8 +725,8 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
             </DropdownMenu>
           </Dropdown>
         </div>
-        
-        <div className="relative">
+
+        <div id="button-whatsapp" className="relative ml-4">
           <div className="flex space-x-4 mt-4">
             <Button
               variant="ghost"
@@ -690,7 +774,7 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
           </div>
         </div>
       </div>
-      <Table className="mt-10">
+      <Table id="tablet-delivery" className="mt-10">
         <TableHeader>
           <TableColumn>Fecha</TableColumn>
           <TableColumn>Bidones 20-L</TableColumn>
@@ -963,30 +1047,68 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
                 <div className="flex justify-between mb-4">
                   <div className="flex items-center">
                     <span className="text-accent mr-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-hand-coins"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="9" r="2.9"/><circle cx="6" cy="5" r="3"/></svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-hand-coins"
+                      >
+                        <path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17" />
+                        <path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9" />
+                        <path d="m2 16 6 6" />
+                        <circle cx="16" cy="9" r="2.9" />
+                        <circle cx="6" cy="5" r="3" />
+                      </svg>
                     </span>
                     <div>
                       <h3 className="font-semibold">
                         <strong>Medio De Pago</strong>
                       </h3>
-                      <p className="text-muted-foreground">    {`Te pagaron como, ${paymentMethods[selectedRow?.PaymentMethod] || "Método desconocido"}`}</p>
+                      <p className="text-muted-foreground">
+                        {" "}
+                        {`Te pagaron como, ${
+                          paymentMethods[selectedRow?.PaymentMethod] ||
+                          "Método desconocido"
+                        }`}
+                      </p>
                     </div>
                   </div>
-            
                 </div>
                 <div className="flex justify-between mb-4">
                   <div className="flex items-center">
                     <span className="text-accent mr-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-circle-dollar-sign"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-circle-dollar-sign"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+                        <path d="M12 18V6" />
+                      </svg>
                     </span>
                     <div>
                       <h3 className="font-semibold">
                         <strong>Accion</strong>
                       </h3>
-                      <p className="text-muted-foreground">{`Dejaste como, ${selectedRow?.IsPaid ? "Pagado" : "Fiado"}`}</p>
+                      <p className="text-muted-foreground">{`Dejaste como, ${
+                        selectedRow?.IsPaid ? "Pagado" : "Fiado"
+                      }`}</p>
                     </div>
                   </div>
-                  
                 </div>
                 <div className="flex justify-between text-muted-foreground mb-4 font-bold">
                   <span>Total</span>
@@ -1020,7 +1142,9 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
             >
               Borrar
             </Button>
-            <Button color="success" onPress={onOpenEditDelivery}>Editar</Button>
+            <Button color="success" onPress={onOpenEditDelivery}>
+              Editar
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -1095,127 +1219,194 @@ const updateDeliveryFacet = async (id: string, onCloseEditDelivery: { (): void; 
           )}
         </ModalContent>
       </Modal>
-            {/* Modal Editar Deliviry  */}
-            <Modal isDismissable={false} isKeyboardDismissDisabled={true} isOpen={isEditOpenDelivery} onOpenChange={onEditChangeDelivery}>
-                    <ModalContent>
-                      {(onCloseEditDelivery) => (
-                        <>
-                          <ModalHeader className="flex flex-col gap-1 text-success">Editar Pedido</ModalHeader>
-                          <ModalBody>
-                            <Input
-                              label="Bidones de 20-L"
-                              labelPlacement="outside"
-                              placeholder="0"
-                              startContent={<span className="text-default-400 te  xt-small">N°</span>}
-                              type="number"
-                              size="md"
-                              value={drum20LQuantity}
-                              onChange={(e) => setDrum20LQuantity(e.target.value)}
-                            />
-                           <Input
-              label="Precio de 20-L"
-              labelPlacement="outside"
-              placeholder="0.00"
-              startContent={<span className="text-default-400 text-small">$</span>}
-              type="text"
-              size="sm"
-              value={drum20LPrice}
-              onChange={(e) => handlePriceChange(e.target.value, setDrum20LPrice)}
-            />
-                            <Input
-                              label="Bidones de 12-L"
-                              labelPlacement="outside"
-                              placeholder="0"
-                              startContent={<span className="text-default-400 text-small">N°</span>}
-                              type="number"
-                              size="md"
-                              value={drum12LQuantity}
-                              onChange={(e) => setDrum12LQuantity(e.target.value)}
-                            />
-                           <Input
-              label="Precio de 12-L"
-              labelPlacement="outside"
-              placeholder="0.00"
-              startContent={<span className="text-default-400 text-small">$</span>}
-              type="text"
-              size="sm"
-              value={drum12LPrice}
-              onChange={(e) => handlePriceChange(e.target.value, setDrum12LPrice)}
-            />
-                            <Input
-                              label="Sifon De Soda"
-                              labelPlacement="outside"
-                              placeholder="0"
-                              startContent={<span className="text-default-400 text-small">N°</span>}
-                              type="number"
-                              value={siphonQuantity}
-                              onChange={(e) => setSiphonQuantity(e.target.value)}
-                            />
-                                            <Input
-              label="Precio De Sifon"
-              labelPlacement="outside"
-              placeholder="0.00"
-              startContent={<span className="text-default-400 text-small">$</span>}
-              type="text"
-              size="sm"
-              value={siphonPrice}
-              onChange={(e) => handlePriceChange(e.target.value, setSiphonPrice)}
-            />
-             {/* Select para Tipo de Pago */}
-                            <Select
-                              size="sm"
-                              variant="bordered"
-            
-                              items={day}
-                              label="Pagado"
-                              placeholder="Selecione Tipo De Pago"
-                              selectedKeys={selectedPaymentMethod ? [selectedPaymentMethod] : []}
-                              onSelectionChange={(keys) => setSelectedPaymentMethod(Array.from(keys)[0] as string)}
-                            >
-                               {day.map((option) => (
-                                <SelectItem key={option.key} value={option.value}>
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </Select>
-             {/* Select para Estado del Pago (Booleano) */}
-                            <Select
-                              size="sm"
-                              variant="bordered"
-            
-                              items={medioDePago}
-                              label="Se realizo"
-                              placeholder="Selecione si la persona se le fio o lo pago"
-                              selectedKeys={isPaid !== null ? [String(isPaid)] : []}
-                              onSelectionChange={(keys) => {
-                                const value = Array.from(keys)[0]; // Obtiene el primer valor del Set
-                                setIsPaid(value === "true"); // Convierte el string en boolean
-                              }}
-                            >
-                             {medioDePago.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-                            </Select>
-                          
-                          </ModalBody>
-                          <ModalFooter>
-                            <Button color="danger" variant="light" onPress={onCloseEditDelivery}>
-                              Cerrar
-                            </Button>
-                            <Button color="primary"  onPress={() =>  selectedRow?._id && updateDeliveryFacet( selectedRow._id, onCloseEditDelivery)} >
-                              Confirmar
-                            </Button>
-                          </ModalFooter>
-                        </>
-                      )}
-                    </ModalContent>
-                  </Modal>
-      <CreateOrdenUser
-        DayEntityId={getDayEntityId}
-        ClientEntityId={getClientEntityId}
-      />
+      {/* Modal beta */}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        isOpen={isOpenStock}
+        onOpenChange={onChangeStock}
+        placement="center"
+        backdrop="blur"
+      >
+        <ModalContent>
+          {(onCloseStock) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 ">
+                Stock-beta
+              </ModalHeader>
+              <ModalBody>
+               
+                <p>
+                 "Esto va determinar el STOCK del cliente. Cuando bidones tiene en su propiedad"
+                </p>
+                <p className="font-semibold">Estamos trabajando en ello para poder bindarle la mejor experiencia</p>
+              </ModalBody>
+              <Button size="lg" color="danger" onPress={onCloseStock}>
+                Cerrar
+              </Button>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      {/* Modal Editar Deliviry  */}
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        isOpen={isEditOpenDelivery}
+        onOpenChange={onEditChangeDelivery}
+      >
+        <ModalContent>
+          {(onCloseEditDelivery) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-success">
+                Editar Pedido
+              </ModalHeader>
+              <ModalBody>
+                <Input
+                  label="Bidones de 20-L"
+                  labelPlacement="outside"
+                  placeholder="0"
+                  startContent={
+                    <span className="text-default-400 te  xt-small">N°</span>
+                  }
+                  type="number"
+                  size="md"
+                  value={drum20LQuantity}
+                  onChange={(e) => setDrum20LQuantity(e.target.value)}
+                />
+                <Input
+                  label="Precio de 20-L"
+                  labelPlacement="outside"
+                  placeholder="0.00"
+                  startContent={
+                    <span className="text-default-400 text-small">$</span>
+                  }
+                  type="text"
+                  size="sm"
+                  value={drum20LPrice}
+                  onChange={(e) =>
+                    handlePriceChange(e.target.value, setDrum20LPrice)
+                  }
+                />
+                <Input
+                  label="Bidones de 12-L"
+                  labelPlacement="outside"
+                  placeholder="0"
+                  startContent={
+                    <span className="text-default-400 text-small">N°</span>
+                  }
+                  type="number"
+                  size="md"
+                  value={drum12LQuantity}
+                  onChange={(e) => setDrum12LQuantity(e.target.value)}
+                />
+                <Input
+                  label="Precio de 12-L"
+                  labelPlacement="outside"
+                  placeholder="0.00"
+                  startContent={
+                    <span className="text-default-400 text-small">$</span>
+                  }
+                  type="text"
+                  size="sm"
+                  value={drum12LPrice}
+                  onChange={(e) =>
+                    handlePriceChange(e.target.value, setDrum12LPrice)
+                  }
+                />
+                <Input
+                  label="Sifon De Soda"
+                  labelPlacement="outside"
+                  placeholder="0"
+                  startContent={
+                    <span className="text-default-400 text-small">N°</span>
+                  }
+                  type="number"
+                  value={siphonQuantity}
+                  onChange={(e) => setSiphonQuantity(e.target.value)}
+                />
+                <Input
+                  label="Precio De Sifon"
+                  labelPlacement="outside"
+                  placeholder="0.00"
+                  startContent={
+                    <span className="text-default-400 text-small">$</span>
+                  }
+                  type="text"
+                  size="sm"
+                  value={siphonPrice}
+                  onChange={(e) =>
+                    handlePriceChange(e.target.value, setSiphonPrice)
+                  }
+                />
+                {/* Select para Tipo de Pago */}
+                <Select
+                  size="sm"
+                  variant="bordered"
+                  items={day}
+                  label="Pagado"
+                  placeholder="Selecione Tipo De Pago"
+                  selectedKeys={
+                    selectedPaymentMethod ? [selectedPaymentMethod] : []
+                  }
+                  onSelectionChange={(keys) =>
+                    setSelectedPaymentMethod(Array.from(keys)[0] as string)
+                  }
+                >
+                  {day.map((option) => (
+                    <SelectItem key={option.key} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+                {/* Select para Estado del Pago (Booleano) */}
+                <Select
+                  size="sm"
+                  variant="bordered"
+                  items={medioDePago}
+                  label="Se realizo"
+                  placeholder="Selecione si la persona se le fio o lo pago"
+                  selectedKeys={isPaid !== null ? [String(isPaid)] : []}
+                  onSelectionChange={(keys) => {
+                    const value = Array.from(keys)[0]; // Obtiene el primer valor del Set
+                    setIsPaid(value === "true"); // Convierte el string en boolean
+                  }}
+                >
+                  {medioDePago.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={onCloseEditDelivery}
+                >
+                  Cerrar
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={() =>
+                    selectedRow?._id &&
+                    updateDeliveryFacet(selectedRow._id, onCloseEditDelivery)
+                  }
+                >
+                  Confirmar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <div id="create-new-delivery">
+        <CreateOrdenUser
+          DayEntityId={getDayEntityId}
+          ClientEntityId={getClientEntityId}
+        />
+      </div>
     </div>
   );
 }

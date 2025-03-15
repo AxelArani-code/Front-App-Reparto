@@ -7,10 +7,9 @@ import { JSX } from "react/jsx-runtime";
 import CreateDay from "../layout/CreateDay";
 import { useApi } from "../config/useUnisave";
 import { DayItem } from "../interface/DayItem";
-
-
 import toast from "react-hot-toast";
-
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
@@ -77,6 +76,8 @@ export default function Home() {
   const [schedule, setSchedule] = useState<DayItem[]>([]); // Manejar el estado del schedule
   const [isLoaded, setIsLoaded] = useState(false); // Estado para Skeleton
 
+
+
        // Obtener la fecha actual
        const today = new Date();
        const initialDate = new CalendarDate(
@@ -107,8 +108,12 @@ export default function Home() {
       }, 2000); // Simula retraso de 2 segundos
     });
   };
+
   // Asegurar que el tema se aplica correctamente en el cliente
   useEffect(() => {
+    const hasVisited = localStorage.getItem("hasVisited");
+
+
     // Hacer una solicitud al cargar el componente
     const fetchData = async () => {
       try {
@@ -119,10 +124,29 @@ export default function Home() {
        
          if (!result?.executionResult?.returned || result.executionResult.returned.length === 0) {
           setSchedule([]);
-     
+          setIsLoaded(true); 
         } else {
           setSchedule(result.executionResult.returned);
-     
+          setTimeout(() => {
+            setIsLoaded(true); // Datos cargados, ocultar Skeleton
+    
+            if (!hasVisited) {
+          
+          localStorage.setItem("hasVisited", "true");
+              const driverObj = driver({
+              showProgress: true,
+              steps: [
+                { element: '#create-repart-dia', popover: { title: 'Crear Reparto', description: 'Selecciona el dia y el recorrido. Ej te toca el barrio marginal, barrio privado, etc' } },
+          
+                { element: '#view-repart', popover: { title: 'Dia De Reparto', description: 'Crea diá de reparto en donde esta el recorrido. Ej contitucion, barrio privado, etc ' } },
+                { element: '#modificacion-repart', popover: { title: 'Modificacion De Reparto', description: 'Puedes modificar el dia de reparto o eliminarlo en todo caso.' } },
+              
+              ]
+            }); 
+            driverObj.drive();
+            }
+            
+        }, 3000);
         }
         //setSchedule(result?.executionResult?.returned)
      
@@ -130,9 +154,7 @@ export default function Home() {
       } catch (err) {
         console.error('API Request Error:', err);
       }
-      setTimeout(() => {
-        setIsLoaded(true); // Datos cargados, ocultar Skeleton
-    }, 3000);
+      
     };
     fetchData();
 
@@ -237,8 +259,6 @@ export default function Home() {
 };
 
 
-
-
   return (
     <div className="container  mx-auto p-4 ">
       <NavBar />
@@ -266,10 +286,10 @@ export default function Home() {
           
         ) : schedule?.length===0?(
           <div className=" ">
-           <div className="flex flex-col items-center justify-center  bg-background p-4">
+           <div  className="flex flex-col items-center justify-center  bg-background p-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
           <h1 className="text-3xl font-bold text-foreground">AppRepart-Beta</h1>
-          <Card className="mt-5">
+          <Card  className="mt-5">
             <CardHeader>
               <div className="flex items-start mr-6">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-notebook-tabs"><path d="M2 6h4" /><path d="M2 10h4" /><path d="M2 14h4" /><path d="M2 18h4" /><rect width="16" height="20" x="4" y="2" rx="2" /><path d="M15 2v20" /><path d="M15 7h5" /><path d="M15 12h5" /><path d="M15 17h5" /></svg>
@@ -326,7 +346,7 @@ export default function Home() {
       
         ):(
           schedule?.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
-            <Card key={_id} shadow="md" className="w-full mt-5" onPress={() => navigate("/scheduleCard")}>
+            <Card  id="view-repart" key={_id} shadow="md" className="w-full mt-5" onPress={() => navigate("/scheduleCard")}>
               <Link to="/view-list-users" state={{ id: _id, date: dateStr, route: Route, createdAt: CreatedAt }}>
                 <CardHeader className="gap-4">
                   <div className="w-2 h-10 bg-primary rounded" />
@@ -349,8 +369,8 @@ export default function Home() {
             
                 </CardBody>
               </Link>
-              <Dropdown>
-                <DropdownTrigger>
+              <Dropdown >
+                <DropdownTrigger id="modificacion-repart">
                   <Button variant="bordered">Modificación</Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
@@ -473,8 +493,10 @@ export default function Home() {
           )}
         </ModalContent>
       </Modal>
+<div id="create-repart-dia">
+  <CreateDay />
+</div>
 
-<CreateDay/>
     </div>
   )
 }
