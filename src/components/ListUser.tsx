@@ -91,7 +91,7 @@ export default function ListUser() {
 
   const fetchClients = async (id: string) => {
     if (!id) return;
-    const hasVisited = localStorage.getItem("hasVisited");
+    const hasVisited = localStorage.getItem("hasVisited-ListUser");
     const storageKey = getStorageKey(id);
     let storedClients: ClientItem[] = [];
 
@@ -127,6 +127,7 @@ export default function ListUser() {
         setTimeout(() => {
           setIsLoaded(true);
           if (!hasVisited) {
+            localStorage.setItem("hasVisited-ListUser", "true");
               const driverObj = driver({
             showProgress: true,
             steps: [

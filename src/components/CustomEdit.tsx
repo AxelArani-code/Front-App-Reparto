@@ -350,7 +350,7 @@ export default function CustomEdit() {
 
   // Asegurar que el tema se aplica correctamente en el cliente
   useEffect(() => {
-    const hasVisited = localStorage.getItem("hasVisited");
+    const hasVisited = localStorage.getItem("hasVisited-CustomEdit");
 
     // Hacer una solicitud al cargar el componente
     const fetchData = async () => {
@@ -377,6 +377,7 @@ export default function CustomEdit() {
           setDelivery(result.executionResult.returned);
 
           if (!hasVisited) {
+            localStorage.setItem("hasVisited-CustomEdit", "true");
             //Driver.Js
             const driverObj = driver({
               showProgress: true,

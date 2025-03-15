@@ -111,7 +111,7 @@ export default function Home() {
 
   // Asegurar que el tema se aplica correctamente en el cliente
   useEffect(() => {
-    const hasVisited = localStorage.getItem("hasVisited");
+    const hasVisited = localStorage.getItem("hasVisited-Home");
 
 
     // Hacer una solicitud al cargar el componente
@@ -132,7 +132,7 @@ export default function Home() {
     
             if (!hasVisited) {
           
-          localStorage.setItem("hasVisited", "true");
+          localStorage.setItem("hasVisited-Home", "true");
               const driverObj = driver({
               showProgress: true,
               steps: [
