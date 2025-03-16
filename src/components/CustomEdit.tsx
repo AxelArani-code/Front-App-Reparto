@@ -405,7 +405,7 @@ export default function CustomEdit() {
                   popover: {
                     title: "Contactarse Con Cliente",
                     description:
-                      "Te facilitamos el contacto con el cliente en donde vas a poder llamarlo o mandarl un mensaje. ",
+                      "Te facilitamos el contacto con el cliente en donde vas a poder llamarlo o mandarle un mensaje. ",
                   },
                 },
                 {
@@ -413,7 +413,7 @@ export default function CustomEdit() {
                   popover: {
                     title: "Modificaciones",
                     description:
-                      "Vas a poder modificar el cliente, la dirección, nombre, telefono, etc. Pero tambien eliminarlo",
+                      "Vas a poder modificar los datos del cliente. Ej  dirección, nombre, telefono, etc. Pero tambien eliminarlo",
                   },
                 },
               ],

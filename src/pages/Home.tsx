@@ -1,6 +1,6 @@
-import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader,  useDisclosure, cn,  Calendar, Skeleton, } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, cn, Calendar, Skeleton, } from "@heroui/react";
 import NavBar from "../components/NavBar";
-import { CalendarDate,   } from "@internationalized/date";
+import { CalendarDate, } from "@internationalized/date";
 import { Link, useNavigate } from "react-router-dom";
 import { SVGProps, useEffect, useState, } from "react";
 import { JSX } from "react/jsx-runtime";
@@ -78,14 +78,14 @@ export default function Home() {
 
 
 
-       // Obtener la fecha actual
-       const today = new Date();
-       const initialDate = new CalendarDate(
-         today.getFullYear(),
-         today.getMonth() + 1,
-         today.getDate()
-       );
-       // Estados para la fecha seleccionada y el recorrido
+  // Obtener la fecha actual
+  const today = new Date();
+  const initialDate = new CalendarDate(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    today.getDate()
+  );
+  // Estados para la fecha seleccionada y el recorrido
   const [selectedDate, setSelectedDate] = useState(initialDate);
   const [route, setRoute] = useState("");
   const formatDate = (date: CalendarDate) => {
@@ -93,10 +93,10 @@ export default function Home() {
     const month = String(date.month).padStart(2, '0');
     const year = date.year;
     return `${day}/${month}/${year}`;
-};
+  };
 
 
-  
+
   const saveSettings = (settings: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -120,41 +120,41 @@ export default function Home() {
         const result = await executeRequest('Backend.Actions.Days.GetDaysFacet', {
           sessionId: sessionId
         });
-         // Check if returned is null
-       
-         if (!result?.executionResult?.returned || result.executionResult.returned.length === 0) {
+        // Check if returned is null
+
+        if (!result?.executionResult?.returned || result.executionResult.returned.length === 0) {
           setSchedule([]);
-          setIsLoaded(true); 
+          setIsLoaded(true);
         } else {
           setSchedule(result.executionResult.returned);
           setTimeout(() => {
             setIsLoaded(true); // Datos cargados, ocultar Skeleton
-    
+
             if (!hasVisited) {
-          
-          localStorage.setItem("hasVisited-Home", "true");
+
+              localStorage.setItem("hasVisited-Home", "true");
               const driverObj = driver({
-              showProgress: true,
-              steps: [
-                { element: '#create-repart-dia', popover: { title: 'Crear Reparto', description: 'Selecciona el dia y el recorrido. Ej te toca el barrio marginal, barrio privado, etc' } },
-          
-                { element: '#view-repart', popover: { title: 'Dia De Reparto', description: 'Crea diá de reparto en donde esta el recorrido. Ej contitucion, barrio privado, etc ' } },
-                { element: '#modificacion-repart', popover: { title: 'Modificacion De Reparto', description: 'Puedes modificar el dia de reparto o eliminarlo en todo caso.' } },
-              
-              ]
-            }); 
-            driverObj.drive();
+                showProgress: true,
+                steps: [
+                { element: '#create-repart-dia', popover: { title: 'Crear Reparto', description: 'Selecciona la fecha del día del barrio que te toca recorrer. Ej te toca el B° Unimev, B° privado, etc' } },
+
+                  { element: '#view-repart', popover: { title: 'Dia De Reparto', description: 'Listado de recorrido del reparto. Ej lunes B° Unimev ' } },
+                  { element: '#modificacion-repart', popover: { title: 'Modificacion De Reparto', description: 'Puedes modificar el dia de reparto o eliminarlo en todo caso.' } },
+
+                ]
+              });
+              driverObj.drive();
             }
-            
-        }, 3000);
+
+          }, 3000);
         }
         //setSchedule(result?.executionResult?.returned)
-     
+
         console.log(result)
       } catch (err) {
         console.error('API Request Error:', err);
       }
-      
+
     };
     fetchData();
 
@@ -165,45 +165,45 @@ export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   // Make sure to clear the selectedDayId after deletion if needed:
   const handleDelete = async () => {
-  
-      try {
-        // Obtener sessionId desde localStorage
-        const sessionId = localStorage.getItem('sessionId');
-        console.log(selectedId)
-        const result = await executeRequest('Backend.Actions.Days.DeleteDayFacet', {
-          parameters: [{ Id: selectedId }],
-          sessionId: sessionId
-        });
-        const isSuccess = result?.executionResult?.returned?.IsSuccessful;
-        const message = result?.executionResult?.returned?.Message;
 
-        if (!isSuccess) {
-          toast.promise(
-            saveSettings(message),
-            {
-              loading: 'Cargando...',
-              error: <b>{message || 'Error Database'}</b>,
-            }
-          );
-        } else {
-          toast.promise(
-            saveSettings(message),
-            {
-              loading: 'Cargando...',
-              success: <b>{message}</b>,
+    try {
+      // Obtener sessionId desde localStorage
+      const sessionId = localStorage.getItem('sessionId');
+      console.log(selectedId)
+      const result = await executeRequest('Backend.Actions.Days.DeleteDayFacet', {
+        parameters: [{ Id: selectedId }],
+        sessionId: sessionId
+      });
+      const isSuccess = result?.executionResult?.returned?.IsSuccessful;
+      const message = result?.executionResult?.returned?.Message;
 
-            }
-          );
-        }
+      if (!isSuccess) {
+        toast.promise(
+          saveSettings(message),
+          {
+            loading: 'Cargando...',
+            error: <b>{message || 'Error Database'}</b>,
+          }
+        );
+      } else {
+        toast.promise(
+          saveSettings(message),
+          {
+            loading: 'Cargando...',
+            success: <b>{message}</b>,
 
-        console.log(result)
-      } catch (err) {
-        console.error('API Request Error:', err);
+          }
+        );
       }
-      setTimeout(() => {
-        window.location.reload();
+
+      console.log(result)
+    } catch (err) {
+      console.error('API Request Error:', err);
+    }
+    setTimeout(() => {
+      window.location.reload();
     }, 4200);
-    
+
 
   };
   //Edit Facet 
@@ -218,8 +218,8 @@ export default function Home() {
       console.log(selectedId)
       const formattedDate = formatDate(selectedDate);
       const result = await executeRequest('Backend.Actions.Days.UpdateDayFacet', {
-        parameters: [{ 
-          Id: selectedId ,
+        parameters: [{
+          Id: selectedId,
           Date: formattedDate,
           Route: route
         }],
@@ -253,10 +253,10 @@ export default function Home() {
     }
     setTimeout(() => {
       window.location.reload();
-  }, 4200);
-  
+    }, 4200);
 
-};
+
+  };
 
 
   return (
@@ -264,152 +264,152 @@ export default function Home() {
       <NavBar />
 
 
-       
-      
+
+
       {!isLoaded ? (
-        
-          Array.from({ length: schedule?.length || 1 }).map((_, index) => (
-            <Card key={index} shadow="md" className="w-full mt-5">
+
+        Array.from({ length: schedule?.length || 1 }).map((_, index) => (
+          <Card key={index} shadow="md" className="w-full mt-5">
+            <CardHeader className="gap-4">
+              <Skeleton className="w-3 h-10 bg-primary rounded" />
+              <div>
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-4 w-24 mt-1" />
+              </div>
+            </CardHeader>
+            <CardBody>
+              <Skeleton className="h-4 w-full mb-2" />
+              <Skeleton className="h-4 w-1/2" />
+            </CardBody>
+          </Card>
+        ))
+
+      ) : schedule?.length === 0 ? (
+        <div className=" ">
+          <div className="flex flex-col items-center justify-center  bg-background p-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
+            <h1 className="text-3xl font-bold text-foreground">AppRepart-Beta</h1>
+            <Card className="mt-5">
+              <CardHeader>
+                <div className="flex items-start mr-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-notebook-tabs"><path d="M2 6h4" /><path d="M2 10h4" /><path d="M2 14h4" /><path d="M2 18h4" /><rect width="16" height="20" x="4" y="2" rx="2" /><path d="M15 2v20" /><path d="M15 7h5" /><path d="M15 12h5" /><path d="M15 17h5" /></svg>
+                </div>
+                <div className="flex flex-col gap-1">
+
+                  <p className="text-medium">Registro de pedido</p>
+                  <p className="text-tiny text-default-400">
+                    Es es espesificamente para repartidores
+                  </p>
+                </div>
+
+              </CardHeader>
+            </Card>
+
+            <Card className="mt-5">
+              <CardHeader>
+                <div className="flex items-start mr-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" /></svg>
+                </div>
+                <div className="flex flex-col gap-1">
+
+                  <p className="text-medium">Menos tiempo</p>
+                  <p className="text-tiny text-default-400">
+                    Lleva los registro con una facilidad mas rapida asi, haces los recorrido mas factible
+                  </p>
+                </div>
+
+              </CardHeader>
+
+            </Card>
+
+            <Card className="mt-5">
+              <CardHeader>
+                <div className="flex items-start mr-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-list-checks"><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></svg>
+                </div>
+                <div className="flex flex-col gap-1">
+
+                  <p className="text-medium">Oraniza Cliente </p>
+                  <p className="text-tiny text-default-400">
+                    Vas a tener un orden de tus cliente los que debe o los que estan al día
+                  </p>
+                </div>
+
+              </CardHeader>
+
+            </Card>
+
+          </div>
+
+
+        </div>
+
+      ) : (
+        schedule?.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
+          <Card id="view-repart" key={_id} shadow="md" className="w-full mt-5" onPress={() => navigate("/scheduleCard")}>
+            <Link to="/view-list-users" state={{ id: _id, date: dateStr, route: Route, createdAt: CreatedAt }}>
               <CardHeader className="gap-4">
-                <Skeleton className="w-3 h-10 bg-primary rounded" />
+                <div className="w-2 h-10 bg-primary rounded" />
                 <div>
-                  <Skeleton className="h-6 w-32" />
-                  <Skeleton className="h-4 w-24 mt-1" />
+                  <h2 className="text-lg font-bold text-primary">
+                    {`Día - ${new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
+                      .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
+                      .charAt(0)
+                      .toUpperCase() + new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
+                        .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
+                        .slice(1)}`}
+                  </h2>
+                  <p className="text-default-500">{`Día Creación - ${new Date(CreatedAt).toLocaleDateString()}`}</p>
                 </div>
               </CardHeader>
               <CardBody>
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-4 w-1/2" />
+                <p className="text-default-500">
+                  Recorrido - <span className="font-semibold text-primary">{Route}</span>
+                </p>
+
               </CardBody>
-            </Card>
-          ))
-          
-        ) : schedule?.length===0?(
-          <div className=" ">
-           <div  className="flex flex-col items-center justify-center  bg-background p-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
-          <h1 className="text-3xl font-bold text-foreground">AppRepart-Beta</h1>
-          <Card  className="mt-5">
-            <CardHeader>
-              <div className="flex items-start mr-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-notebook-tabs"><path d="M2 6h4" /><path d="M2 10h4" /><path d="M2 14h4" /><path d="M2 18h4" /><rect width="16" height="20" x="4" y="2" rx="2" /><path d="M15 2v20" /><path d="M15 7h5" /><path d="M15 12h5" /><path d="M15 17h5" /></svg>
-              </div>
-              <div className="flex flex-col gap-1">
-
-                <p className="text-medium">Registro de pedido</p>
-                <p className="text-tiny text-default-400">
-                  Es es espesificamente para repartidores
-                </p>
-              </div>
-
-            </CardHeader>
-          </Card>
-
-          <Card className="mt-5">
-            <CardHeader>
-              <div className="flex items-start mr-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" /></svg>
-              </div>
-              <div className="flex flex-col gap-1">
-
-                <p className="text-medium">Menos tiempo</p>
-                <p className="text-tiny text-default-400">
-                  Lleva los registro con una facilidad mas rapida asi, haces los recorrido mas factible
-                </p>
-              </div>
-
-            </CardHeader>
-
-          </Card>
-
-          <Card className="mt-5">
-            <CardHeader>
-              <div className="flex items-start mr-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-list-checks"><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></svg>
-              </div>
-              <div className="flex flex-col gap-1">
-
-                <p className="text-medium">Oraniza Cliente </p>
-                <p className="text-tiny text-default-400">
-                  Vas a tener un orden de tus cliente los que debe o los que estan al día
-                </p>
-              </div>
-
-            </CardHeader>
-
-          </Card>
-
-        </div>
-       
-
-        </div>
-      
-        ):(
-          schedule?.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
-            <Card  id="view-repart" key={_id} shadow="md" className="w-full mt-5" onPress={() => navigate("/scheduleCard")}>
-              <Link to="/view-list-users" state={{ id: _id, date: dateStr, route: Route, createdAt: CreatedAt }}>
-                <CardHeader className="gap-4">
-                  <div className="w-2 h-10 bg-primary rounded" />
-                  <div>
-                    <h2 className="text-lg font-bold text-primary">
-                      {`Día - ${new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
-                        .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
-                        .charAt(0)
-                        .toUpperCase() + new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
-                        .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
-                        .slice(1)}`}
-                    </h2>
-                    <p className="text-default-500">{`Día Creación - ${new Date(CreatedAt).toLocaleDateString()}`}</p>
-                  </div>
-                </CardHeader>
-                <CardBody>
-                  <p className="text-default-500">
-                    Recorrido - <span className="font-semibold text-primary">{Route}</span>
-                  </p>
-            
-                </CardBody>
-              </Link>
-              <Dropdown >
-                <DropdownTrigger id="modificacion-repart">
-                  <Button variant="bordered">Modificación</Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
-                  <DropdownSection showDivider title="Acción">
-                    <DropdownItem 
+            </Link>
+            <Dropdown >
+              <DropdownTrigger id="modificacion-repart">
+                <Button variant="bordered">Modificación</Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
+                <DropdownSection showDivider title="Acción">
+                  <DropdownItem
                     onPress={() => {
                       setSelectedId(_id);
                       onOpenEdit();      // Abre el modal
                     }}
                     startContent={<EditDocumentIcon className={iconClasses} />}
                     key="edit" description="Vas a poder editar el reparto">
-                      Editar Reparto
-                    </DropdownItem>
-                  </DropdownSection>
-                  <DropdownSection title="Precaución">
-                    <DropdownItem 
+                    Editar Reparto
+                  </DropdownItem>
+                </DropdownSection>
+                <DropdownSection title="Precaución">
+                  <DropdownItem
                     onPress={() => {
                       setSelectedId(_id);
                       onOpenDelete();      // Abre el modal
                     }}
                     startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
                     key="delete" className="text-danger" color="danger" description="Eliminarás los clientes de ese día">
-                      Eliminar Reparto
-                    </DropdownItem>
-                  </DropdownSection>
-                </DropdownMenu>
-              </Dropdown>
-            </Card>
-            
-          )
-        
+                    Eliminar Reparto
+                  </DropdownItem>
+                </DropdownSection>
+              </DropdownMenu>
+            </Dropdown>
+          </Card>
+
         )
-      
+
         )
-       
-        
-        }
-       
-     
+
+      )
+
+
+      }
+
+
 
 
       {/* Modal Eliminar */}
@@ -455,15 +455,15 @@ export default function Home() {
               <ModalHeader className="flex flex-col gap-1 text-success">Editar Dia De Reparto</ModalHeader>
               <ModalBody className="items-center">
                 <p>¿Estas seguro que quieres editar el día?</p>
-                <Calendar aria-label="Date (Uncontrolled)" 
-                value={selectedDate}
-                onChange={setSelectedDate} 
+                <Calendar aria-label="Date (Uncontrolled)"
+                  value={selectedDate}
+                  onChange={setSelectedDate}
                 />
                 <DateInput
 
                   isDisabled
                   value={selectedDate}
-            
+
                   label={"Dia Por Defecto"}
                   placeholderValue={new CalendarDate(1995, 11, 6)}
                 />
@@ -485,17 +485,17 @@ export default function Home() {
                 <Button color="danger" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" variant="bordered"  disabled={!route.trim() || !isNaN(Number(route))} onPress={handleEdit}>
+                <Button color="primary" variant="bordered" disabled={!route.trim() || !isNaN(Number(route))} onPress={handleEdit}>
                   Aceptar
                 </Button>
-              </ModalFooter>  
+              </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-<div id="create-repart-dia">
-  <CreateDay />
-</div>
+      <div id="create-repart-dia">
+        <CreateDay />
+      </div>
 
     </div>
   )

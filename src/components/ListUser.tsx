@@ -136,7 +136,7 @@ export default function ListUser() {
                 popover: {
                   title: "Crear Clientes",
                   description:
-                    "Crear los cliente de ese dia que dejas agua y soda para tener una mayor organización.",
+                    "Ingresar los datos del cliente para el día del reparto.",
                 },
               },
     
