@@ -296,9 +296,9 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-1">
 
-                  <p className="text-medium">Registro de pedido</p>
+                  <p className="text-medium">Registro De Pedidos</p>
                   <p className="text-tiny text-default-400">
-                    Es es espesificamente para repartidores
+                  Te facilitamos los registros de cada cliente para tu comodidad.
                   </p>
                 </div>
 
@@ -312,9 +312,9 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-1">
 
-                  <p className="text-medium">Menos tiempo</p>
+                  <p className="text-medium">Menos Tiempo</p>
                   <p className="text-tiny text-default-400">
-                    Lleva los registro con una facilidad mas rapida asi, haces los recorrido mas factible
+                  Ingresa datos lo más rápido y conciso para que puedas ir anotando los pedidos del cliente y asi terminar lo mas antes posible el reparto.
                   </p>
                 </div>
 
@@ -329,9 +329,9 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-1">
 
-                  <p className="text-medium">Oraniza Cliente </p>
+                  <p className="text-medium">Organización  </p>
                   <p className="text-tiny text-default-400">
-                    Vas a tener un orden de tus cliente los que debe o los que estan al día
+                  Te brindamos un mayor orden de cada pedido los que están al día o no.
                   </p>
                 </div>
 
