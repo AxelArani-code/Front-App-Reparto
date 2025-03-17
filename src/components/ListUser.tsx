@@ -284,6 +284,21 @@ export default function ListUser() {
           />
         </div>
       </div>
+      <p id="view-client" className="ml-5 font-semibold text-primary">{`Clientes del ${
+              new Date(new Date(date).setDate(new Date(date).getDate() + 1))
+                .toLocaleDateString("es-ES", {
+                  weekday: "long",
+                  timeZone: "America/Argentina/Buenos_Aires",
+                })
+                .charAt(0)
+                .toUpperCase() +
+              new Date(new Date(date).setDate(new Date(date).getDate() + 1))
+                .toLocaleDateString("es-ES", {
+                  weekday: "long",
+                  timeZone: "America/Argentina/Buenos_Aires",
+                })
+                .slice(1)
+            }`}</p>
 
       {/* Renderizado de los clientes filtrados */}
       {!isLoaded ? (
@@ -315,7 +330,7 @@ export default function ListUser() {
             items={filteredClients.map((c) => c._id)}
             strategy={verticalListSortingStrategy}
           >
-            <div id="view-client" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredClients.map((item, index) => (
                 <SortableItem
                   key={item._id || index}

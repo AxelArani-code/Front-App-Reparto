@@ -10,6 +10,7 @@ import {
   Input,
   Select,
   SelectItem,
+  Alert,
 } from "@heroui/react";
 import { useApi } from "../config/useUnisave";
 import toast from "react-hot-toast";
@@ -99,7 +100,9 @@ useEffect(() => {
     } catch (err) {
       console.error("API Request Error:", err);
     }
- 
+ setTimeout(() => {
+      window.location.reload();
+    }, 3200);
     
   };
 
@@ -114,6 +117,13 @@ useEffect(() => {
             <>
               <ModalHeader className="flex flex-col gap-1">Crear Nuevo Pedido</ModalHeader>
               <ModalBody>
+              <Alert
+        hideIconWrapper
+        color="secondary"
+        description="Se multiplica cada producto por lo que ingresas como precio. Ejemplo 2x3.200=6.400 "
+        title="Advertencia"
+        variant="bordered"
+      />
                 <Input
                   label="Bidones de 20-L"
                   labelPlacement="outside"

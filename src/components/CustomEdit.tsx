@@ -369,13 +369,10 @@ export default function CustomEdit() {
         // Check if returned is null
 
         if (
-          !result?.executionResult?.returned ||
-          result.executionResult.returned.length === 0
+          result?.executionResult?.returned 
         ) {
-          setDelivery([]);
-        } else {
-          setDelivery(result.executionResult.returned);
-
+         // setDelivery([]);
+         setDelivery(result.executionResult.returned);
           if (!hasVisited) {
             localStorage.setItem("hasVisited-CustomEdit", "true");
             //Driver.Js
@@ -420,7 +417,7 @@ export default function CustomEdit() {
             });
             driverObj.drive();
           }
-        }
+        } 
         //setSchedule(result?.executionResult?.returned)
 
         console.log(result);
@@ -430,12 +427,11 @@ export default function CustomEdit() {
     };
     //Hora y fecha
     const now = new Date();
-    const formattedDate = `${now.getDate()}/${
-      now.getMonth() + 1
-    }/${now.getFullYear()} ${now.getHours()}:${now
-      .getMinutes()
-      .toString()
-      .padStart(2, "0")}`;
+    const formattedDate = `${now.getDate()}/${now.getMonth() + 1
+      }/${now.getFullYear()} ${now.getHours()}:${now
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")}`;
     setDateTime(formattedDate);
     console.log(now.toISOString());
 
@@ -624,32 +620,31 @@ export default function CustomEdit() {
     <div>
       <NavBar />
       <div className="mt-5 ml-3">
-<Button onPress={onOpenStock} variant="ghost" size="md" className="">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          className="lucide lucide-book-user"
-        >
-          <path d="M15 13a3 3 0 1 0-6 0" />
-          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
-          <circle cx="12" cy="8" r="2" />
-        </svg>
-        Stock
-      </Button>
+        <Button onPress={onOpenStock} variant="ghost" size="md" className="">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            className="lucide lucide-book-user"
+          >
+            <path d="M15 13a3 3 0 1 0-6 0" />
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+            <circle cx="12" cy="8" r="2" />
+          </svg>
+          Stock
+        </Button>
       </div>
-      
+
       <div className="flex flex-col items-center p-4  relative">
         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">
           {" "}
-          {`Dia - ${
-            new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
+          {`Dia - ${new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
               .toLocaleDateString("es-ES", {
                 weekday: "long",
                 timeZone: "America/Argentina/Buenos_Aires",
@@ -662,7 +657,7 @@ export default function CustomEdit() {
                 timeZone: "America/Argentina/Buenos_Aires",
               })
               .slice(1)
-          }`}
+            }`}
         </h2>
         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">
           {getFirstName + getLastName}
@@ -789,11 +784,10 @@ export default function CustomEdit() {
               <TableRow
                 key={item._id}
                 onClick={() => handleRowClick(item)}
-                className={`cursor-pointer transition-colors border-2 ${
-                  selectedRow?._id === item._id
+                className={`cursor-pointer transition-colors border-2 ${selectedRow?._id === item._id
                     ? "border-blue-500 bg-gray-700"
                     : "border-transparent hover:bg-gray-700"
-                }`}
+                  }`}
               >
                 <TableCell>{`${new Date(item.DeliveryTime).toLocaleDateString(
                   "es-ES",
@@ -1073,10 +1067,9 @@ export default function CustomEdit() {
                       </h3>
                       <p className="text-muted-foreground">
                         {" "}
-                        {`Te pagaron como, ${
-                          paymentMethods[selectedRow?.PaymentMethod] ||
+                        {`Te pagaron como, ${paymentMethods[selectedRow?.PaymentMethod] ||
                           "Método desconocido"
-                        }`}
+                          }`}
                       </p>
                     </div>
                   </div>
@@ -1105,9 +1098,8 @@ export default function CustomEdit() {
                       <h3 className="font-semibold">
                         <strong>Accion</strong>
                       </h3>
-                      <p className="text-muted-foreground">{`Dejaste como, ${
-                        selectedRow?.IsPaid ? "Pagado" : "Fiado"
-                      }`}</p>
+                      <p className="text-muted-foreground">{`Dejaste como, ${selectedRow?.IsPaid ? "Pagado" : "Fiado"
+                        }`}</p>
                     </div>
                   </div>
                 </div>
@@ -1119,8 +1111,8 @@ export default function CustomEdit() {
                       maximumFractionDigits: 2,
                     }).format(
                       selectedRow.SiphonPrice +
-                        selectedRow.Drum12LPrice +
-                        selectedRow.Drum20LPrice
+                      selectedRow.Drum12LPrice +
+                      selectedRow.Drum20LPrice
                     )}`}
                   </span>
                 </div>
@@ -1236,11 +1228,14 @@ export default function CustomEdit() {
                 Stock-beta
               </ModalHeader>
               <ModalBody>
-               
                 <p>
-                 "Esto va determinar el STOCK del cliente. Cuando bidones tiene en su propiedad"
+                  "Esto va determinar el STOCK del cliente. Cuando bidones tiene
+                  en su propiedad"
                 </p>
-                <p className="font-semibold">Estamos trabajando en ello para poder bindarle la mejor experiencia</p>
+                <p className="font-semibold">
+                  Estamos trabajando en ello para poder bindarle la mejor
+                  experiencia
+                </p>
               </ModalBody>
               <Button size="lg" color="danger" onPress={onCloseStock}>
                 Cerrar
