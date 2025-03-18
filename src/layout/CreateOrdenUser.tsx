@@ -120,7 +120,7 @@ useEffect(() => {
               <Alert
         hideIconWrapper
         color="secondary"
-        description="Se multiplica cada producto por lo que ingresas como precio. Ejemplo 2x3.200=6.400 "
+        description="La cantidad de producto ingresado, será calculado automáticamente su valor. Ej: 2 Bidones 20-L precio $6.400 (ud. $3.200) "
         title="Advertencia"
         variant="bordered"
       />
