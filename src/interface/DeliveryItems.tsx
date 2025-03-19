@@ -11,6 +11,7 @@ export type DeliveryItems  ={
     IsPaid:boolean,
     PaymentMethod:string,
     Total:string,
+    Comments:string,
     DeliveryTime: string,
     CreatedAt: string,
     UpdatedAt: string,

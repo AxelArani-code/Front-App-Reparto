@@ -23,6 +23,7 @@ import {
   Textarea,
   Select,
   SelectItem,
+  Alert,
 } from "@heroui/react";
 import NavBar from "./NavBar";
 import { SVGProps, useEffect, useState } from "react";
@@ -328,6 +329,7 @@ export default function CustomEdit() {
   const [drum20LPrice, setDrum20LPrice] = useState("");
   const [drum12LPrice, setDrum12LPrice] = useState("");
   const [siphonPrice, setSiphonPrice] = useState("");
+  const [comments, setComments] = useState("");
   // Estado para la fecha y hora
   const [dateTime, setDateTime] = useState("");
   // Estados para almacenar los valores seleccionados en los Select
@@ -585,6 +587,7 @@ export default function CustomEdit() {
               Drum12LPrice: drum12LPrice,
               SiphonPrice: siphonPrice,
               PaymentMethod: selectedPaymentMethod,
+              Comments: comments,
               IsPaid: isPaid,
               Time: dateTime,
             },
@@ -1118,7 +1121,8 @@ export default function CustomEdit() {
                 </div>
                 <Textarea
                   isReadOnly
-                  defaultValue="Aqui van las notas"
+                  defaultValue={selectedRow.Comments}
+                  size="sm"
                   label="Notas"
                   labelPlacement="outside"
                   placeholder="Aqui van las notas"
@@ -1258,7 +1262,15 @@ export default function CustomEdit() {
                 Editar Pedido
               </ModalHeader>
               <ModalBody>
-                <Input
+                  <Alert
+                        hideIconWrapper
+                        color="secondary"
+                        description="La cantidad de producto ingresado, será calculado automáticamente su valor. Ej: 2 Bidones 20-L precio $6.400 (ud. $3.200) "
+                        title="Advertencia"
+                        variant="bordered"
+                      />
+                <div className="grid grid-cols-2 gap-4">
+ <Input
                   label="Bidones de 20-L"
                   labelPlacement="outside"
                   placeholder="0"
@@ -1284,7 +1296,9 @@ export default function CustomEdit() {
                     handlePriceChange(e.target.value, setDrum20LPrice)
                   }
                 />
-                <Input
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+ <Input
                   label="Bidones de 12-L"
                   labelPlacement="outside"
                   placeholder="0"
@@ -1310,7 +1324,9 @@ export default function CustomEdit() {
                     handlePriceChange(e.target.value, setDrum12LPrice)
                   }
                 />
-                <Input
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+<Input
                   label="Sifon De Soda"
                   labelPlacement="outside"
                   placeholder="0"
@@ -1335,6 +1351,10 @@ export default function CustomEdit() {
                     handlePriceChange(e.target.value, setSiphonPrice)
                   }
                 />
+                </div>
+               
+               
+                
                 {/* Select para Tipo de Pago */}
                 <Select
                   size="sm"
@@ -1374,6 +1394,11 @@ export default function CustomEdit() {
                     </SelectItem>
                   ))}
                 </Select>
+                    <Textarea    
+                         value={comments}
+                                onChange={(e) => handlePriceChange(e.target.value, setComments)}               
+                                        
+                                        type="text"   variant="bordered"  label="Notas"   size="sm"placeholder="Escribe Notas" />
               </ModalBody>
               <ModalFooter>
                 <Button

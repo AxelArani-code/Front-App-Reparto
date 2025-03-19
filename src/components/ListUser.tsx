@@ -17,7 +17,7 @@ import {
 import NavBar from "./NavBar";
 import { JSX } from "react/jsx-runtime";
 import CreateClient from "../layout/CreateClient";
-import { Link, useLocation } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { useApi } from "../config/useUnisave";
 import { ClientItem } from "../interface/ClientItem";
 import { ArrowLeft } from "lucide-react";
@@ -79,7 +79,7 @@ export const CheckIcon = (
 export default function ListUser() {
   const location = useLocation();
   const { id, date, route } = location.state || {};
-
+  const navigate = useNavigate();
   const [isDragEnabled, setIsDragEnabled] = useState(false);
   const { executeRequest } = useApi();
   const [client, setClient] = useState<ClientItem[]>([]);
@@ -210,15 +210,18 @@ export default function ListUser() {
       .includes(searchTerm.toLowerCase())
   );
 
+  const routerBack = () => {
+    navigate("/");
+  };
   return (
     <div>
       <NavBar />
       <div className="px-4 py-1">
-        <Link to="/">
-          <Button variant="ghost" size="md">
+   
+          <Button onPress={routerBack} variant="ghost" size="md">
             <ArrowLeft className="h-6 w-6" />
           </Button>
-        </Link>
+     
         <div className="flex flex-col items-center p-4 relative">
           <h2 className="text-2xl mt-10 font-semibold text-center text-primary">
             {`Día - ${

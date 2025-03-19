@@ -11,6 +11,7 @@ import {
   Select,
   SelectItem,
   Alert,
+  Textarea,
 } from "@heroui/react";
 import { useApi } from "../config/useUnisave";
 import toast from "react-hot-toast";
@@ -45,6 +46,7 @@ export default function CreateOrdenUser({ DayEntityId, ClientEntityId}: CreateOr
   const [drum20LPrice, setDrum20LPrice] = useState("");
   const [drum12LPrice, setDrum12LPrice] = useState("");
   const [siphonPrice, setSiphonPrice] = useState("");
+  const [comments, setComments] = useState("");
 // Estado para la fecha y hora
 const [dateTime, setDateTime] = useState("");
 
@@ -79,6 +81,7 @@ useEffect(() => {
             Drum12LPrice:drum12LPrice,
             SiphonPrice: siphonPrice,
             PaymentMethod: selectedPaymentMethod,
+            Comments: comments,
             IsPaid: isPaid,
             Time: dateTime
           },
@@ -124,7 +127,8 @@ useEffect(() => {
         title="Advertencia"
         variant="bordered"
       />
-                <Input
+      <div className="grid grid-cols-2 gap-4">
+    <Input
                   label="Bidones de 20-L"
                   labelPlacement="outside"
                   placeholder="0"
@@ -135,6 +139,7 @@ useEffect(() => {
                   onChange={(e) => setDrum20LQuantity(e.target.value)}
                 />
                <Input
+                className="font-semibold"
   label="Precio de 20-L"
   labelPlacement="outside"
   placeholder="0.00"
@@ -144,7 +149,11 @@ useEffect(() => {
   value={drum20LPrice}
   onChange={(e) => handlePriceChange(e.target.value, setDrum20LPrice)}
 />
-                <Input
+            
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+<Input
                   label="Bidones de 12-L"
                   labelPlacement="outside"
                   placeholder="0"
@@ -155,6 +164,7 @@ useEffect(() => {
                   onChange={(e) => setDrum12LQuantity(e.target.value)}
                 />
                <Input
+                className="font-semibold"
   label="Precio de 12-L"
   labelPlacement="outside"
   placeholder="0.00"
@@ -164,7 +174,11 @@ useEffect(() => {
   value={drum12LPrice}
   onChange={(e) => handlePriceChange(e.target.value, setDrum12LPrice)}
 />
-                <Input
+              
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+  <Input
                   label="Sifon De Soda"
                   labelPlacement="outside"
                   placeholder="0"
@@ -174,6 +188,7 @@ useEffect(() => {
                   onChange={(e) => setSiphonQuantity(e.target.value)}
                 />
                                 <Input
+                                className="font-semibold"
   label="Precio De Sifon"
   labelPlacement="outside"
   placeholder="0.00"
@@ -182,7 +197,10 @@ useEffect(() => {
   size="sm"
   value={siphonPrice}
   onChange={(e) => handlePriceChange(e.target.value, setSiphonPrice)}
-/>
+/>          
+      </div>
+                
+      
   {/* Select para Tipo de Pago */}
                 <Select
                   size="sm"
@@ -220,6 +238,10 @@ useEffect(() => {
     </SelectItem>
   ))}
                 </Select>
+                
+                                <Textarea    
+                                value={comments}
+                                onChange={(e) => handlePriceChange(e.target.value, setComments)}  type="text"   variant="bordered"  label="Notas"   size="sm"placeholder="Escribe Notas" />
 
               </ModalBody>
               <ModalFooter>
