@@ -234,9 +234,12 @@ export default function NavBar() {
       </DropdownItem>
     ) : null}
 
-<DropdownItem onPress={routerAnalisis} key="logout" color="danger">
+    {/* 
+    <DropdownItem onPress={routerAnalisis} key="logout" color="danger">
     Analisis
     </DropdownItem>
+    */}
+
     <DropdownItem onPress={handleAddUser} key="logout" color="danger">
       Cerrar Sesión
     </DropdownItem>
