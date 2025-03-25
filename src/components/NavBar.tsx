@@ -177,9 +177,7 @@ export default function NavBar() {
   const handleAddAdmin = () => {
     navigate("/admin-user");
   };
-  const routerAnalisis = () => {
-    navigate("/analysis");
-  };
+
   if (!mounted) return null; // Evita el error de SSR en Next.js
   return (
     <Navbar>
@@ -235,6 +233,10 @@ export default function NavBar() {
     ) : null}
 
     {/* 
+
+      const routerAnalisis = () => {
+    navigate("/analysis");
+  };
     <DropdownItem onPress={routerAnalisis} key="logout" color="danger">
     Analisis
     </DropdownItem>
