@@ -37,31 +37,9 @@ export default function CreateClient({ id }: MyComponentProps) {
     description: false,
   });
 
-  // Expresiones regulares para validar
-  const nameRegex = /^[a-zA-ZÀ-ÿ\s]+$/; // Solo letras y espacios (soporta tildes)
-  const phoneRegex = /^\d+$/; // Solo números
-
-  // Función para validar los campos
-  const validateFields = () => {
-    const newErrors = {
-      firstName: !nameRegex.test(firstName.trim()), // Verifica que sean solo letras
-      lastName: !nameRegex.test(lastName.trim()), // Verifica que sean solo letras
-      telephone: !phoneRegex.test(telephone), // Solo números
-      address: address.trim() === "",
-      description: description.trim() === "",
-    };
-
-    setErrors(newErrors);
-
-    // Si algún campo es inválido, retorna false
-    return !Object.values(newErrors).includes(true);
-  };
 
   const AddClientFacet = async () => {
-    if (!validateFields()) {
-      toast.error("Por favor, completa todos los campos correctamente.");
-      return;
-    }
+
 
     try {
       const sessionId = localStorage.getItem("sessionId");
