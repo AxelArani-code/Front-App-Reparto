@@ -356,6 +356,7 @@ export default function CustomEdit() {
 
     // Hacer una solicitud al cargar el componente
     const fetchData = async () => {
+      console.log(getDayEntityId)
       try {
         const result = await executeRequest(
           "Backend.Actions.Deliveries.GetDeliveriesFromDayFacet",
@@ -363,6 +364,7 @@ export default function CustomEdit() {
             parameters: [
               {
                 Id: getDayEntityId,
+                ClientId: getClientEntityId
               },
             ],
             sessionId: sessionId,

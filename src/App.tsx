@@ -9,6 +9,7 @@ import HelpSupport from "./pages/HelpSupport";
 import NavBar from "./components/NavBar";
 import { Toaster } from "react-hot-toast";
 import UserAdmin from "./admin/intex";
+import Analysis from "./pages/Analysis";
 
 export default function Router() {
   return (
@@ -26,6 +27,7 @@ export default function Router() {
           <Route path="/help-support" element={<HelpSupport />} />
         
             <Route path="/admin-user" element={<UserAdmin />} />
+            <Route path="/analysis" element={<Analysis />} />
        
           
 

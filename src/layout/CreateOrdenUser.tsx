@@ -63,6 +63,8 @@ useEffect(() => {
   
   const AddDeliveryFacet = async (onClose: { (): void; (): void; }) => {
 
+    console.log(`DayEntity ${DayEntityId}`)
+    console.log(`ClientEntityu ${ClientEntityId}`)
     try {
       const sessionId = localStorage.getItem("sessionId");
       if (!selectedPaymentMethod || isPaid === null) {
@@ -103,9 +105,7 @@ useEffect(() => {
     } catch (err) {
       console.error("API Request Error:", err);
     }
- setTimeout(() => {
-      window.location.reload();
-    }, 3200);
+
     
   };
 
