@@ -461,7 +461,7 @@ export default function CustomEdit() {
       const result = await executeRequest(
         "Backend.Actions.Clients.DeleteClientFacet",
         {
-          parameters: [{ Id: getDayEntityId }],
+          parameters: [{ Id: getClientEntityId }],
           sessionId: sessionId,
         }
       );
