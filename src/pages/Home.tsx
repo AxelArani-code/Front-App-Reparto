@@ -89,9 +89,6 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState(initialDate);
   const [route, setRoute] = useState("");
 
-  const [date, setDate] = useState("");
-const [selectedDatee, setSelectedDatee] = useState(null);
-
   const formatDate = (date: CalendarDate) => {
     const day = String(date.day).padStart(2, '0');
     const month = String(date.month).padStart(2, '0');
@@ -384,7 +381,7 @@ const [selectedDatee, setSelectedDatee] = useState(null);
                     onPress={() => {
                       setSelectedId(_id);
                       setRoute(Route);
-                      setDate(dateStr);
+                    
                       setSelectedDate(new CalendarDate(
                         new Date(dateStr).getFullYear(),
                         new Date(dateStr).getMonth() + 1,  // Ajuste para que el mes sea correcto
