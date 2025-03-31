@@ -15,8 +15,12 @@ import {
   DropdownTrigger,
   cn,
   Progress,
+  Tabs,
+  Tab,
+  CardBody,
 } from "@heroui/react";
 import {Icon} from "@iconify/react";
+import NavBar from "../components/NavBar";
 
 type ChartData = {
   name: string;
@@ -51,49 +55,38 @@ const data1 = [
 ];
 const data: CircleChartProps[] = [
   {
-    title: "Traffic Sources",
-    categories: ["Search", "Direct", "Social", "Referral"],
+    title: "Bidones De 20-L",
+    categories: ["Pagado Efectivo", "Pagado Transferencia", "Fiados", "De Más"],
     color: "warning",
     chartData: [
-      {name: "Search", value: 400},
-      {name: "Direct", value: 300},
-      {name: "Social", value: 300},
-      {name: "Referral", value: 200},
+      {name: "Pagado Efectivo", value: 600},
+      {name: "Pagado Transferencia", value: 300},
+      {name: "Fiados", value: 300},
+      {name: "De Más", value: 100},
     ],
   },
-  {
-    title: "Device Usage",
-    categories: ["Mobile", "Desktop", "Tablet", "Smart TV"],
-    color: "success",
-    chartData: [
-      {name: "Mobile", value: 450},
-      {name: "Desktop", value: 300},
-      {name: "Tablet", value: 250},
-      {name: "Smart TV", value: 200},
-    ],
-  },
-  {
-    title: "Browser Usage",
-    categories: ["Chrome", "Safari", "Firefox", "Edge"],
-    color: "danger",
-    chartData: [
-      {name: "Chrome", value: 350},
-      {name: "Safari", value: 280},
-      {name: "Firefox", value: 220},
-      {name: "Edge", value: 150},
-    ],
-  },
+  
 ];
 
 export default function Component() {
   return (
-    <dl className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+<div>
+  <NavBar />
+{/*Tap*/}
+<div className="flex w-full flex-col p-3">
+      <Tabs aria-label="Options">
+        <Tab key="lunes" title="Lunes">
+          <Card>
+            <CardBody>
+
+ {/*Analisis de rosca */}
+ <dl className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
       {data.map((item, index) => (
         <CircleChartCard key={index} {...item} />
       ))}
-
-
-<dl className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+    </dl>
+              {/*Analisis de tablar */}
+            <dl className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 mt-5">
       {data1.map(({title, value, status, iconName}, index) => (
         <Card
           key={index}
@@ -156,7 +149,36 @@ export default function Component() {
       ))}
     </dl>
 
-    </dl>
+
+            </CardBody>
+          </Card>
+        </Tab>
+        <Tab key="martes" title="Martes">
+          <Card>
+            <CardBody>
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+              ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur.
+            </CardBody>
+          </Card>
+        </Tab>
+        <Tab key="miercoles" title="Miercoles">
+          <Card>
+            <CardBody>
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+              mollit anim id est laborum.
+            </CardBody>
+          </Card>
+        </Tab>
+      </Tabs>
+    </div>
+
+
+
+
+
+      
+</div>
   );
 }
 
@@ -197,9 +219,9 @@ const CircleChartCard = React.forwardRef<
               placeholder="Per Day"
               size="sm"
             >
-              <SelectItem key="per-day">Per Day</SelectItem>
-              <SelectItem key="per-week">Per Week</SelectItem>
-              <SelectItem key="per-month">Per Month</SelectItem>
+              <SelectItem key="per-day">Por Dia</SelectItem>
+              <SelectItem key="per-week">Por Semana</SelectItem>
+              <SelectItem key="per-month">Por Mes</SelectItem>
             </Select>
             <Dropdown
               classNames={{

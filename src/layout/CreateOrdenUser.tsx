@@ -106,6 +106,9 @@ useEffect(() => {
       console.error("API Request Error:", err);
     }
 
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
     
   };
 

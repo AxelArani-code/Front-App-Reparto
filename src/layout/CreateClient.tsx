@@ -73,7 +73,7 @@ export default function CreateClient({ id }: MyComponentProps) {
 
     setTimeout(() => {
       window.location.reload();
-    }, 4200);
+    }, 2000);
   };
 
   // Función para limpiar los campos al cerrar el modal

@@ -88,6 +88,10 @@ export default function Home() {
   // Estados para la fecha seleccionada y el recorrido
   const [selectedDate, setSelectedDate] = useState(initialDate);
   const [route, setRoute] = useState("");
+
+  const [date, setDate] = useState("");
+const [selectedDatee, setSelectedDatee] = useState(null);
+
   const formatDate = (date: CalendarDate) => {
     const day = String(date.day).padStart(2, '0');
     const month = String(date.month).padStart(2, '0');
@@ -163,6 +167,7 @@ export default function Home() {
 
   //Elimnar Peticion 
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  
   // Make sure to clear the selectedDayId after deletion if needed:
   const handleDelete = async () => {
 
@@ -378,6 +383,13 @@ export default function Home() {
                   <DropdownItem
                     onPress={() => {
                       setSelectedId(_id);
+                      setRoute(Route);
+                      setDate(dateStr);
+                      setSelectedDate(new CalendarDate(
+                        new Date(dateStr).getFullYear(),
+                        new Date(dateStr).getMonth() + 1,  // Ajuste para que el mes sea correcto
+                        new Date(dateStr).getDate() + 1
+                      ));// Convierte la fecha a formato Date
                       onOpenEdit();      // Abre el modal
                     }}
                     startContent={<EditDocumentIcon className={iconClasses} />}
