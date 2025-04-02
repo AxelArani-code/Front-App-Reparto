@@ -147,7 +147,7 @@ useEffect(() => {
   labelPlacement="outside"
   placeholder="0.00"
   startContent={<span className="text-default-400 text-small">$</span>}
-  type="text"
+  type="number"
   size="sm"
   value={drum20LPrice}
   onChange={(e) => handlePriceChange(e.target.value, setDrum20LPrice)}
@@ -172,7 +172,7 @@ useEffect(() => {
   labelPlacement="outside"
   placeholder="0.00"
   startContent={<span className="text-default-400 text-small">$</span>}
-  type="text"
+      type="number"
   size="sm"
   value={drum12LPrice}
   onChange={(e) => handlePriceChange(e.target.value, setDrum12LPrice)}
@@ -196,7 +196,7 @@ useEffect(() => {
   labelPlacement="outside"
   placeholder="0.00"
   startContent={<span className="text-default-400 text-small">$</span>}
-  type="text"
+      type="number"
   size="sm"
   value={siphonPrice}
   onChange={(e) => handlePriceChange(e.target.value, setSiphonPrice)}
