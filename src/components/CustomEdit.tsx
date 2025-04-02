@@ -271,6 +271,7 @@ export default function CustomEdit() {
     getDay,
     getTelephone,
     getAddress,
+    getDescription
   } = location.state || {}; // Obtener datos
   const { executeRequest } = useApi();
 
@@ -701,7 +702,15 @@ export default function CustomEdit() {
                 <DropdownItem
                   key="edit"
                   description="Vas a poder editar el cliente"
-                  onPress={onOpenEdit}
+                  onPress={()=>{
+                    onOpenEdit();
+                    setLastName(getLastName);
+                    setFirstName(getFirstName);
+                    setTelephone(getTelephone);
+                    setAddress(getAddress)
+                    setDescription(getDescription)
+
+                  }}
                   startContent={<EditDocumentIcon className={iconClasses} />}
                 >
                   Editar Cliente
