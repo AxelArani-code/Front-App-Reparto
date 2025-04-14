@@ -89,16 +89,14 @@ export default function ListUser() {
 
   const getStorageKey = (id: string) => `CLIENT_ORDER_${id}`;
 
-  const fetchClients = async (id: string) => {
+  const fetchClients = async () => {
     if (!id) return;
     const hasVisited = localStorage.getItem("hasVisited-ListUser");
     const storageKey = getStorageKey(id);
-    let storedClients: ClientItem[] = [];
+   //let storedClients: ClientItem[] = [];
+   const storedClients: ClientItem[] = JSON.parse(localStorage.getItem(storageKey) || "[]");
 
-    const savedOrder = localStorage.getItem(storageKey);
-    if (savedOrder) {
-      storedClients = JSON.parse(savedOrder);
-    }
+
 
     try {
       const result = await executeRequest(
@@ -123,7 +121,9 @@ export default function ListUser() {
         });
 
         setClient(updatedClients);
-        saveScheduleToStorage(id, updatedClients);
+               // Guardar directamente la respuesta de la API en localStorage
+               localStorage.setItem(storageKey, JSON.stringify(apiClients));
+      //  saveScheduleToStorage(id, updatedClients);
         setTimeout(() => {
           setIsLoaded(true);
           if (!hasVisited) {
@@ -176,18 +176,22 @@ export default function ListUser() {
     }
   };
 
-  useEffect(() => {
-    
-    if (id) {
-      fetchClients(id);
-    }
-   
-  }, [id]);
+ // Ejecutar fetchClients cada vez que se entra a la vista
+ useEffect(() => {
+  if (id) {
+    fetchClients();
+  }
+}, [id, location.key]); // Se ejecuta cada vez que la vista cambia
 
-  const saveScheduleToStorage = (id: string, newClient: typeof client) => {
-    const storageKey = getStorageKey(id);
-    localStorage.setItem(storageKey, JSON.stringify(newClient));
-  };
+  // Detectar cambios en `client` y guardar automáticamente en localStorage
+  /*
+    useEffect(() => {
+    if (id && client.length > 0) {
+      localStorage.setItem(getStorageKey(id), JSON.stringify(client));
+    }
+  }, [client]);
+
+  */
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -200,14 +204,10 @@ export default function ListUser() {
     updatedClients.splice(newIndex, 0, updatedClients.splice(oldIndex, 1)[0]);
 
     setClient(updatedClients);
-    saveScheduleToStorage(id, updatedClients);
   };
 
-  // Filtrar clientes en base al término de búsqueda
   const filteredClients = client.filter((c) =>
-    `${c.FirstName} ${c.LastName}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+    `${c.FirstName} ${c.LastName}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const routerBack = () => {

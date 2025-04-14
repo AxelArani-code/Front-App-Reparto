@@ -1,8 +1,8 @@
 "use client";
 
 import type {ButtonProps, CardProps} from "@heroui/react";
-
-import React from "react";
+import {parseDate} from "@internationalized/date";
+import React, { useEffect } from "react";
 import {ResponsiveContainer, PieChart, Pie, Tooltip, Cell} from "recharts";
 import {
   Card,
@@ -15,12 +15,12 @@ import {
   DropdownTrigger,
   cn,
   Progress,
-  Tabs,
-  Tab,
-  CardBody,
+
+  DateRangePicker,
 } from "@heroui/react";
 import {Icon} from "@iconify/react";
 import NavBar from "../components/NavBar";
+import { useApi } from "../config/useUnisave";
 
 type ChartData = {
   name: string;
@@ -55,7 +55,7 @@ const data1 = [
 ];
 const data: CircleChartProps[] = [
   {
-    title: "Bidones De 20-L",
+    title: "Analisis",
     categories: ["Pagado Efectivo", "Pagado Transferencia", "Fiados", "De Más"],
     color: "warning",
     chartData: [
@@ -68,18 +68,55 @@ const data: CircleChartProps[] = [
   
 ];
 
-export default function Component() {
+export default function Analisis() {
+  const { executeRequest, } = useApi();
+  const sessionId = localStorage.getItem('sessionId');
+  // Asegurar que el tema se aplica correctamente en el cliente
+  useEffect(() => {
+
+
+    // Hacer una solicitud al cargar el componente
+    const fetchData = async () => {
+      try {
+        const result = await executeRequest('Backend.Actions.Deliveries.GetDeliveryStats', {
+          parameters: [{ TimeFilter:"" }],
+          sessionId: sessionId
+        });
+        // Check if returned is null
+
+        //setSchedule(result?.executionResult?.returned)
+
+        console.log(result)
+      } catch (err) {
+        console.error('API Request Error:', err);
+      }
+
+    };
+    fetchData();
+
+  }, []);
+
   return (
 <div>
   <NavBar />
-{/*Tap*/}
-<div className="flex w-full flex-col p-3">
-      <Tabs aria-label="Options">
-        <Tab key="lunes" title="Lunes">
-          <Card>
-            <CardBody>
 
- {/*Analisis de rosca */}
+
+{/*Fecha*/}
+
+
+<DateRangePicker
+      isRequired
+      className="max-w-xs"
+      defaultValue={{
+        start: parseDate("2024-04-01"),
+        end: parseDate("2024-04-08"),
+      }}
+      label="Filtrar Por Fecha"
+    />
+
+
+
+   {/*Analisis de rosca */}
  <dl className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
       {data.map((item, index) => (
         <CircleChartCard key={index} {...item} />
@@ -148,33 +185,6 @@ export default function Component() {
         </Card>
       ))}
     </dl>
-
-
-            </CardBody>
-          </Card>
-        </Tab>
-        <Tab key="martes" title="Martes">
-          <Card>
-            <CardBody>
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-              ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur.
-            </CardBody>
-          </Card>
-        </Tab>
-        <Tab key="miercoles" title="Miercoles">
-          <Card>
-            <CardBody>
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-              mollit anim id est laborum.
-            </CardBody>
-          </Card>
-        </Tab>
-      </Tabs>
-    </div>
-
-
-
 
 
       

@@ -1,11 +1,5 @@
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Tooltip,
+
   Dropdown,
   DropdownTrigger,
   Button,
@@ -24,6 +18,9 @@ import {
   Select,
   SelectItem,
   Alert,
+  Card,
+  CardHeader,
+  CardBody,
 } from "@heroui/react";
 import NavBar from "./NavBar";
 import { SVGProps, useEffect, useState } from "react";
@@ -458,6 +455,7 @@ export default function CustomEdit() {
     try {
       const sessionId = localStorage.getItem("sessionId");
       console.log(getDayEntityId);
+      console.log(getClientEntityId);
       // Llamar siempre a la API
       const result = await executeRequest(
         "Backend.Actions.Clients.DeleteClientFacet",
@@ -495,7 +493,7 @@ export default function CustomEdit() {
         {
           parameters: [
             {
-              Id: getDayEntityId,
+              Id: getClientEntityId,
               FirstName: firstName,
               LastName: lastName,
               Telephone: telephone,
@@ -634,9 +632,9 @@ export default function CustomEdit() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="lucide lucide-book-user"
           >
             <path d="M15 13a3 3 0 1 0-6 0" />
@@ -784,26 +782,18 @@ export default function CustomEdit() {
           </div>
         </div>
       </div>
-      <Table id="tablet-delivery" className="mt-10">
-        <TableHeader>
-          <TableColumn>Fecha</TableColumn>
-          <TableColumn>Bidones 20-L</TableColumn>
-          <TableColumn>Bidones 12-L</TableColumn>
-          <TableColumn>Sifones</TableColumn>
-          <TableColumn>Accion</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {delivery.length > 0 ? (
-            delivery.map((item) => (
-              <TableRow
-                key={item._id}
-                onClick={() => handleRowClick(item)}
-                className={`cursor-pointer transition-colors border-2 ${selectedRow?._id === item._id
-                    ? "border-blue-500 bg-gray-700"
-                    : "border-transparent hover:bg-gray-700"
-                  }`}
-              >
-                <TableCell>{`${new Date(item.DeliveryTime).toLocaleDateString(
+{ delivery.map((item) => (
+
+     <Card id="view-repart" key={item._id} shadow="md" className="mx-3 mt-2" onPress={() => navigate("/scheduleCard")}>
+         
+              <CardHeader className="gap-4">
+                <div className="w-2 h-10 bg-primary rounded" />
+              
+                <div className="flex items-center">
+                
+        <span className="text-muted-foreground">
+        <h2 className="text-lg font-semibold ">Pedido</h2> 
+          {`${new Date(item.DeliveryTime).toLocaleDateString(
                   "es-ES",
                   {
                     day: "2-digit",
@@ -811,52 +801,80 @@ export default function CustomEdit() {
                     year: "numeric",
                     timeZone: "America/Argentina/Buenos_Aires",
                   }
-                )}`}</TableCell>
-                <TableCell>{item.Drum20LQuantity}</TableCell>
-                <TableCell>{item.Drum12LQuantity}</TableCell>
-                <TableCell>{item.SiphonQuantity}</TableCell>
-                <TableCell>
-                  <div className="relative flex items-center gap-2">
-                    <Tooltip content="Details">
-                      <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                        <EyeIcon />
-                      </span>
-                    </Tooltip>
-                    <Tooltip content="Edit user">
-                      <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                        <EditIcon />
-                      </span>
-                    </Tooltip>
-                    <Tooltip color="danger" content="Delete user">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                        <DeleteIcon />
-                      </span>
-                    </Tooltip>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell children={undefined}>
-                {/** Celda vacía para alinear con la cantidad de columnas */}
-              </TableCell>
-              <TableCell children={undefined}>
-                {/** Celda vacía para alinear con la cantidad de columnas */}
-              </TableCell>
-              <TableCell children={undefined}>
-                {/** Celda vacía para alinear con la cantidad de columnas */}
-              </TableCell>
-              <TableCell children={undefined}>
-                {/** Celda vacía para alinear con la cantidad de columnas */}
-              </TableCell>
-              <TableCell className="text-center py-4">
-                No tiene ninguna entrega
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+                )}`}</span> 
+     
+      </div>
+      
+      {item.PaymentMethod === '1' ? (
+  <span className="bg-green-500 text-white rounded-full px-2 py-1 ml-auto flex items-center gap-1">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-circle-dollar-sign-icon lucide-circle-dollar-sign"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+    Pagado
+  </span>
+) : item.PaymentMethod === '2' ? (
+  <span className="bg-yellow-500 text-white rounded-full px-2 py-1 ml-auto flex items-center gap-1">
+   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-landmark-icon lucide-landmark"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+    Trasferencia
+  </span>
+) : item.PaymentMethod === '3' ? (
+
+  <span className="bg-red-500 text-white rounded-full px-2 py-1 ml-auto flex items-center gap-1">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote-x-icon lucide-banknote-x"><path d="M13 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"/><path d="m17 17 5 5"/><path d="M18 12h.01"/><path d="m22 17-5 5"/><path d="M6 12h.01"/><circle cx="12" cy="12" r="2"/></svg>
+   No pago
+ </span>
+): null}
+
+              </CardHeader>
+              <CardBody>
+
+      <ul className="list-disc list-inside mt-2 space-y-1">
+        <li className="flex items-center">
+        <img
+              aria-hidden="true"
+            
+              src="https://openui.fly.dev/openui/24x24.svg?text=💧"
+              className="mr-2"
+            />
+            {`Dejaste ${item.Drum20LQuantity}, Bidon de 20L `}
+        </li>
+        
+        <li className="flex items-center">
+        <img
+              aria-hidden="true"
+            
+              src="https://openui.fly.dev/openui/24x24.svg?text=💧"
+              className="mr-2"
+            />
+            {`Dejaste ${item.Drum12LQuantity}, Bidon de 12L `}
+        </li>
+
+        <li className="flex items-center">
+        <img
+              aria-hidden="true"
+            
+              src="https://openui.fly.dev/openui/24x24.svg?text=💧"
+              className="mr-2"
+            />
+            {`Dejaste ${item.SiphonQuantity}, Sifones `}
+        </li>
+      </ul>
+                <p className="text-default-500">
+                  Detalles - <span className="font-semibold text-primary">{}</span>
+                </p>
+
+              </CardBody>
+     
+              
+            
+                <Button onPress={() => handleRowClick(item)}variant="bordered">Ver Detalles</Button>
+          
+          
+       
+          </Card>
+))  }
+
+
+
+
 
       {/* Modal Editar */}
       <Modal
@@ -1063,9 +1081,9 @@ export default function CustomEdit() {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         className="lucide lucide-hand-coins"
                       >
                         <path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17" />
@@ -1098,9 +1116,9 @@ export default function CustomEdit() {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         className="lucide lucide-circle-dollar-sign"
                       >
                         <circle cx="12" cy="12" r="10" />
@@ -1439,6 +1457,10 @@ export default function CustomEdit() {
           ClientEntityId={getClientEntityId}
         />
       </div>
+      
     </div>
+    
+    
+
   );
 }
