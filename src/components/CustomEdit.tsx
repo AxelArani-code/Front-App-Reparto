@@ -439,7 +439,7 @@ export default function CustomEdit() {
 
     fetchData();
   }, []);
-
+  
   const saveSettings = (settings: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {

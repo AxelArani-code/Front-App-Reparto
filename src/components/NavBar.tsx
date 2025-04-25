@@ -7,6 +7,7 @@ import {
   Dropdown,
   DropdownMenu,
   Switch,
+  Button,
 } from "@heroui/react";
 import { SVGProps } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -180,43 +181,24 @@ export default function NavBar() {
 
   if (!mounted) return null; // Evita el error de SSR en Next.js
   return (
-    <Navbar>
+    <Navbar >
       <Link to="/">
         <NavbarBrand className="mx-px">
           <AcmeLogo />
-          <p className="font-bold  text-inherit">AppRepart-Beta</p>
+          <p className="font-bold  text-inherit">Repart-Beta</p>
         </NavbarBrand>
         <NavbarBrand className="mx-px">
           <p className="text-sm">{firstName + lastName}</p>
         </NavbarBrand>
       </Link>
       <NavbarContent as="div" justify="end">
-        <Switch
-          isSelected={theme === "dark"}
-          onChange={() => setTheme(theme === "dark" ? "light" : "dark")}
-          color="success"
-          size="lg"
-          startContent={<SunIcon />}
-          endContent={<MoonIcon />}
-        />
+       
+        <Button  variant="bordered" color="success" className=" rounded-full">Contactar</Button>
         <Dropdown placement="bottom-end">
+          
+          
           <DropdownTrigger>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-circle-user-round"
-            >
-              <path d="M18 20a6 6 0 0 0-12 0" />
-              <circle cx="12" cy="10" r="4" />
-              <circle cx="12" cy="12" r="10" />
-            </svg>
+          <Button className="bg-blue-600 text-white px-4 py-2 rounded-full">Acceder</Button>
           </DropdownTrigger>
           {isAuthenticated ? (
   <DropdownMenu aria-label="Profile Actions" variant="flat">
@@ -247,6 +229,18 @@ export default function NavBar() {
   </DropdownMenu>
 ) : (
   <DropdownMenu aria-label="Profile Actions" variant="flat">
+     <DropdownItem key="login" onPress={routerLogin} color="primary">
+     <Switch
+          isSelected={theme === "dark"}
+          onChange={() => setTheme(theme === "dark" ? "light" : "dark")}
+          color="success"
+          size="sm"
+          startContent={<SunIcon />}
+          endContent={<MoonIcon />}
+      >
+        Modo Noche 
+      </Switch>
+    </DropdownItem>
     <DropdownItem key="login" onPress={routerLogin} color="primary">
       Login
     </DropdownItem>

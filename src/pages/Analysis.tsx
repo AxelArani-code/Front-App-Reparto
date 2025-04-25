@@ -1,8 +1,8 @@
 "use client";
 
-import type {ButtonProps, CardProps} from "@heroui/react";
+import type {ButtonProps, CalendarDate, CardProps, RangeValue} from "@heroui/react";
 import {parseDate} from "@internationalized/date";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {ResponsiveContainer, PieChart, Pie, Tooltip, Cell} from "recharts";
 import {
   Card,
@@ -71,30 +71,59 @@ const data: CircleChartProps[] = [
 export default function Analisis() {
   const { executeRequest, } = useApi();
   const sessionId = localStorage.getItem('sessionId');
-  // Asegurar que el tema se aplica correctamente en el cliente
-  useEffect(() => {
+    // ✅ Estado compatible con null
+    const [selectedRange, setSelectedRange] = useState<RangeValue<CalendarDate> | null>({
+      start: parseDate("2024-04-01"),
+      end: parseDate("2024-04-08"),
+    });
+ // ✅ Formatear fecha como "d/M/yyyy H:mm"
+ const formatDate = (date: CalendarDate) => {
+  // Siempre establecer la hora a 12:00
+  const jsDate = new Date(date.year, date.month - 1, date.day, 12, 0);
+
+  const pad = (num: number) => num.toString().padStart(2, "0");
+
+  const day = pad(jsDate.getDate());
+  const month = pad(jsDate.getMonth() + 1);
+  const year = jsDate.getFullYear();
+  const hour = pad(jsDate.getHours());
+  const minute = pad(jsDate.getMinutes());
+
+  return `${day}/${month}/${year} ${hour}:${minute}`;
+};
 
 
-    // Hacer una solicitud al cargar el componente
-    const fetchData = async () => {
+
+
+ // ✅ Llamada a la API cada vez que se cambia el rango
+ useEffect(() => {
+  const fetchDataWithDate = async () => {
+    if (selectedRange?.start && selectedRange?.end) {
+      const startFormatted = formatDate(selectedRange.start);
+      const endFormatted = formatDate(selectedRange.end);
+
+      console.log("Inicio:", startFormatted);
+      console.log("Final:", endFormatted);
+
       try {
-        const result = await executeRequest('Backend.Actions.Deliveries.GetDeliveryStats', {
-          parameters: [{ TimeFilter:"" }],
-          sessionId: sessionId
+        const result = await executeRequest("Backend.Actions.Deliveries.GetDeliveryStats", {
+          parameters: [{ 
+            StartDate: startFormatted,
+            EndDate: endFormatted
+           }],
+          sessionId,
         });
-        // Check if returned is null
 
-        //setSchedule(result?.executionResult?.returned)
-
-        console.log(result)
+        console.log("Datos con rango:", result);
       } catch (err) {
-        console.error('API Request Error:', err);
+        console.error("Error al obtener datos con fecha:", err);
       }
+    }
+  };
 
-    };
-    fetchData();
+  fetchDataWithDate();
+}, [selectedRange]);
 
-  }, []);
 
   return (
 <div>
@@ -105,13 +134,11 @@ export default function Analisis() {
 
 
 <DateRangePicker
-      isRequired
-      className="max-w-xs"
-      defaultValue={{
-        start: parseDate("2024-04-01"),
-        end: parseDate("2024-04-08"),
-      }}
-      label="Filtrar Por Fecha"
+       isRequired
+       className="max-w-xs"
+       value={selectedRange}
+       onChange={setSelectedRange}
+       label="Filtrar Por Fecha"
     />
 
 

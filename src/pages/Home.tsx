@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, cn, Calendar, Skeleton, } from "@heroui/react";
 import NavBar from "../components/NavBar";
 import { CalendarDate, } from "@internationalized/date";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, } from "react-router-dom";
 import { SVGProps, useEffect, useState, } from "react";
 import { JSX } from "react/jsx-runtime";
 import CreateDay from "../layout/CreateDay";
@@ -10,6 +10,7 @@ import { DayItem } from "../interface/DayItem";
 import toast from "react-hot-toast";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import Landing from "../components/Landing";
 
 export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
@@ -68,7 +69,7 @@ export const DeleteDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVG
 export default function Home() {
   const { isOpen: isDeleteOpen, onOpen: onOpenDelete, onOpenChange: onDeleteChange } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onOpenEdit, onOpenChange: onEditChange } = useDisclosure();
-  const navigate = useNavigate();
+
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const { executeRequest, } = useApi();
@@ -260,9 +261,8 @@ export default function Home() {
 
   };
 
-
   return (
-    <div className="container  mx-auto p-4 ">
+    <div className="  mx-auto p-4 ">
       <NavBar />
 
 
@@ -287,68 +287,16 @@ export default function Home() {
         ))
 
       ) : schedule?.length === 0 ? (
-        <div className=" ">
-          <div className="flex flex-col items-center justify-center  bg-background p-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
-            <h1 className="text-3xl font-bold text-foreground">AppRepart-Beta</h1>
-            <Card className="mt-5">
-              <CardHeader>
-                <div className="flex items-start mr-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-notebook-tabs"><path d="M2 6h4" /><path d="M2 10h4" /><path d="M2 14h4" /><path d="M2 18h4" /><rect width="16" height="20" x="4" y="2" rx="2" /><path d="M15 2v20" /><path d="M15 7h5" /><path d="M15 12h5" /><path d="M15 17h5" /></svg>
-                </div>
-                <div className="flex flex-col gap-1">
+       
+          <Landing></Landing>
 
-                  <p className="text-medium">Registro De Pedidos</p>
-                  <p className="text-tiny text-default-400">
-                  Te facilitamos los registros de cada cliente para tu comodidad.
-                  </p>
-                </div>
-
-              </CardHeader>
-            </Card>
-
-            <Card className="mt-5">
-              <CardHeader>
-                <div className="flex items-start mr-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" /></svg>
-                </div>
-                <div className="flex flex-col gap-1">
-
-                  <p className="text-medium">Menos Tiempo</p>
-                  <p className="text-tiny text-default-400">
-                  Ingresa datos lo más rápido y conciso para que puedas ir anotando los pedidos del cliente y asi terminar lo mas antes posible el reparto.
-                  </p>
-                </div>
-
-              </CardHeader>
-
-            </Card>
-
-            <Card className="mt-5">
-              <CardHeader>
-                <div className="flex items-start mr-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-list-checks"><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></svg>
-                </div>
-                <div className="flex flex-col gap-1">
-
-                  <p className="text-medium">Organización  </p>
-                  <p className="text-tiny text-default-400">
-                  Te brindamos un mayor orden de cada pedido los que están al día o no.
-                  </p>
-                </div>
-
-              </CardHeader>
-
-            </Card>
-
-          </div>
-
-
-        </div>
+      
 
       ) : (
-        schedule?.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
-          <Card id="view-repart" key={_id} shadow="md" className="w-full mt-5" onPress={() => navigate("/scheduleCard")}>
+        <>
+  
+       {schedule?.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
+          <Card id="view-repart" key={_id} shadow="md" className="w-full mt-5">
             <Link to="/view-list-users" state={{ id: _id, date: dateStr, route: Route, createdAt: CreatedAt }}>
               <CardHeader className="gap-4">
                 <div className="w-2 h-10 bg-primary rounded" />
@@ -368,10 +316,12 @@ export default function Home() {
                 <p className="text-default-500">
                   Recorrido - <span className="font-semibold text-primary">{Route}</span>
                 </p>
-
               </CardBody>
             </Link>
-            <Dropdown >
+      
+       
+        
+            <Dropdown>
               <DropdownTrigger id="modificacion-repart">
                 <Button variant="bordered">Modificación</Button>
               </DropdownTrigger>
@@ -381,16 +331,19 @@ export default function Home() {
                     onPress={() => {
                       setSelectedId(_id);
                       setRoute(Route);
-                    
-                      setSelectedDate(new CalendarDate(
-                        new Date(dateStr).getFullYear(),
-                        new Date(dateStr).getMonth() + 1,  // Ajuste para que el mes sea correcto
-                        new Date(dateStr).getDate() + 1
-                      ));// Convierte la fecha a formato Date
-                      onOpenEdit();      // Abre el modal
+                      setSelectedDate(
+                        new CalendarDate(
+                          new Date(dateStr).getFullYear(),
+                          new Date(dateStr).getMonth() + 1,
+                          new Date(dateStr).getDate() + 1
+                        )
+                      );
+                      onOpenEdit();
                     }}
                     startContent={<EditDocumentIcon className={iconClasses} />}
-                    key="edit" description="Vas a poder editar el reparto">
+                    key="edit"
+                    description="Vas a poder editar el reparto"
+                  >
                     Editar Reparto
                   </DropdownItem>
                 </DropdownSection>
@@ -398,27 +351,35 @@ export default function Home() {
                   <DropdownItem
                     onPress={() => {
                       setSelectedId(_id);
-                      onOpenDelete();      // Abre el modal
+                      onOpenDelete();
                     }}
                     startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
-                    key="delete" className="text-danger" color="danger" description="Eliminarás los clientes de ese día">
+                    key="delete"
+                    className="text-danger"
+                    color="danger"
+                    description="Eliminarás los clientes de ese día"
+                  >
                     Eliminar Reparto
                   </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>
             </Dropdown>
           </Card>
+        ))}
+                {/* SOLO SI HAY DATOS EN SCHEDULE */}
+    <div className="mt-5">
+      <CreateDay />
+    </div>
 
-        )
-
-        )
+        </>
+       
+        
 
       )
 
 
       }
-
-
+  
 
 
       {/* Modal Eliminar */}
@@ -502,10 +463,7 @@ export default function Home() {
           )}
         </ModalContent>
       </Modal>
-      <div id="create-repart-dia">
-        <CreateDay />
-      </div>
-
+   
     </div>
   )
 }
