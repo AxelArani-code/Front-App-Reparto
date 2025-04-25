@@ -69,8 +69,6 @@ export default function Landing() {
       </div>
     </section>
 
-
-
     {/* Footer */}
     <footer className=" py-10 px-6 md:px-32">
       <div className="flex flex-col md:flex-row justify-between items-start">
