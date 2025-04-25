@@ -22,7 +22,7 @@ export default function Landing() {
         </div>
         <div className="mt-10 md:mt-0 md:ml-12">
           
-          <img src="../../public/iphone_1.png" alt="Device Mockup" className="w-90 md:w-100" />
+          <img src="../assets/img/iphone_1.png" alt="Device Mockup" className="w-90 md:w-100" />
         </div>
       </div>
     </section>
