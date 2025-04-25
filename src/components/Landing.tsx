@@ -22,7 +22,7 @@ export default function Landing() {
         </div>
         <div className="mt-10 md:mt-0 md:ml-12">
           
-          <img src="../assets/img/iphone_1.png" alt="Device Mockup" className="w-90 md:w-100" />
+          <img src="/iphone_1.png" alt="Device Mockup" className="w-90 md:w-100" />
         </div>
       </div>
     </section>
@@ -44,14 +44,14 @@ export default function Landing() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
           <div className="bg-white text-black rounded-[28px] p-6 shadow-xl flex flex-col items-center">
-            <img src="/public/iphone_4.png" alt="QR" className="mb-6 h-48 object-contain" />
+            <img src="/iphone_4.png" alt="QR" className="mb-6 h-48 object-contain" />
             <p className="text-lg font-medium">Organización total</p>
             <p className="text-gray-600 mt-6">
             Planificá cada día con tus clientes asignados. Sabés a quién vas, qué llevás y cuándo.
           </p>
           </div>
           <div className="bg-white text-black rounded-[28px] p-6 shadow-xl flex flex-col items-center">
-            <img src="/public/iphone_3.png" alt="Transaction" className="mb-6 h-48 object-contain" />
+            <img src="/iphone_3.png" alt="Transaction" className="mb-6 h-48 object-contain" />
             <p className="text-lg font-medium">Historial automático de entregas
             </p>
             <p className="text-gray-600 mt-6">
@@ -59,7 +59,7 @@ export default function Landing() {
           </p>
           </div>
           <div className="bg-white text-black rounded-[28px] p-6 shadow-xl flex flex-col items-center">
-          <img src="/public/iphone_2.png" alt="QR" className="mb-6 h-48 object-contain" />
+          <img src="/iphone_2.png" alt="QR" className="mb-6 h-48 object-contain" />
             <p className="text-lg font-medium">Conexión rápida con clientes.</p>
             <p className="text-gray-600 mt-6">
             Cada cliente tiene un botón de WhatsApp directo, para que puedas avisarle en segundos cuándo estás llegando o confirmar pedidos.
