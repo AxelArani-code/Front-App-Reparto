@@ -178,6 +178,11 @@ export default function NavBar() {
   const handleAddAdmin = () => {
     navigate("/admin-user");
   };
+    //Button 
+const handleClicWhatsap = () => {
+  const url = `https://wa.link/9bgcu9`;
+  window.open(url, "_blank");
+};
 
   if (!mounted) return null; // Evita el error de SSR en Next.js
   return (
@@ -193,7 +198,7 @@ export default function NavBar() {
       </Link>
       <NavbarContent as="div" justify="end">
        
-        <Button  variant="bordered" color="success" className=" rounded-full">Contactar</Button>
+        <Button onPress={handleClicWhatsap} variant="bordered" color="success" className=" rounded-full">Contactar</Button>
         <Dropdown placement="bottom-end">
           
           

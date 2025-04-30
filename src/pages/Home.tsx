@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, cn, Calendar, Skeleton, } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, cn, Calendar, } from "@heroui/react";
 import NavBar from "../components/NavBar";
 import { CalendarDate, } from "@internationalized/date";
 import { Link, } from "react-router-dom";
@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import Landing from "../components/Landing";
+import SkeletonLoader from "../components/SkeletonLoader";
 
 export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
@@ -270,27 +271,10 @@ export default function Home() {
 
       {!isLoaded ? (
 
-        Array.from({ length: schedule?.length || 1 }).map((_, index) => (
-          <Card key={index} shadow="md" className="w-full mt-5">
-            <CardHeader className="gap-4">
-              <Skeleton className="w-3 h-10 bg-primary rounded" />
-              <div>
-                <Skeleton className="h-6 w-32" />
-                <Skeleton className="h-4 w-24 mt-1" />
-              </div>
-            </CardHeader>
-            <CardBody>
-              <Skeleton className="h-4 w-full mb-2" />
-              <Skeleton className="h-4 w-1/2" />
-            </CardBody>
-          </Card>
-        ))
+      <SkeletonLoader/>
 
-      ) : schedule?.length === 0 ? (
-       
+      ) : schedule?.length === 0 ? (       
           <Landing></Landing>
-
-      
 
       ) : (
         <>

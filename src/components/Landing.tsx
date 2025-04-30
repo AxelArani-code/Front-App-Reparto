@@ -1,7 +1,13 @@
 
-import CreateDay from "../layout/CreateDay";
+import { Button } from "@heroui/react";
+
 
 export default function Landing() {
+  //Button 
+const handleClicWhatsap = () => {
+  const url = `https://wa.link/9bgcu9`;
+  window.open(url, "_blank");
+};
   return (
     <div className="font-sans ">
 
@@ -17,12 +23,12 @@ export default function Landing() {
           Es una app web pensada exclusivamente para repartidores de agua. Te permite organizar tus días de trabajo, registrar cada entrega y comunicarte rápidamente con tus clientes.
           </p>
           <div className="mt-6 items-center w-full max-w-md">
-                  <CreateDay />
+             <Button  onPress={handleClicWhatsap}className="mt-5 w-full bg-blue-500 text-white py-4 text-center text-lg font-semibold">Contactarnos</Button>
           </div>
         </div>
         <div className="mt-10 md:mt-0 md:ml-12">
           
-          <img src="/iphone_1.png" alt="Device Mockup" className="w-90 md:w-100" />
+          <img src="/iphone_1.png" alt="Device Mockup" className="w-64 md:w-96 lg:w-[250px] xl:w-[400px]" />
         </div>
       </div>
     </section>
@@ -74,20 +80,10 @@ export default function Landing() {
       <div className="flex flex-col md:flex-row justify-between items-start">
         <div>
           <h4 className="text-xl font-bold text-blue-700">Repart-Beta</h4>
-          <p className="text-sm text-gray-500 mt-2">© Company 2025</p>
+          <p className="text-sm text-gray-500 mt-2">©--2025</p>
           
         </div>
-        <div className="mt-6 md:mt-0 grid grid-cols-2 gap-6">
-          <div>
-            <h5 className="font-semibold">Creadores</h5>
-            <ul className="text-sm text-gray-600 space-y-2 mt-2">
-              <li>Axel Aranibar</li>
-              <li>Nicolas Manzanares</li>
-             
-            </ul>
-          </div>
-         
-        </div>
+      
       </div>
     </footer>
   </div>
