@@ -22,6 +22,7 @@ import {Icon} from "@iconify/react";
 import NavBar from "../components/NavBar";
 import { useApi } from "../config/useUnisave";
 
+
 type ChartData = {
   name: string;
   [key: string]: string | number;
@@ -33,48 +34,61 @@ type CircleChartProps = {
   categories: string[];
   chartData: ChartData[];
 };
-const data1 = [
-  {
-    title: "Server Load",
-    value: 38,
-    status: "good",
-    iconName: "solar:server-square-linear",
-  },
-  {
-    title: "Server Load",
-    value: 98,
-    status: "danger",
-    iconName: "solar:server-square-linear",
-  },
-  {
-    title: "Average Memory Used",
-    value: 64,
-    status: "warn",
-    iconName: "solar:sd-card-linear",
-  },
-];
-const data: CircleChartProps[] = [
-  {
-    title: "Analisis",
-    categories: ["Pagado Efectivo", "Pagado Transferencia", "Fiados", "De Más"],
-    color: "warning",
-    chartData: [
-      {name: "Pagado Efectivo", value: 600},
-      {name: "Pagado Transferencia", value: 300},
-      {name: "Fiados", value: 300},
-      {name: "De Más", value: 100},
-    ],
-  },
-  
-];
+
+
 
 export default function Analisis() {
   const { executeRequest, } = useApi();
   const sessionId = localStorage.getItem('sessionId');
+  //Valores de Rosca y datos que quiero obtener dentro del facet 
+  const [cashPaid, setCashPaid] = useState<number>(0);
+  const [transferPaid, setTransferPaid] = useState<number>(0);
+  const [debitoPaid, setDevitoPaid] = useState<number>(0);
+//Datos de tabala
+const [drum20LAmounts, setDrum20LAmounts] = useState<number>(0);
+const [drum12LAmounts, setDrum12LAmounts] = useState<number>(0);
+const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
+
+  const data: CircleChartProps[] = [
+    {
+       title: "Pagado Efectivo",
+       categories: ["Pagado Efectivo"],
+       chartData: [
+        { name: "Pagado Efectivo", value: cashPaid },
+        { name: "Transferencia", value: transferPaid },
+        { name: "Debito", value: debitoPaid },
+      ],
+       color: "primary", // usa el color que desees
+     },
+     
+   ];
+
+   const dataPorUnidad = [
+    {
+      title: "Total Bidones De 20-L",
+      value: drum20LAmounts,
+      status: "good",
+      iconName: "material-symbols:water-drop-rounded",
+    },
+    {
+      title: "Total Bidones De 12-L",
+      value: drum12LAmounts,
+      status: "good",
+      iconName: "material-symbols:water-drop-rounded",
+    },
+    {
+      title: "Total De Sifonos",
+      value: siphonAmounts,
+      status: "bad",
+      iconName: "mdi:bottle-soda",
+    },
+    
+  ];
+
     // ✅ Estado compatible con null
     const [selectedRange, setSelectedRange] = useState<RangeValue<CalendarDate> | null>({
-      start: parseDate("2024-04-01"),
-      end: parseDate("2024-04-08"),
+      start: parseDate("2025-01-01"),
+      end: parseDate("2025-04-30"),
     });
  // ✅ Formatear fecha como "d/M/yyyy H:mm"
  const formatDate = (date: CalendarDate) => {
@@ -113,8 +127,24 @@ export default function Analisis() {
            }],
           sessionId,
         });
-
         console.log("Datos con rango:", result);
+
+        // 👇 Validar y guardar el valor
+        const totalCash = result?.executionResult?.returned?.TotalInCash ?? 0 ;
+        const transfer = result?.executionResult?.returned?.TotalInTransfer ?? 0 ;
+        const debito = result?.executionResult?.returned?.TotalInDebt ?? 0 ;
+        const drumAmounts = result?.executionResult?.returned?.Drum20LAmounts ?? 0 ;
+        const drum12LAmounts = result?.executionResult?.returned?.Drum12LAmounts ?? 0 ;
+        const siphonAmounts = result?.executionResult?.returned?.SiphonAmounts ?? 0 ;
+
+        setCashPaid(totalCash);
+        setTransferPaid(transfer);
+        setDevitoPaid(debito)
+        console.log("TotalCash :", totalCash);
+        console.log("TotalTrasferencia :", transfer);
+        setDrum20LAmounts(drumAmounts)
+        setDrum12LAmounts(drum12LAmounts)
+        setSiphonAmounts(siphonAmounts)
       } catch (err) {
         console.error("Error al obtener datos con fecha:", err);
       }
@@ -145,13 +175,22 @@ export default function Analisis() {
 
    {/*Analisis de rosca */}
  <dl className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-      {data.map((item, index) => (
-        <CircleChartCard key={index} {...item} />
-      ))}
+ {data.map(() => (
+  <CircleChartCard
+  title="Medios De Pagos"
+  color="primary"
+  categories={["Efectivo", "Transferencia", "Debito"]}
+  chartData={[
+    { name: "Efectivo", value: cashPaid },
+    { name: "Transferencia", value: transferPaid },
+    { name: "Debito", value: debitoPaid }
+  ]}
+/>
+))}
     </dl>
               {/*Analisis de tablar */}
             <dl className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 mt-5">
-      {data1.map(({title, value, status, iconName}, index) => (
+      {dataPorUnidad.map(({title, value, status, iconName}, index) => (
         <Card
           key={index}
           className="flex flex-col border border-transparent p-4 dark:border-default-100"
@@ -174,7 +213,7 @@ export default function Analisis() {
 
           <div className="pt-1">
             <dt className="my-2 text-sm font-medium text-default-500">{title}</dt>
-            <dd className="text-2xl font-semibold text-default-700">{value}%</dd>
+            <dd className="text-2xl font-semibold text-default-700">{value}/Ud.</dd>
           </div>
           <Progress
             aria-label="status"
@@ -220,7 +259,11 @@ export default function Analisis() {
 }
 
 const formatTotal = (total: number) => {
-  return total >= 1000 ? `${(total / 1000).toFixed(1)}K` : total;
+  return new Intl.NumberFormat("es-CL", {
+    style: "currency",
+    currency: "CLP",
+    minimumFractionDigits: 0,
+  }).format(total);
 };
 
 const CircleChartCard = React.forwardRef<
@@ -286,11 +329,8 @@ const CircleChartCard = React.forwardRef<
         </div>
       </div>
       <div className="flex h-full flex-wrap items-center justify-center gap-x-2 lg:flex-nowrap">
-        <ResponsiveContainer
-          className="[&_.recharts-surface]:outline-none"
-          height={200}
-          width="100%"
-        >
+      <ResponsiveContainer height={200} width="100%">
+
           <PieChart accessibilityLayer margin={{top: 0, right: 0, left: 0, bottom: 0}}>
             <Tooltip
               content={({label, payload}) => (

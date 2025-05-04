@@ -211,7 +211,18 @@ const handleClicWhatsap = () => {
       <p className="font-semibold">Cuenta de </p>
       <p className="font-semibold">{Email}</p>
     </DropdownItem>
-
+    <DropdownItem key="login" onPress={routerLogin} color="primary">
+     <Switch
+          isSelected={theme === "dark"}
+          onChange={() => setTheme(theme === "dark" ? "light" : "dark")}
+          color="success"
+          size="sm"
+          startContent={<SunIcon />}
+          endContent={<MoonIcon />}
+      >
+        Modo Noche 
+      </Switch>
+    </DropdownItem>
     {/* ✅ Se usa el operador ternario para evitar errores */}
     {isAdmin ? (
       <DropdownItem onPress={handleAddAdmin} key="admin" color="warning">
@@ -247,7 +258,7 @@ const handleClicWhatsap = () => {
       </Switch>
     </DropdownItem>
     <DropdownItem key="login" onPress={routerLogin} color="primary">
-      Login
+      Ingresar
     </DropdownItem>
   </DropdownMenu>
 )}

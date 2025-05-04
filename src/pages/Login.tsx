@@ -99,7 +99,7 @@ console.log("Session ID recuperado:", sessionId);
   <Button className="w-full" color="primary" type="submit" isLoading={loading}>
     Ingresar
   </Button>
-  <Button className="w-full" color="success" onPress={onOpen} isLoading={loading}>
+  <Button className="w-full" color="success" onPress={onOpen} >
     Registrarme
   </Button>
   {message && <p className="text-center text-sm">{message}</p>}
