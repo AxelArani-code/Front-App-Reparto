@@ -183,6 +183,9 @@ const handleClicWhatsap = () => {
   const url = `https://wa.link/9bgcu9`;
   window.open(url, "_blank");
 };
+const routerAnalisis = () => {
+  navigate("/analysis");
+};
 
   if (!mounted) return null; // Evita el error de SSR en Next.js
   return (
@@ -223,21 +226,19 @@ const handleClicWhatsap = () => {
         Modo Noche 
       </Switch>
     </DropdownItem>
-    {/* ✅ Se usa el operador ternario para evitar errores */}
+ 
     {isAdmin ? (
       <DropdownItem onPress={handleAddAdmin} key="admin" color="warning">
         Admin
       </DropdownItem>
     ) : null}
 
-    {/* 
-      const routerAnalisis = () => {
-    navigate("/analysis");
-  };<DropdownItem onPress={routerAnalisis} key="logout" color="danger">
+  
+ <DropdownItem onPress={routerAnalisis} key="logout" color="danger">
     Analisis
     </DropdownItem>
 
-    */}
+    
 
     <DropdownItem onPress={handleAddUser} key="logout" color="danger">
       Cerrar Sesión

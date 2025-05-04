@@ -156,7 +156,7 @@ const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
 
 
   return (
-<div>
+<div className="mx-2 items-center">
   <NavBar />
 
 
@@ -165,7 +165,7 @@ const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
 
 <DateRangePicker
        isRequired
-       className="max-w-xs"
+       className="mt-5 "
        value={selectedRange}
        onChange={setSelectedRange}
        label="Filtrar Por Fecha"
@@ -174,7 +174,7 @@ const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
 
 
    {/*Analisis de rosca */}
- <dl className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+ <dl className="mt-5  grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
  {data.map(() => (
   <CircleChartCard
   title="Medios De Pagos"
