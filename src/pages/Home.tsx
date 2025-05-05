@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, cn, Calendar, Skeleton, } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, cn, Calendar,} from "@heroui/react";
 import NavBar from "../components/NavBar";
 import { CalendarDate, } from "@internationalized/date";
 import { Link, } from "react-router-dom";
@@ -79,7 +79,7 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false); // Estado para Skeleton
 
 
-  const [isLoadingSchedule, setIsLoadingSchedule] = useState(false);
+
   
 
   // Obtener la fecha actual
@@ -129,15 +129,15 @@ export default function Home() {
 
         if (!result?.executionResult?.returned || result.executionResult.returned.length === 0) {
           setSchedule([]);
-          setIsLoaded(false);
+          setIsLoaded(true);
         } else {
-          setIsLoadingSchedule(true); // <-- Nuevo loading para el segundo loader
+          //setIsLoadingSchedule(true); // <-- Nuevo loading para el segundo loader
           
           setTimeout(() => {
             setSchedule(result.executionResult.returned);
             setIsLoaded(true); // Datos cargados, ocultar Skeleton
             
-            setIsLoadingSchedule(false); // <-- desactivamos luego de mostrar datos
+         
             if (!hasVisited) {
 
               localStorage.setItem("hasVisited-Home", "true");
@@ -276,23 +276,7 @@ export default function Home() {
   <SkeletonLoader />
 ) : schedule.length === 0 ? (
   <Landing />
-) : isLoadingSchedule ? (
-  Array.from({ length: schedule?.length || 1 }).map((_, index) => (
-    <Card key={index} shadow="md" className="w-full mt-5">
-      <CardHeader className="gap-4">
-        <Skeleton className="w-3 h-10 bg-primary rounded" />
-        <div>
-          <Skeleton className="h-6 w-32" />
-          <Skeleton className="h-4 w-24 mt-1" />
-        </div>
-      </CardHeader>
-      <CardBody>
-        <Skeleton className="h-4 w-full mb-2" />
-        <Skeleton className="h-4 w-1/2" />
-      </CardBody>
-    </Card>
-  ))
-) : (
+): (
   <>
           {schedule?.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
           <Card id="view-repart" key={_id} shadow="md" className="w-full mt-5">
