@@ -75,6 +75,12 @@ const handleClicWhatsap = () => {
       </div>
     </section>
 
+{/* AppStore Teaser */}
+<section className="text-center py-16">
+        <h3 className="text-2xl mb-8">Analizamos todo tu reparto automáticamente...</h3>
+        <img src="/iphone_6.png" alt="App Preview" className="mx-auto w-64 md:w-96 lg:w-[250px] xl:w-[400px]" />
+      </section>
+
     {/* Footer */}
     <footer className=" py-10 px-6 md:px-32">
       <div className="flex flex-col md:flex-row justify-between items-start">
