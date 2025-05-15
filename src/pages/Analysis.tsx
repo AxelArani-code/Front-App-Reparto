@@ -6,13 +6,7 @@ import React, { useEffect, useState } from "react";
 import {ResponsiveContainer, PieChart, Pie, Tooltip, Cell} from "recharts";
 import {
   Card,
-  Button,
-  Select,
-  SelectItem,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
+
   cn,
   Progress,
 
@@ -21,7 +15,7 @@ import {
 import {Icon} from "@iconify/react";
 import NavBar from "../components/NavBar";
 import { useApi } from "../config/useUnisave";
-
+import { today } from "@internationalized/date"; // ✅ IMPORTANTE
 
 type ChartData = {
   name: string;
@@ -48,6 +42,8 @@ export default function Analisis() {
 const [drum20LAmounts, setDrum20LAmounts] = useState<number>(0);
 const [drum12LAmounts, setDrum12LAmounts] = useState<number>(0);
 const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
+
+
 
   const data: CircleChartProps[] = [
     {
@@ -86,10 +82,8 @@ const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
   ];
 
     // ✅ Estado compatible con null
-    const [selectedRange, setSelectedRange] = useState<RangeValue<CalendarDate> | null>({
-      start: parseDate("2025-01-01"),
-      end: parseDate("2025-04-30"),
-    });
+   const [selectedRange, setSelectedRange] = useState<RangeValue<CalendarDate> | null>(null);
+
  // ✅ Formatear fecha como "d/M/yyyy H:mm"
  const formatDate = (date: CalendarDate) => {
   // Siempre establecer la hora a 12:00
@@ -107,7 +101,42 @@ const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
 };
 
 
+  // ✅ Recuperar fechas desde localStorage al iniciar
+  useEffect(() => {
+    const savedRange = localStorage.getItem("selectedDateRange");
+    if (savedRange) {
+      try {
+        const parsed = JSON.parse(savedRange);
+        if (parsed.start && parsed.end) {
+          setSelectedRange({
+            start: parseDate(parsed.start),
+            end: parseDate(parsed.end),
+          });
+        }
+      } catch (error) {
+        console.error("Error al leer fechas del localStorage", error);
+      }
+    } else {
+      // Por defecto si no hay nada guardado
+      setSelectedRange({
+        start: parseDate("2025-01-01"),
+       end: today("UTC"),
+      });
+    }
+  }, []);
 
+  // ✅ Guardar en localStorage cada vez que se modifiquen las fechas
+  useEffect(() => {
+    if (selectedRange?.start && selectedRange?.end) {
+      localStorage.setItem(
+        "selectedDateRange",
+        JSON.stringify({
+          start: selectedRange.start.toString(), // formato ISO
+          end: selectedRange.end.toString(),
+        })
+      );
+    }
+  }, [selectedRange]);
 
  // ✅ Llamada a la API cada vez que se cambia el rango
  useEffect(() => {
@@ -221,33 +250,7 @@ const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
             color={status === "good" ? "success" : status === "warn" ? "warning" : "danger"}
             value={value}
           />
-          <Dropdown
-            classNames={{
-              content: "min-w-[120px]",
-            }}
-            placement="bottom-end"
-          >
-            <DropdownTrigger>
-              <Button
-                isIconOnly
-                className="absolute right-2 top-2 w-auto rounded-full"
-                size="sm"
-                variant="light"
-              >
-                <Icon height={16} icon="solar:menu-dots-bold" width={16} />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              itemClasses={{
-                title: "text-tiny",
-              }}
-              variant="flat"
-            >
-              <DropdownItem key="view-details">View Details</DropdownItem>
-              <DropdownItem key="export-data">Export Data</DropdownItem>
-              <DropdownItem key="set-alert">Set Alert</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+         
         </Card>
       ))}
     </dl>
@@ -281,51 +284,7 @@ const CircleChartCard = React.forwardRef<
           <dt>
             <h3 className="text-small font-medium text-default-500">{title}</h3>
           </dt>
-          <div className="flex items-center justify-end gap-x-2">
-            <Select
-              aria-label="Time Range"
-              classNames={{
-                trigger: "min-w-[100px] min-h-7 h-7",
-                value: "text-tiny !text-default-500",
-                selectorIcon: "text-default-500",
-                popoverContent: "min-w-[120px]",
-              }}
-              defaultSelectedKeys={["per-day"]}
-              listboxProps={{
-                itemClasses: {
-                  title: "text-tiny",
-                },
-              }}
-              placeholder="Per Day"
-              size="sm"
-            >
-              <SelectItem key="per-day">Por Dia</SelectItem>
-              <SelectItem key="per-week">Por Semana</SelectItem>
-              <SelectItem key="per-month">Por Mes</SelectItem>
-            </Select>
-            <Dropdown
-              classNames={{
-                content: "min-w-[120px]",
-              }}
-              placement="bottom-end"
-            >
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <Icon height={16} icon="solar:menu-dots-bold" width={16} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                itemClasses={{
-                  title: "text-tiny",
-                }}
-                variant="flat"
-              >
-                <DropdownItem key="view-details">View Details</DropdownItem>
-                <DropdownItem key="export-data">Export Data</DropdownItem>
-                <DropdownItem key="set-alert">Set Alert</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
+          
         </div>
       </div>
       <div className="flex h-full flex-wrap items-center justify-center gap-x-2 lg:flex-nowrap">

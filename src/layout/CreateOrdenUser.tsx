@@ -118,19 +118,20 @@ useEffect(() => {
         Crear Nuevo Pedido
       </Button>
       <Modal isDismissable={false} isKeyboardDismissDisabled={true} isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
+        <ModalContent className="">
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Crear Nuevo Pedido</ModalHeader>
               <ModalBody>
-              <Alert
+                <div className="max-h-[70vh] overflow-y-auto ">
+                    <Alert className="px-2 pb-4 text-sm"
         hideIconWrapper
         color="secondary"
-        description="La cantidad de producto ingresado, será calculado automáticamente su valor. Ej: 2 Bidones 20-L precio $6.400 (ud. $3.200) "
+        description="Ingresar el valor de un solo vidon o solo. Ej pones 2 Unid. y ingresas un solo valor 3.300$ "
         title="Advertencia"
         variant="bordered"
-      />
-      <div className="grid grid-cols-2 gap-4">
+      ></Alert>
+      <div className="grid grid-cols-2 gap-4  px-2 pb-2 pt-4">
     <Input
                   label="Bidones de 20-L"
                   labelPlacement="outside"
@@ -155,7 +156,7 @@ useEffect(() => {
             
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4   px-2 pb-2">
 <Input
                   label="Bidones de 12-L"
                   labelPlacement="outside"
@@ -180,7 +181,7 @@ useEffect(() => {
               
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 px-2 pb-2">
   <Input
                   label="Sifon De Soda"
                   labelPlacement="outside"
@@ -208,7 +209,7 @@ useEffect(() => {
                 <Select
                   size="sm"
                   variant="bordered"
-
+                  className="px-2 pb-2"
                   items={day}
                   label="Pagado"
                   placeholder="Selecione Tipo De Pago"
@@ -225,7 +226,7 @@ useEffect(() => {
                 <Select
                   size="sm"
                   variant="bordered"
-
+                  className="px-2 pb-2"
                   items={medioDePago}
                   label="Se realizo"
                   placeholder="Selecione si la persona se le fio o lo pago"
@@ -243,9 +244,12 @@ useEffect(() => {
                 </Select>
                 
                                 <Textarea    
+                                className="px-2 "
                                 value={comments}
                                 onChange={(e) => handlePriceChange(e.target.value, setComments)}  type="text"   variant="bordered"  label="Notas"   size="sm"placeholder="Escribe Notas" />
 
+                </div>
+            
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>

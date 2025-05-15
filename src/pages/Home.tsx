@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, cn, Calendar,} from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, DateInput, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, cn, Calendar, Alert,} from "@heroui/react";
 import NavBar from "../components/NavBar";
 import { CalendarDate, } from "@internationalized/date";
 import { Link, } from "react-router-dom";
@@ -78,6 +78,8 @@ export default function Home() {
   const [schedule, setSchedule] = useState<DayItem[]>([]); // Manejar el estado del schedule
   const [isLoaded, setIsLoaded] = useState(false); // Estado para Skeleton
 
+//Credenciales 
+const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
 
   
@@ -158,10 +160,23 @@ export default function Home() {
         }
         //setSchedule(result?.executionResult?.returned)
 
+
+        //Credenciales 
+        const authResult = await executeRequest("Backend.Actions.GetMyUserFacet", {
+        sessionId: "",
+      });
+      if (authResult?.executionResult?.returned == null) {
+        setIsAuthenticated(false);
+      } else {
+        setIsAuthenticated(true);
+      }
         console.log(result)
       } catch (err) {
         console.error('API Request Error:', err);
       }
+
+      //
+ 
 
     };
     fetchData();
@@ -268,89 +283,123 @@ export default function Home() {
   };
 
   return (
-    <div className="   ">
+    <div className=" ">
       <NavBar />
 
-
-      {!isLoaded ? (
+{!isLoaded ? (
   <SkeletonLoader />
-) : schedule.length === 0 ? (
+) : !isAuthenticated ? (
   <Landing />
-): (
-  <>
-          {schedule?.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
-          <Card id="view-repart" key={_id} shadow="md" className="w-full mt-5">
-            <Link to="/view-list-users" state={{ id: _id, date: dateStr, route: Route, createdAt: CreatedAt }}>
-              <CardHeader className="gap-4">
-                <div className="w-2 h-10 bg-primary rounded" />
-                <div>
-                  <h2 className="text-lg font-bold text-primary">
-                    {`Día - ${new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
-                      .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
-                      .charAt(0)
-                      .toUpperCase() + new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() + 1))
-                        .toLocaleDateString("es-ES", { weekday: "long", timeZone: "America/Argentina/Buenos_Aires" })
-                        .slice(1)}`}
-                  </h2>
-                  <p className="text-default-500">{`Día Creación - ${new Date(CreatedAt).toLocaleDateString()}`}</p>
-                </div>
-              </CardHeader>
-              <CardBody>
-                <p className="text-default-500">
-                  Recorrido - <span className="font-semibold text-primary">{Route}</span>
-                </p>
-              </CardBody>
-            </Link>
+) : schedule.length === 0 ? (
+
+  
+  <div className="mt-5  mx-4  ">
+    <Alert
+        color="warning"
+        description="Por favor ingrese nuevo Dia de reparto para poder utilizar las funcionalidad "
       
-       
-        
-            <Dropdown>
-              <DropdownTrigger id="modificacion-repart">
-                <Button variant="bordered">Modificación</Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Dropdown menu with description" variant="faded">
-                <DropdownSection showDivider title="Acción">
-                  <DropdownItem
-                    onPress={() => {
-                      setSelectedId(_id);
-                      setRoute(Route);
-                      setSelectedDate(
-                        new CalendarDate(
-                          new Date(dateStr).getFullYear(),
-                          new Date(dateStr).getMonth() + 1,
-                          new Date(dateStr).getDate() + 1
-                        )
-                      );
-                      onOpenEdit();
-                    }}
-                    startContent={<EditDocumentIcon className={iconClasses} />}
-                    key="edit"
-                    description="Vas a poder editar el reparto"
-                  >
-                    Editar Reparto
-                  </DropdownItem>
-                </DropdownSection>
-                <DropdownSection title="Precaución">
-                  <DropdownItem
-                    onPress={() => {
-                      setSelectedId(_id);
-                      onOpenDelete();
-                    }}
-                    startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
-                    key="delete"
-                    className="text-danger"
-                    color="danger"
-                    description="Eliminarás los clientes de ese día"
-                  >
-                    Eliminar Reparto
-                  </DropdownItem>
-                </DropdownSection>
-              </DropdownMenu>
-            </Dropdown>
-          </Card>
-        ))}
-                {/* SOLO SI HAY DATOS EN SCHEDULE */}
-    <div className="mt-5">
+        title="Atención"
+        variant="faded"
+      />
+      <CreateDay />
+    </div>
+) : (
+  <>
+  <div className=" mx-4 ">
+      {schedule.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
+      <Card id="view-repart" key={_id} shadow="md" className="w-full mt-5  ">
+        <Link
+          to="/view-list-users"
+          state={{ id: _id, date: dateStr, route: Route, createdAt: CreatedAt }}
+        >
+          <CardHeader className="gap-4">
+            <div className="w-2 h-10 bg-primary rounded" />
+            <div>
+              <h2 className="text-lg font-bold text-primary">
+                {`Día - ${new Date(
+                  new Date(dateStr).setDate(new Date(dateStr).getDate() + 1)
+                )
+                  .toLocaleDateString("es-ES", {
+                    weekday: "long",
+                    timeZone: "America/Argentina/Buenos_Aires",
+                  })
+                  .charAt(0)
+                  .toUpperCase() +
+                  new Date(
+                    new Date(dateStr).setDate(new Date(dateStr).getDate() + 1)
+                  )
+                    .toLocaleDateString("es-ES", {
+                      weekday: "long",
+                      timeZone: "America/Argentina/Buenos_Aires",
+                    })
+                    .slice(1)}`}
+              </h2>
+              <p className="text-default-500">{`Día Creación - ${new Date(
+                CreatedAt
+              ).toLocaleDateString()}`}</p>
+            </div>
+          </CardHeader>
+          <CardBody>
+            <p className="text-default-500">
+              Recorrido - <span className="font-semibold text-primary">{Route}</span>
+            </p>
+          </CardBody>
+        </Link>
+
+        <Dropdown>
+          <DropdownTrigger id="modificacion-repart">
+            <Button variant="bordered">Modificación</Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            aria-label="Dropdown menu with description"
+            variant="faded"
+          >
+            <DropdownSection showDivider title="Acción">
+              <DropdownItem
+                onPress={() => {
+                  setSelectedId(_id);
+                  setRoute(Route);
+                  setSelectedDate(
+                    new CalendarDate(
+                      new Date(dateStr).getFullYear(),
+                      new Date(dateStr).getMonth() + 1,
+                      new Date(dateStr).getDate() + 1
+                    )
+                  );
+                  onOpenEdit();
+                }}
+                startContent={<EditDocumentIcon className={iconClasses} />}
+                key="edit"
+                description="Vas a poder editar el reparto"
+              >
+                Editar Reparto
+              </DropdownItem>
+            </DropdownSection>
+            <DropdownSection title="Precaución">
+              <DropdownItem
+                onPress={() => {
+                  setSelectedId(_id);
+                  onOpenDelete();
+                }}
+                startContent={
+                  <DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />
+                }
+                key="delete"
+                className="text-danger"
+                color="danger"
+                description="Eliminarás los clientes de ese día"
+              >
+                Eliminar Reparto
+              </DropdownItem>
+            </DropdownSection>
+          </DropdownMenu>
+        </Dropdown>
+      </Card>
+    ))}
+
+  </div>
+  
+    <div className="mt-5  mx-4 ">
       <CreateDay />
     </div>
   </>

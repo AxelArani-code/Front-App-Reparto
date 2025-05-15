@@ -156,6 +156,7 @@ export default function NavBar() {
         toast.promise(saveSettings(message), {
           loading: "Cargando...",
           success: <b>{message}</b>,
+          
         });
 
         localStorage.removeItem("sessionId");
@@ -166,8 +167,10 @@ export default function NavBar() {
       toast.error(error.message + "Error al autenticar el usuario.");
     }
     setTimeout(() => {
-      window.location.reload();
+       navigate("/");
+ 
     }, 3000);
+        
   };
   const routerProfile = () => {
     navigate("/profile");

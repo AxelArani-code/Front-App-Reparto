@@ -1142,9 +1142,9 @@ export default function CustomEdit() {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     }).format(
-                      selectedRow.SiphonPrice +
-                      selectedRow.Drum12LPrice +
-                      selectedRow.Drum20LPrice
+                      selectedRow.SiphonPrice   * selectedRow.SiphonQuantity +
+                      selectedRow.Drum12LPrice * selectedRow.Drum12LQuantity  +
+                      selectedRow.Drum20LPrice * selectedRow.Drum20LQuantity 
                     )}`}
                   </span>
                 </div>
