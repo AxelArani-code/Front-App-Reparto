@@ -268,7 +268,7 @@ export default function Home() {
   };
 
   return (
-    <div className="  mx-auto p-4 ">
+    <div className="   ">
       <NavBar />
 
 

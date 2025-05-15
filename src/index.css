@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.wave-shape {
+    background: linear-gradient(to top, #005b96, #007acc, #00aaff);
+    clip-path: polygon(0 80%, 10% 85%, 20% 80%, 30% 90%, 40% 85%, 50% 95%, 60% 85%, 70% 90%, 80% 80%, 90% 85%, 100% 80%, 100% 100%, 0% 100%);
+    height: 300px;
+    width: 100%;
+  }
+  

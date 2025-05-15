@@ -76,7 +76,9 @@ const handleClicWhatsap = () => {
     </section>
 
 {/* AppStore Teaser */}
-<section className="text-center py-16">
+<section className="relative text-center py-24 bg-no-repeat bg-cover bg-bottom" style={{
+    backgroundImage: "url('/background.png')",
+  }}>
         <h3 className="text-2xl mb-8">Analizamos todo tu reparto automáticamente...</h3>
         <img src="/iphone_6.png" alt="App Preview" className="mx-auto w-64 md:w-96 lg:w-[250px] xl:w-[400px]" />
       </section>
