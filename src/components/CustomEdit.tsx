@@ -617,6 +617,26 @@ export default function CustomEdit() {
     }, 3200);
   };
 
+const handleEdit = (row) => {
+  setSelectedRow(row);
+
+  setDrum20LQuantity(row.Drum20LQuantity);
+  setDrum20LPrice(row.Drum20LPrice);
+  
+  setDrum12LQuantity(row.Drum12LQuantity);
+  setDrum12LPrice(row.Drum12LPrice);
+  
+  setSiphonQuantity(row.SiphonQuantity);
+  setSiphonPrice(row.SiphonPrice);
+  
+  setSelectedPaymentMethod(row.PaymentMethod);
+  setIsPaid(row.IsPaid);
+  setComments(row.Comments);
+
+  onOpenEditDelivery(); // 👉 Esto abre el modal de editar
+};
+
+
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
@@ -782,9 +802,22 @@ export default function CustomEdit() {
           </div>
         </div>
       </div>
-{ delivery.map((item) => (
 
-     <Card id="view-repart" key={item._id} shadow="md" className="mx-3 mt-2" onPress={() => navigate("/scheduleCard")}>
+
+<div className="mx-4">
+
+{delivery.length === 0 ? (
+  <Alert
+        color="warning"
+        description="No hay pedidos cargados"
+       
+        title="Alerta"
+        variant="faded"
+      />
+) : (
+ delivery.map((item) => (
+
+     <Card id="view-repart" key={item._id} shadow="md" className="mt-2 " onPress={() => navigate("/scheduleCard")}>
          
               <CardHeader className="gap-4">
                 <div className="w-2 h-10 bg-primary rounded" />
@@ -826,8 +859,8 @@ export default function CustomEdit() {
               </CardHeader>
               <CardBody>
 
-      <ul className="list-disc list-inside mt-2 space-y-1">
-        <li className="flex items-center">
+      <ul className="list-disc list-inside  space-y-1 text-sm">
+        <li className="flex items-center ">
         <img
               aria-hidden="true"
             
@@ -857,8 +890,8 @@ export default function CustomEdit() {
             {`Dejaste ${item.SiphonQuantity}, Sifones `}
         </li>
       </ul>
-                <p className="text-default-500">
-                  Detalles - <span className="font-semibold text-primary">{}</span>
+                <p className="t font-semibold">
+                  Total - <span className="font-semibold text-primary">{item.Total}</span>
                 </p>
 
               </CardBody>
@@ -870,8 +903,17 @@ export default function CustomEdit() {
           
        
           </Card>
-))  }
+)) 
+)}
 
+
+ <div id="create-new-delivery ">
+        <CreateOrdenUser 
+          DayEntityId={getDayEntityId}
+          ClientEntityId={getClientEntityId}
+        />
+      </div>
+</div>
 
 
 
@@ -1168,7 +1210,7 @@ export default function CustomEdit() {
             >
               Borrar
             </Button>
-            <Button color="success" onPress={onOpenEditDelivery}>
+            <Button color="success" onPress={() => handleEdit(selectedRow)}>
               Editar
             </Button>
           </ModalFooter>
@@ -1302,7 +1344,7 @@ export default function CustomEdit() {
  <Input
                   label="Bidones de 20-L"
                   labelPlacement="outside"
-                  placeholder="0"
+                  placeholder={`${selectedRow.Drum12LQuantity}`}
                   startContent={
                     <span className="text-default-400 te  xt-small">N°</span>
                   }
@@ -1310,6 +1352,7 @@ export default function CustomEdit() {
                   size="md"
                   value={drum20LQuantity}
                   onChange={(e) => setDrum20LQuantity(e.target.value)}
+                  
                 />
                 <Input
                   label="Precio de 20-L"
@@ -1451,12 +1494,7 @@ export default function CustomEdit() {
           )}
         </ModalContent>
       </Modal>
-      <div id="create-new-delivery">
-        <CreateOrdenUser
-          DayEntityId={getDayEntityId}
-          ClientEntityId={getClientEntityId}
-        />
-      </div>
+     
       
     </div>
     

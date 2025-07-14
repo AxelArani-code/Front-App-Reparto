@@ -167,7 +167,8 @@ export default function NavBar() {
       toast.error(error.message + "Error al autenticar el usuario.");
     }
     setTimeout(() => {
-       navigate("/");
+window.location.reload();
+
  
     }, 3000);
         

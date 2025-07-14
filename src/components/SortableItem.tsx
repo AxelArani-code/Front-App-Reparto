@@ -64,7 +64,7 @@ Date,
       animate={isDragEnabled ? { x: [10, 5, -5, 10] } : {}} // Animación cuando el Drag está activado
       transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
     >
-      <div className="mx-4" ref={setNodeRef} style={style} {...(isDragEnabled ? { ...attributes, ...listeners } : {})}>
+      <div className="" ref={setNodeRef} style={style} {...(isDragEnabled ? { ...attributes, ...listeners } : {})}>
         <Card shadow="md" className="w-full">
           {isDragEnabled ? (
             // 🔹 Si el Drag & Drop está habilitado, no permite la navegación

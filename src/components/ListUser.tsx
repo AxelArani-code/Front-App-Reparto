@@ -7,6 +7,7 @@ import {
 } from "@dnd-kit/sortable";
 import SortableItem from "./SortableItem";
 import {
+  Alert,
   Button,
   Card,
   CardBody,
@@ -216,7 +217,7 @@ export default function ListUser() {
   return (
     <div>
       <NavBar />
-      <div className="px-4 py-1">
+      <div className="px-4 py-1 ">
    
           <Button onPress={routerBack} variant="ghost" size="md">
             <ArrowLeft className="h-6 w-6" />
@@ -303,7 +304,8 @@ export default function ListUser() {
                 .slice(1)
             }`}</p>
 
-      {/* Renderizado de los clientes filtrados */}
+            <div className="mx-4 ">
+    {/* Renderizado de los clientes filtrados */}
       {!isLoaded ? (
         Array.from({ length: client.length || 1 }).map((_, index) => (
           <Card key={index} shadow="md" className="w-full mt-5">
@@ -321,11 +323,16 @@ export default function ListUser() {
           </Card>
         ))
       ) : filteredClients.length === 0 ? (
-        <p className="text-center text-gray-500 mt-4">
-          No se encontraron clientes
-        </p>
+       <Alert
+        color="warning"
+        description="No se encuentra clientes en este día"
+        
+        title="Alerta"
+        variant="faded"
+      />
       ) : (
-        <DndContext
+        <DndContext 
+      
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
@@ -358,6 +365,9 @@ export default function ListUser() {
      <CreateClient id={id} />
 </div>
    
+            </div>
+
+  
     </div>
   );
 }

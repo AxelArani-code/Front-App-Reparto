@@ -112,7 +112,7 @@ export default function CreateClient({ id }: MyComponentProps) {
               <ModalHeader className="flex flex-col gap-1">Crear Cliente Nuevo</ModalHeader>
               <ModalBody>
                 <Input
-                  size="lg"
+                  size="sm"
                   placeholder="Escribe Nombre"
                   label="Nombre"
                   type="text"
@@ -123,7 +123,7 @@ export default function CreateClient({ id }: MyComponentProps) {
                   errorMessage={errors.firstName ? "El nombre debe contener solo letras" : ""}
                 />
                 <Input
-                  size="lg"
+                  size="sm"
                   placeholder="Escribe Apellido"
                   label="Apellido"
                   type="text"
@@ -134,7 +134,7 @@ export default function CreateClient({ id }: MyComponentProps) {
                   errorMessage={errors.lastName ? "El apellido debe contener solo letras" : ""}
                 />
                 <Input
-                  size="lg"
+                  size="sm"
                   placeholder="Escribe Teléfono"
                   label="Teléfono"
                   type="tel"
@@ -145,7 +145,7 @@ export default function CreateClient({ id }: MyComponentProps) {
                   errorMessage={errors.telephone ? "El teléfono debe contener solo números" : ""}
                 />
                 <Input
-                  size="lg"
+                  size="sm"
                   placeholder="Escribe la calle del cliente"
                   label="Ubicación"
                   type="text"
@@ -156,7 +156,7 @@ export default function CreateClient({ id }: MyComponentProps) {
                   errorMessage={errors.address ? "La ubicación es obligatoria" : ""}
                 />
                 <Input
-                  size="lg"
+                  size="sm"
                   placeholder="Escribe una pequeña descripción"
                   label="Descripción"
                   type="text"

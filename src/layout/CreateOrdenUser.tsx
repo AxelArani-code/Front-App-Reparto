@@ -125,6 +125,7 @@ useEffect(() => {
               <ModalBody>
                 <div className="max-h-[70vh] overflow-y-auto ">
                     <Alert className="px-2 pb-4 text-sm"
+                   
         hideIconWrapper
         color="secondary"
         description="Ingresar el valor de un solo vidon o solo. Ej pones 2 Unid. y ingresas un solo valor 3.300$ "
@@ -245,6 +246,7 @@ useEffect(() => {
                 
                                 <Textarea    
                                 className="px-2 "
+                                minRows={1}
                                 value={comments}
                                 onChange={(e) => handlePriceChange(e.target.value, setComments)}  type="text"   variant="bordered"  label="Notas"   size="sm"placeholder="Escribe Notas" />
 
