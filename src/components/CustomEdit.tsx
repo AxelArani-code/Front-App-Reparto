@@ -617,17 +617,17 @@ export default function CustomEdit() {
     }, 3200);
   };
 
-const handleEdit = (row) => {
+const handleEdit = (row: DeliveryItems) => {
   setSelectedRow(row);
 
-  setDrum20LQuantity(row.Drum20LQuantity);
-  setDrum20LPrice(row.Drum20LPrice);
+  setDrum20LQuantity(String (row.Drum20LQuantity));
+  setDrum20LPrice( String (row.Drum20LPrice));
   
-  setDrum12LQuantity(row.Drum12LQuantity);
-  setDrum12LPrice(row.Drum12LPrice);
+  setDrum12LQuantity(String (row.Drum12LQuantity));
+  setDrum12LPrice(String(row.Drum12LPrice));
   
-  setSiphonQuantity(row.SiphonQuantity);
-  setSiphonPrice(row.SiphonPrice);
+  setSiphonQuantity(String(row.SiphonQuantity));
+  setSiphonPrice(String(row.SiphonPrice));
   
   setSelectedPaymentMethod(row.PaymentMethod);
   setIsPaid(row.IsPaid);
@@ -1210,7 +1210,7 @@ const handleEdit = (row) => {
             >
               Borrar
             </Button>
-            <Button color="success" onPress={() => handleEdit(selectedRow)}>
+            <Button color="success" onPress={() => handleEdit(selectedRow!)}>
               Editar
             </Button>
           </ModalFooter>
@@ -1344,7 +1344,7 @@ const handleEdit = (row) => {
  <Input
                   label="Bidones de 20-L"
                   labelPlacement="outside"
-                  placeholder={`${selectedRow.Drum12LQuantity}`}
+          placeholder={`${selectedRow?.Drum12LQuantity ?? ''}`}
                   startContent={
                     <span className="text-default-400 te  xt-small">N°</span>
                   }
