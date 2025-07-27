@@ -10,8 +10,10 @@ import { DayItem } from "../interface/DayItem";
 import toast from "react-hot-toast";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import Landing from "../components/Landing";
+
 import SkeletonLoader from "../components/SkeletonLoader";
+
+import Landing from "./Landing";
 
 export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
@@ -130,8 +132,8 @@ const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
         // Check if returned is null
 
         if (!result?.executionResult?.returned || result.executionResult.returned.length === 0) {
-          setSchedule([]);
-          setIsLoaded(true);
+            setIsAuthenticated(false);
+       
         } else {
           //setIsLoadingSchedule(true); // <-- Nuevo loading para el segundo loader
           
@@ -179,6 +181,7 @@ const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
  
 
     };
+    
     fetchData();
 
   }, []);
@@ -278,18 +281,19 @@ const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     setTimeout(() => {
       window.location.reload();
     }, 4200);
-
-
   };
+  //Login Logica 
+
 
   return (
     <div className=" ">
-      <NavBar />
+  
 
-{!isLoaded ? (
-  <SkeletonLoader />
-) : !isAuthenticated ? (
-  <Landing />
+{isAuthenticated === false ? (
+
+    <Landing />
+) : !isLoaded ?(
+<SkeletonLoader />
 ) : schedule.length === 0 ? (
 
   
@@ -305,6 +309,7 @@ const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     </div>
 ) : (
   <>
+      <NavBar />
   <div className=" mx-4 ">
       {schedule.map(({ _id, Date: dateStr, Route, CreatedAt }) => (
       <Card id="view-repart" key={_id} shadow="md" className="w-full mt-5  ">

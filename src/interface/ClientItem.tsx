@@ -1,4 +1,6 @@
 export type ClientItem ={
+  UpdatedAt: any;
+  CreatedAt: any;
 
      Owner: string;
   Day: string;

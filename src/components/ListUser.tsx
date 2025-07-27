@@ -17,7 +17,7 @@ import {
 } from "@heroui/react";
 import NavBar from "./NavBar";
 import { JSX } from "react/jsx-runtime";
-import CreateClient from "../layout/CreateClient";
+
 import {  useLocation, useNavigate } from "react-router-dom";
 import { useApi } from "../config/useUnisave";
 import { ClientItem } from "../interface/ClientItem";
@@ -90,12 +90,41 @@ export default function ListUser() {
 
   const getStorageKey = (id: string) => `CLIENT_ORDER_${id}`;
 
+function reviveClientDates(clients: ClientItem[]): ClientItem[] {
+  return clients.map(client => ({
+    ...client,
+    CreatedAt: client.CreatedAt ? new Date(client.CreatedAt) : null,
+    UpdatedAt: client.UpdatedAt ? new Date(client.UpdatedAt) : null,
+  }));
+}
+
+  function getFormattedDay(dateStr?: string): string {
+  if (!dateStr) return "Fecha no válida";
+
+  const parsedDate = new Date(dateStr);
+  if (isNaN(parsedDate.getTime())) return "Fecha no válida";
+
+  // Sumamos un día
+  parsedDate.setDate(parsedDate.getDate() + 1);
+
+  // Formateamos el día de la semana en español (Argentina)
+  return parsedDate.toLocaleDateString("es-ES", {
+    weekday: "long",
+    timeZone: "America/Argentina/Buenos_Aires",
+  })
+  .replace(/^./, (char) => char.toUpperCase()); // Capitalizamos la primera letra
+}
+
   const fetchClients = async () => {
     if (!id) return;
     const hasVisited = localStorage.getItem("hasVisited-ListUser");
     const storageKey = getStorageKey(id);
    //let storedClients: ClientItem[] = [];
-   const storedClients: ClientItem[] = JSON.parse(localStorage.getItem(storageKey) || "[]");
+   //const storedClients: ClientItem[] = JSON.parse(localStorage.getItem(storageKey) || "[]");
+
+  // 👇 Leemos y revivimos las fechas del localStorage
+  const rawClients = JSON.parse(localStorage.getItem(storageKey) || "[]");
+  const storedClients: ClientItem[] = reviveClientDates(rawClients);
 
 
 
@@ -108,6 +137,7 @@ export default function ListUser() {
         }
       );
 
+      console.log('Dataos De Cliente', result)
       if (result?.executionResult?.returned) {
         const apiClients = result.executionResult.returned;
 
@@ -217,37 +247,26 @@ export default function ListUser() {
   return (
     <div>
       <NavBar />
-      <div className="px-4 py-1 ">
-   
+      <div className="px-1 py-1 ">
+        <div className=" mt-1"> 
+
           <Button onPress={routerBack} variant="ghost" size="md">
             <ArrowLeft className="h-6 w-6" />
           </Button>
      
-        <div className="flex flex-col items-center p-4 relative">
+        <div className="font-semibold text-primary">
+         
           <h2 className="text-2xl mt-10 font-semibold text-center text-primary">
-            {`Día - ${
-              new Date(new Date(date).setDate(new Date(date).getDate() + 1))
-                .toLocaleDateString("es-ES", {
-                  weekday: "long",
-                  timeZone: "America/Argentina/Buenos_Aires",
-                })
-                .charAt(0)
-                .toUpperCase() +
-              new Date(new Date(date).setDate(new Date(date).getDate() + 1))
-                .toLocaleDateString("es-ES", {
-                  weekday: "long",
-                  timeZone: "America/Argentina/Buenos_Aires",
-                })
-                .slice(1)
-            }`}
-          </h2>
+  {`Día - ${getFormattedDay(date)}`}
+</h2>
+
           <p className="mt-2 text-default-500">
             Recorrido -{" "}
             <span className="font-semibold text-primary">
               {decodeURIComponent(route)}{" "}
             </span>
           </p>
-          <div className="absolute top-6 right-2 flex space-x-2">
+          <div className="absolute top-20 right-2 flex space-x-2">
             <Button id="button-organizar"
               size="sm"
               onPress={() => setIsDragEnabled(!isDragEnabled)}
@@ -288,6 +307,8 @@ export default function ListUser() {
           />
         </div>
       </div>
+        </div>
+   
       <p id="view-client" className="ml-5 font-semibold text-primary">{`Clientes del ${
               new Date(new Date(date).setDate(new Date(date).getDate() + 1))
                 .toLocaleDateString("es-ES", {
@@ -304,7 +325,7 @@ export default function ListUser() {
                 .slice(1)
             }`}</p>
 
-            <div className="mx-4 ">
+            <div className="mx-2  pb-32 h-[calc(100vh-300px)] overflow-y-auto">
     {/* Renderizado de los clientes filtrados */}
       {!isLoaded ? (
         Array.from({ length: client.length || 1 }).map((_, index) => (
@@ -361,8 +382,22 @@ export default function ListUser() {
           </SortableContext>
         </DndContext>
       )}
-<div id="create-cliente">
-     <CreateClient id={id} />
+
+<div id="create-cliente" className="fixed bottom-0 left-0 right-0 px-4 pb-4  shadow-lg z-50">
+     <Button
+     id={id} 
+  onPress={() => {
+    // 👉 Guardamos antes de salir de la vista
+    sessionStorage.setItem("viewListUsersState", JSON.stringify({ id, date, route }));
+
+   navigate(`/crear-cliente/${id}`);
+  }}
+  color="primary"
+  size="lg"
+  fullWidth
+>
+  Crear Cliente
+</Button>
 </div>
    
             </div>

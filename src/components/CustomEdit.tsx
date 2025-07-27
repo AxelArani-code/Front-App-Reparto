@@ -24,7 +24,6 @@ import {
 } from "@heroui/react";
 import NavBar from "./NavBar";
 import { SVGProps, useEffect, useState } from "react";
-import CreateOrdenUser from "../layout/CreateOrdenUser";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApi } from "../config/useUnisave";
 import toast from "react-hot-toast";
@@ -314,11 +313,7 @@ export default function CustomEdit() {
     onOpenChange: onEditChangeDelivery,
   } = useDisclosure();
 
-  const {
-    isOpen: isOpenStock,
-    onOpen: onOpenStock,
-    onOpenChange: onChangeStock,
-  } = useDisclosure();
+ 
   // Estado para manejar los valores de los inputs
   const [drum20LQuantity, setDrum20LQuantity] = useState("");
   const [drum12LQuantity, setDrum12LQuantity] = useState("");
@@ -371,10 +366,10 @@ export default function CustomEdit() {
         // Check if returned is null
 
         if (
-          result?.executionResult?.returned 
+          result?.executionResult?.returned
         ) {
-         // setDelivery([]);
-         setDelivery(result.executionResult.returned);
+          // setDelivery([]);
+          setDelivery(result.executionResult.returned);
           if (!hasVisited) {
             localStorage.setItem("hasVisited-CustomEdit", "true");
             //Driver.Js
@@ -419,7 +414,7 @@ export default function CustomEdit() {
             });
             driverObj.drive();
           }
-        } 
+        }
         //setSchedule(result?.executionResult?.returned)
 
         console.log(result);
@@ -439,7 +434,7 @@ export default function CustomEdit() {
 
     fetchData();
   }, []);
-  
+
   const saveSettings = (settings: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -617,24 +612,24 @@ export default function CustomEdit() {
     }, 3200);
   };
 
-const handleEdit = (row: DeliveryItems) => {
-  setSelectedRow(row);
+  const handleEdit = (row: DeliveryItems) => {
+    setSelectedRow(row);
 
-  setDrum20LQuantity(String (row.Drum20LQuantity));
-  setDrum20LPrice( String (row.Drum20LPrice));
-  
-  setDrum12LQuantity(String (row.Drum12LQuantity));
-  setDrum12LPrice(String(row.Drum12LPrice));
-  
-  setSiphonQuantity(String(row.SiphonQuantity));
-  setSiphonPrice(String(row.SiphonPrice));
-  
-  setSelectedPaymentMethod(row.PaymentMethod);
-  setIsPaid(row.IsPaid);
-  setComments(row.Comments);
+    setDrum20LQuantity(String(row.Drum20LQuantity));
+    setDrum20LPrice(String(row.Drum20LPrice));
 
-  onOpenEditDelivery(); // 👉 Esto abre el modal de editar
-};
+    setDrum12LQuantity(String(row.Drum12LQuantity));
+    setDrum12LPrice(String(row.Drum12LPrice));
+
+    setSiphonQuantity(String(row.SiphonQuantity));
+    setSiphonPrice(String(row.SiphonPrice));
+
+    setSelectedPaymentMethod(row.PaymentMethod);
+    setIsPaid(row.IsPaid);
+    setComments(row.Comments);
+
+    onOpenEditDelivery(); // 👉 Esto abre el modal de editar
+  };
 
 
   const iconClasses =
@@ -643,8 +638,17 @@ const handleEdit = (row: DeliveryItems) => {
   return (
     <div>
       <NavBar />
-      <div className="mt-5 ml-3">
-        <Button onPress={onOpenStock} variant="ghost" size="md" className="">
+      <div className="mt-5 ml-3 ">
+        <Button onPress={ () => { 
+ navigate("/user-analysis", {
+                state: {
+                  getClientEntityId: getClientEntityId,
+                  getFirstName: getFirstName,
+                  getLastName: getLastName
+                },
+              });
+
+        }} variant="ghost" size="md" className="">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -669,12 +673,12 @@ const handleEdit = (row: DeliveryItems) => {
         <h2 className="text-2xl mt-1 font-semibold text-center text-primary">
           {" "}
           {`Dia - ${new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
-              .toLocaleDateString("es-ES", {
-                weekday: "long",
-                timeZone: "America/Argentina/Buenos_Aires",
-              })
-              .charAt(0)
-              .toUpperCase() +
+            .toLocaleDateString("es-ES", {
+              weekday: "long",
+              timeZone: "America/Argentina/Buenos_Aires",
+            })
+            .charAt(0)
+            .toUpperCase() +
             new Date(new Date(getDay).setDate(new Date(getDay).getDate() + 1))
               .toLocaleDateString("es-ES", {
                 weekday: "long",
@@ -720,7 +724,7 @@ const handleEdit = (row: DeliveryItems) => {
                 <DropdownItem
                   key="edit"
                   description="Vas a poder editar el cliente"
-                  onPress={()=>{
+                  onPress={() => {
                     onOpenEdit();
                     setLastName(getLastName);
                     setFirstName(getFirstName);
@@ -804,116 +808,139 @@ const handleEdit = (row: DeliveryItems) => {
       </div>
 
 
-<div className="mx-4">
+      <div className="mx-2  pb-32 h-[calc(100vh-300px)] overflow-y-auto">
 
-{delivery.length === 0 ? (
-  <Alert
-        color="warning"
-        description="No hay pedidos cargados"
-       
-        title="Alerta"
-        variant="faded"
-      />
-) : (
- delivery.map((item) => (
+        {delivery.length === 0 ? (
+          <Alert
+            color="warning"
+            description="No hay pedidos cargados"
 
-     <Card id="view-repart" key={item._id} shadow="md" className="mt-2 " onPress={() => navigate("/scheduleCard")}>
-         
+            title="Alerta"
+            variant="faded"
+          />
+        ) : (
+          delivery.map((item) => (
+
+            <Card id="view-repart" key={item._id} shadow="md" className="mt-2 " onPress={() => navigate("/scheduleCard")}>
+
               <CardHeader className="gap-4">
                 <div className="w-2 h-10 bg-primary rounded" />
-              
-                <div className="flex items-center">
-                
-        <span className="text-muted-foreground">
-        <h2 className="text-lg font-semibold ">Pedido</h2> 
-          {`${new Date(item.DeliveryTime).toLocaleDateString(
-                  "es-ES",
-                  {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    timeZone: "America/Argentina/Buenos_Aires",
-                  }
-                )}`}</span> 
-     
-      </div>
-      
-      {item.PaymentMethod === '1' ? (
-  <span className="bg-green-500 text-white rounded-full px-2 py-1 ml-auto flex items-center gap-1">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-circle-dollar-sign-icon lucide-circle-dollar-sign"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
-    Pagado
-  </span>
-) : item.PaymentMethod === '2' ? (
-  <span className="bg-yellow-500 text-white rounded-full px-2 py-1 ml-auto flex items-center gap-1">
-   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-landmark-icon lucide-landmark"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
-    Trasferencia
-  </span>
-) : item.PaymentMethod === '3' ? (
 
-  <span className="bg-red-500 text-white rounded-full px-2 py-1 ml-auto flex items-center gap-1">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote-x-icon lucide-banknote-x"><path d="M13 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"/><path d="m17 17 5 5"/><path d="M18 12h.01"/><path d="m22 17-5 5"/><path d="M6 12h.01"/><circle cx="12" cy="12" r="2"/></svg>
-   No pago
- </span>
-): null}
+                <div className="flex items-center">
+
+                  <span className="text-muted-foreground">
+                    <h2 className="text-lg font-semibold ">Pedido</h2>
+                    {`${new Date(item.DeliveryTime).toLocaleDateString(
+                      "es-ES",
+                      {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        timeZone: "America/Argentina/Buenos_Aires",
+                      }
+                    )}`}</span>
+
+                </div>
+
+                {item.PaymentMethod === '1' ? (
+                  <span className="bg-green-500 text-white rounded-full px-2 py-1 ml-auto flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-circle-dollar-sign-icon lucide-circle-dollar-sign"><circle cx="12" cy="12" r="10" /><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" /><path d="M12 18V6" /></svg>
+                    Pagado
+                  </span>
+                ) : item.PaymentMethod === '2' ? (
+                  <span className="bg-yellow-500 text-white rounded-full px-2 py-1 ml-auto flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-landmark-icon lucide-landmark"><line x1="3" x2="21" y1="22" y2="22" /><line x1="6" x2="6" y1="18" y2="11" /><line x1="10" x2="10" y1="18" y2="11" /><line x1="14" x2="14" y1="18" y2="11" /><line x1="18" x2="18" y1="18" y2="11" /><polygon points="12 2 20 7 4 7" /></svg>
+                    Trasferencia
+                  </span>
+                ) : item.PaymentMethod === '3' ? (
+
+                  <span className="bg-red-500 text-white rounded-full px-2 py-1 ml-auto flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote-x-icon lucide-banknote-x"><path d="M13 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5" /><path d="m17 17 5 5" /><path d="M18 12h.01" /><path d="m22 17-5 5" /><path d="M6 12h.01" /><circle cx="12" cy="12" r="2" /></svg>
+                    No pago
+                  </span>
+                ) : null}
 
               </CardHeader>
               <CardBody>
 
-      <ul className="list-disc list-inside  space-y-1 text-sm">
-        <li className="flex items-center ">
-        <img
-              aria-hidden="true"
-            
-              src="https://openui.fly.dev/openui/24x24.svg?text=💧"
-              className="mr-2"
-            />
-            {`Dejaste ${item.Drum20LQuantity}, Bidon de 20L `}
-        </li>
-        
-        <li className="flex items-center">
-        <img
-              aria-hidden="true"
-            
-              src="https://openui.fly.dev/openui/24x24.svg?text=💧"
-              className="mr-2"
-            />
-            {`Dejaste ${item.Drum12LQuantity}, Bidon de 12L `}
-        </li>
+                <ul className="list-disc list-inside  space-y-1 text-sm">
+                  <li className="flex items-center ">
+                    <img
+                      aria-hidden="true"
 
-        <li className="flex items-center">
-        <img
-              aria-hidden="true"
-            
-              src="https://openui.fly.dev/openui/24x24.svg?text=💧"
-              className="mr-2"
-            />
-            {`Dejaste ${item.SiphonQuantity}, Sifones `}
-        </li>
-      </ul>
+                      src="https://openui.fly.dev/openui/24x24.svg?text=💧"
+                      className="mr-2"
+                    />
+                    {`Dejaste ${item.Drum20LQuantity}, Bidon de 20L `}
+                  </li>
+
+                  <li className="flex items-center">
+                    <img
+                      aria-hidden="true"
+
+                      src="https://openui.fly.dev/openui/24x24.svg?text=💧"
+                      className="mr-2"
+                    />
+                    {`Dejaste ${item.Drum12LQuantity}, Bidon de 12L `}
+                  </li>
+
+                  <li className="flex items-center">
+                    <img
+                      aria-hidden="true"
+
+                      src="https://openui.fly.dev/openui/24x24.svg?text=💧"
+                      className="mr-2"
+                    />
+                    {`Dejaste ${item.SiphonQuantity}, Sifones `}
+                  </li>
+                </ul>
                 <p className="t font-semibold">
                   Total - <span className="font-semibold text-primary">{item.Total}</span>
                 </p>
 
               </CardBody>
-     
-              
-            
-                <Button onPress={() => handleRowClick(item)}variant="bordered">Ver Detalles</Button>
-          
-          
-       
-          </Card>
-)) 
-)}
 
 
- <div id="create-new-delivery ">
-        <CreateOrdenUser 
-          DayEntityId={getDayEntityId}
-          ClientEntityId={getClientEntityId}
-        />
+
+              <Button onPress={() => handleRowClick(item)} variant="bordered">Ver Detalles</Button>
+
+
+
+            </Card>
+          ))
+        )}
+
+
+        <div id="create-new-delivery" className="fixed bottom-0 left-0 right-0 px-4 pb-4  shadow-lg z-50">
+
+          <Button
+
+            onPress={() => {
+              // 👉 Guardamos antes de salir de la vista
+              sessionStorage.setItem("viewCustomEditState", JSON.stringify({getFirstName,
+    getLastName,
+    getDayEntityId,
+    getClientEntityId,
+    getDay,
+    getTelephone,
+    getAddress,
+    getDescription  }));
+
+              navigate("/crear-orden", {
+                state: {
+                  DayEntityId: getDayEntityId,
+                  ClientEntityId: getClientEntityId,
+                },
+              });
+            }}
+            color="primary"
+            size="lg"
+            fullWidth
+          >
+            Crear Pedido
+          </Button>
+        </div>
       </div>
-</div>
 
 
 
@@ -1184,9 +1211,9 @@ const handleEdit = (row: DeliveryItems) => {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     }).format(
-                      selectedRow.SiphonPrice   * selectedRow.SiphonQuantity +
-                      selectedRow.Drum12LPrice * selectedRow.Drum12LQuantity  +
-                      selectedRow.Drum20LPrice * selectedRow.Drum20LQuantity 
+                      selectedRow.SiphonPrice * selectedRow.SiphonQuantity +
+                      selectedRow.Drum12LPrice * selectedRow.Drum12LQuantity +
+                      selectedRow.Drum20LPrice * selectedRow.Drum20LQuantity
                     )}`}
                   </span>
                 </div>
@@ -1287,38 +1314,7 @@ const handleEdit = (row: DeliveryItems) => {
           )}
         </ModalContent>
       </Modal>
-      {/* Modal beta */}
-      <Modal
-        isDismissable={false}
-        isKeyboardDismissDisabled={true}
-        isOpen={isOpenStock}
-        onOpenChange={onChangeStock}
-        placement="center"
-        backdrop="blur"
-      >
-        <ModalContent>
-          {(onCloseStock) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 ">
-                Stock-beta
-              </ModalHeader>
-              <ModalBody>
-                <p>
-                  "Esto va determinar el STOCK del cliente. Cuando bidones tiene
-                  en su propiedad"
-                </p>
-                <p className="font-semibold">
-                  Estamos trabajando en ello para poder bindarle la mejor
-                  experiencia
-                </p>
-              </ModalBody>
-              <Button size="lg" color="danger" onPress={onCloseStock}>
-                Cerrar
-              </Button>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+   
       {/* Modal Editar Deliviry  */}
       <Modal
         isDismissable={false}
@@ -1333,100 +1329,100 @@ const handleEdit = (row: DeliveryItems) => {
                 Editar Pedido
               </ModalHeader>
               <ModalBody>
-                  <Alert
-                        hideIconWrapper
-                        color="secondary"
-                        description="La cantidad de producto ingresado, será calculado automáticamente su valor. Ej: 2 Bidones 20-L precio $6.400 (ud. $3.200) "
-                        title="Advertencia"
-                        variant="bordered"
-                      />
+                <Alert
+                  hideIconWrapper
+                  color="secondary"
+                  description="La cantidad de producto ingresado, será calculado automáticamente su valor. Ej: 2 Bidones 20-L precio $6.400 (ud. $3.200) "
+                  title="Advertencia"
+                  variant="bordered"
+                />
                 <div className="grid grid-cols-2 gap-4">
- <Input
-                  label="Bidones de 20-L"
-                  labelPlacement="outside"
-          placeholder={`${selectedRow?.Drum12LQuantity ?? ''}`}
-                  startContent={
-                    <span className="text-default-400 te  xt-small">N°</span>
-                  }
-                  type="number"
-                  size="md"
-                  value={drum20LQuantity}
-                  onChange={(e) => setDrum20LQuantity(e.target.value)}
-                  
-                />
-                <Input
-                  label="Precio de 20-L"
-                  labelPlacement="outside"
-                  placeholder="0.00"
-                  startContent={
-                    <span className="text-default-400 text-small">$</span>
-                  }
-                  type="text"
-                  size="sm"
-                  value={drum20LPrice}
-                  onChange={(e) =>
-                    handlePriceChange(e.target.value, setDrum20LPrice)
-                  }
-                />
+                  <Input
+                    label="Bidones de 20-L"
+                    labelPlacement="outside"
+                    placeholder={`${selectedRow?.Drum12LQuantity ?? ''}`}
+                    startContent={
+                      <span className="text-default-400 te  xt-small">N°</span>
+                    }
+                    type="number"
+                    size="md"
+                    value={drum20LQuantity}
+                    onChange={(e) => setDrum20LQuantity(e.target.value)}
+
+                  />
+                  <Input
+                    label="Precio de 20-L"
+                    labelPlacement="outside"
+                    placeholder="0.00"
+                    startContent={
+                      <span className="text-default-400 text-small">$</span>
+                    }
+                    type="text"
+                    size="sm"
+                    value={drum20LPrice}
+                    onChange={(e) =>
+                      handlePriceChange(e.target.value, setDrum20LPrice)
+                    }
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
- <Input
-                  label="Bidones de 12-L"
-                  labelPlacement="outside"
-                  placeholder="0"
-                  startContent={
-                    <span className="text-default-400 text-small">N°</span>
-                  }
-                  type="number"
-                  size="md"
-                  value={drum12LQuantity}
-                  onChange={(e) => setDrum12LQuantity(e.target.value)}
-                />
-                <Input
-                  label="Precio de 12-L"
-                  labelPlacement="outside"
-                  placeholder="0.00"
-                  startContent={
-                    <span className="text-default-400 text-small">$</span>
-                  }
-                  type="text"
-                  size="sm"
-                  value={drum12LPrice}
-                  onChange={(e) =>
-                    handlePriceChange(e.target.value, setDrum12LPrice)
-                  }
-                />
+                  <Input
+                    label="Bidones de 12-L"
+                    labelPlacement="outside"
+                    placeholder="0"
+                    startContent={
+                      <span className="text-default-400 text-small">N°</span>
+                    }
+                    type="number"
+                    size="md"
+                    value={drum12LQuantity}
+                    onChange={(e) => setDrum12LQuantity(e.target.value)}
+                  />
+                  <Input
+                    label="Precio de 12-L"
+                    labelPlacement="outside"
+                    placeholder="0.00"
+                    startContent={
+                      <span className="text-default-400 text-small">$</span>
+                    }
+                    type="text"
+                    size="sm"
+                    value={drum12LPrice}
+                    onChange={(e) =>
+                      handlePriceChange(e.target.value, setDrum12LPrice)
+                    }
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-<Input
-                  label="Sifon De Soda"
-                  labelPlacement="outside"
-                  placeholder="0"
-                  startContent={
-                    <span className="text-default-400 text-small">N°</span>
-                  }
-                  type="number"
-                  value={siphonQuantity}
-                  onChange={(e) => setSiphonQuantity(e.target.value)}
-                />
-                <Input
-                  label="Precio De Sifon"
-                  labelPlacement="outside"
-                  placeholder="0.00"
-                  startContent={
-                    <span className="text-default-400 text-small">$</span>
-                  }
-                  type="text"
-                  size="sm"
-                  value={siphonPrice}
-                  onChange={(e) =>
-                    handlePriceChange(e.target.value, setSiphonPrice)
-                  }
-                />
+                  <Input
+                    label="Sifon De Soda"
+                    labelPlacement="outside"
+                    placeholder="0"
+                    startContent={
+                      <span className="text-default-400 text-small">N°</span>
+                    }
+                    type="number"
+                    value={siphonQuantity}
+                    onChange={(e) => setSiphonQuantity(e.target.value)}
+                  />
+                  <Input
+                    label="Precio De Sifon"
+                    labelPlacement="outside"
+                    placeholder="0.00"
+                    startContent={
+                      <span className="text-default-400 text-small">$</span>
+                    }
+                    type="text"
+                    size="sm"
+                    value={siphonPrice}
+                    onChange={(e) =>
+                      handlePriceChange(e.target.value, setSiphonPrice)
+                    }
+                  />
                 </div>
-               
-               
-                
+
+
+
                 {/* Select para Tipo de Pago */}
                 <Select
                   size="sm"
@@ -1466,11 +1462,11 @@ const handleEdit = (row: DeliveryItems) => {
                     </SelectItem>
                   ))}
                 </Select>
-                    <Textarea    
-                         value={comments}
-                                onChange={(e) => handlePriceChange(e.target.value, setComments)}               
-                                        
-                                        type="text"   variant="bordered"  label="Notas"   size="sm"placeholder="Escribe Notas" />
+                <Textarea
+                  value={comments}
+                  onChange={(e) => handlePriceChange(e.target.value, setComments)}
+
+                  type="text" variant="bordered" label="Notas" size="sm" placeholder="Escribe Notas" />
               </ModalBody>
               <ModalFooter>
                 <Button
@@ -1494,11 +1490,11 @@ const handleEdit = (row: DeliveryItems) => {
           )}
         </ModalContent>
       </Modal>
-     
-      
+
+
     </div>
-    
-    
+
+
 
   );
 }

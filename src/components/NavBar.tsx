@@ -16,6 +16,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useApi } from "../config/useUnisave";
 import toast from "react-hot-toast";
+import { Droplets } from "lucide-react";
 export const AcmeLogo = () => {
   return (
     <svg
@@ -183,21 +184,22 @@ window.location.reload();
     navigate("/admin-user");
   };
     //Button 
-const handleClicWhatsap = () => {
-  const url = `https://wa.link/9bgcu9`;
-  window.open(url, "_blank");
-};
 const routerAnalisis = () => {
   navigate("/analysis");
 };
 
   if (!mounted) return null; // Evita el error de SSR en Next.js
   return (
-    <Navbar >
+    <Navbar className="pt-[env(safe-area-inset-top)]">
       <Link to="/">
         <NavbarBrand className="mx-px">
-          <AcmeLogo />
-          <p className="font-bold  text-inherit">Repart-Beta</p>
+       {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-cyan-500 rounded-lg flex items-center justify-center">
+              <Droplets className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-base font-bold text-foreground">AquaReparto</span>
+          </div>
         </NavbarBrand>
         <NavbarBrand className="mx-px">
           <p className="text-sm">{firstName + lastName}</p>
@@ -205,7 +207,7 @@ const routerAnalisis = () => {
       </Link>
       <NavbarContent as="div" justify="end">
        
-        <Button onPress={handleClicWhatsap} variant="bordered" color="success" className=" rounded-full">Contactar</Button>
+        
         <Dropdown placement="bottom-end">
           
           

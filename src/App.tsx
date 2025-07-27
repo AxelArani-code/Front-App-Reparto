@@ -10,11 +10,16 @@ import NavBar from "./components/NavBar";
 import { Toaster } from "react-hot-toast";
 import UserAdmin from "./admin/intex";
 import Analysis from "./pages/Analysis";
+import CreateClient from "./layout/CreateClient";
+import CreateOrdenUser from "./layout/CreateOrdenUser";
+import UserAnalysis from "./pages/UserAnalysis";
+import NotFound from "./pages/NotFound";
 
 export default function Router() {
   return (
     <>
       <Toaster /> {/* Aquí se renderizan los toasts en cualquier parte de la app */}
+      
       <BrowserRouter>
         <Routes>
           <Route element={<NavBar />} />
@@ -29,9 +34,13 @@ export default function Router() {
             <Route path="/admin-user" element={<UserAdmin />} />
             <Route path="/analysis" element={<Analysis />} />
        
-          
+       
+          <Route path="/crear-cliente/:entity/:entityId" element={<CreateClient />} />
+          <Route  path="/crear-orden" element={<CreateOrdenUser  />} />
+          <Route  path="/user-analysis" element={<UserAnalysis  />} />
 
-         Z|
+           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>

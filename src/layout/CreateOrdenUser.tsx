@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
+
   Button,
-  useDisclosure,
   Input,
   Select,
   SelectItem,
@@ -15,12 +10,11 @@ import {
 } from "@heroui/react";
 import { useApi } from "../config/useUnisave";
 import toast from "react-hot-toast";
+import { useLocation, useNavigate, } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 
-type CreateOrdenUserProps = {
-  DayEntityId: string;
-  ClientEntityId:string
-};
+
 export const day = [
   { key: "1", label: "Efectivo", value: "Efectivo" },
   { key: "2", label: "Transferencia", value: "Transferencia" },
@@ -30,8 +24,12 @@ export const medioDePago = [
   { key: "1", label: "Pagado", value: "true" },
   { key: "2", label: "Fiado", value: "false" },
 ];
-export default function CreateOrdenUser({ DayEntityId, ClientEntityId}: CreateOrdenUserProps) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+export default function CreateOrdenUser() {
+const { state } = useLocation();
+  const { DayEntityId, ClientEntityId } = state || {};
+  console.log("DayEntityId:", DayEntityId, ClientEntityId);
+   const navigate = useNavigate();
+ // const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { executeRequest } = useApi();
   // Estados para almacenar los valores seleccionados en los Select
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
@@ -61,7 +59,7 @@ useEffect(() => {
     setValue(sanitizedValue);
   };
   
-  const AddDeliveryFacet = async (onClose: { (): void; (): void; }) => {
+  const AddDeliveryFacet = async () => {
 
     console.log(`DayEntity ${DayEntityId}`)
     console.log(`ClientEntityu ${ClientEntityId}`)
@@ -98,7 +96,7 @@ useEffect(() => {
         toast.error(message || "Error en la base de datos");
       } else {
         toast.success(message);
-        onClose();
+    
       }
 
       console.log(result);
@@ -107,164 +105,225 @@ useEffect(() => {
     }
 
     setTimeout(() => {
-      window.location.reload();
+               // 👉 Volver programáticamente con los datos guardados
+const savedState = sessionStorage.getItem("viewCustomEditState");
+if (savedState) {
+  const {  getFirstName,
+    getLastName,
+    getDayEntityId,
+    getClientEntityId,
+    getDay,
+    getTelephone,
+    getAddress,
+    getDescription} = JSON.parse(savedState);
+  navigate("/view-orders-user", {
+    state: {  getFirstName,
+    getLastName,
+    getDayEntityId,
+    getClientEntityId,
+    getDay,
+    getTelephone,
+    getAddress,
+    getDescription},
+  });
+  sessionStorage.removeItem("viewCustomEditState");
+} else {
+  navigate("/view-orders-user");
+}
+
     }, 2000);
     
+  };
+   const routerBack = () => {
+ const savedState = sessionStorage.getItem("viewCustomEditState");
+if (savedState) {
+  const {  getFirstName,
+    getLastName,
+    getDayEntityId,
+    getClientEntityId,
+    getDay,
+    getTelephone,
+    getAddress,
+    getDescription} = JSON.parse(savedState);
+  navigate("/view-orders-user", {
+    state: {  getFirstName,
+    getLastName,
+    getDayEntityId,
+    getClientEntityId,
+    getDay,
+    getTelephone,
+    getAddress,
+    getDescription},
+  });
+  sessionStorage.removeItem("viewCustomEditState");
+} else {
+  navigate("/view-orders-user");
+}
   };
 
   return (
     <>
-      <Button className="mt-5" onPress={onOpen} color="primary" size="lg" fullWidth>
-        Crear Nuevo Pedido
-      </Button>
-      <Modal isDismissable={false} isKeyboardDismissDisabled={true} isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent className="">
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Crear Nuevo Pedido</ModalHeader>
-              <ModalBody>
-                <div className="max-h-[70vh] overflow-y-auto ">
-                    <Alert className="px-2 pb-4 text-sm"
-                   
-        hideIconWrapper
-        color="secondary"
-        description="Ingresar el valor de un solo vidon o solo. Ej pones 2 Unid. y ingresas un solo valor 3.300$ "
-        title="Advertencia"
-        variant="bordered"
-      ></Alert>
-      <div className="grid grid-cols-2 gap-4  px-2 pb-2 pt-4">
-    <Input
-                  label="Bidones de 20-L"
-                  labelPlacement="outside"
-                  placeholder="0"
-                  startContent={<span className="text-default-400 text-small">N°</span>}
-                  type="number"
-                  size="md"
-                  value={drum20LQuantity}
-                  onChange={(e) => setDrum20LQuantity(e.target.value)}
-                />
-               <Input
-                className="font-semibold"
-  label="Precio de 20-L"
-  labelPlacement="outside"
-  placeholder="0.00"
-  startContent={<span className="text-default-400 text-small">$</span>}
-  type="number"
-  size="sm"
-  value={drum20LPrice}
-  onChange={(e) => handlePriceChange(e.target.value, setDrum20LPrice)}
-/>
-            
+         <div className="p-4">
+      <div className="flex mt-1">
+         <Button onPress={routerBack} variant="ghost" size="sm">
+                    <ArrowLeft className="h-6 w-6" />
+                  </Button>
+             <div className="flex justify-between items-center mb-6 ml-3">
+<h1 className="text-2xl font-bold">Crear Nuevo Pedido</h1>
+             </div>
+        
+        
       </div>
 
-      <div className="grid grid-cols-2 gap-4   px-2 pb-2">
-<Input
-                  label="Bidones de 12-L"
-                  labelPlacement="outside"
-                  placeholder="0"
-                  startContent={<span className="text-default-400 text-small">N°</span>}
-                  type="number"
-                  size="md"
-                  value={drum12LQuantity}
-                  onChange={(e) => setDrum12LQuantity(e.target.value)}
-                />
-               <Input
-                className="font-semibold"
-  label="Precio de 12-L"
-  labelPlacement="outside"
-  placeholder="0.00"
-  startContent={<span className="text-default-400 text-small">$</span>}
-      type="number"
-  size="sm"
-  value={drum12LPrice}
-  onChange={(e) => handlePriceChange(e.target.value, setDrum12LPrice)}
-/>
-              
-      </div>
+      <div className="max-h-[80vh] overflow-y-auto space-y-3">
 
-      <div className="grid grid-cols-2 gap-4 px-2 pb-2">
-  <Input
-                  label="Sifon De Soda"
-                  labelPlacement="outside"
-                  placeholder="0"
-                  startContent={<span className="text-default-400 text-small">N°</span>}
-                  type="number"
-                  value={siphonQuantity}
-                  onChange={(e) => setSiphonQuantity(e.target.value)}
-                />
-                                <Input
-                                className="font-semibold"
-  label="Precio De Sifon"
-  labelPlacement="outside"
-  placeholder="0.00"
-  startContent={<span className="text-default-400 text-small">$</span>}
-      type="number"
-  size="sm"
-  value={siphonPrice}
-  onChange={(e) => handlePriceChange(e.target.value, setSiphonPrice)}
-/>          
-      </div>
-                
-      
-  {/* Select para Tipo de Pago */}
-                <Select
-                  size="sm"
-                  variant="bordered"
-                  className="px-2 pb-2"
-                  items={day}
-                  label="Pagado"
-                  placeholder="Selecione Tipo De Pago"
-                  selectedKeys={selectedPaymentMethod ? [selectedPaymentMethod] : []}
-                  onSelectionChange={(keys) => setSelectedPaymentMethod(Array.from(keys)[0] as string)}
-                >
-                   {day.map((option) => (
+        <Alert
+          className="px-2 text-sm"
+          hideIconWrapper
+          color="secondary"
+          description="Ingresar el valor de un solo bidón. Ej: pones 2 Unid. y un solo valor $3.300"
+          title="Advertencia"
+          variant="bordered"
+          
+        />
+
+        {/* Bidones de 20L */}
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label="Bidones de 20-L"
+            labelPlacement="outside"
+            placeholder="0"
+            startContent={<span className="text-default-400 text-small">N°</span>}
+            type="number"
+            size="sm"
+            value={drum20LQuantity}
+            onChange={(e) => setDrum20LQuantity(e.target.value)}
+          />
+          <Input
+            className="font-semibold"
+            label="Precio de 20-L"
+            labelPlacement="outside"
+            placeholder="0.00"
+            startContent={<span className="text-default-400 text-small">$</span>}
+            type="number"
+            size="sm"
+            value={drum20LPrice}
+            onChange={(e) => handlePriceChange(e.target.value, setDrum20LPrice)}
+          />
+        </div>
+
+        {/* Bidones de 12L */}
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label="Bidones de 12-L"
+            labelPlacement="outside"
+            placeholder="0"
+            startContent={<span className="text-default-400 text-small">N°</span>}
+            type="number"
+            size="sm"
+            value={drum12LQuantity}
+            onChange={(e) => setDrum12LQuantity(e.target.value)}
+          />
+          <Input
+            className="font-semibold"
+            label="Precio de 12-L"
+            labelPlacement="outside"
+            placeholder="0.00"
+            startContent={<span className="text-default-400 text-small">$</span>}
+            type="number"
+            size="sm"
+            value={drum12LPrice}
+            onChange={(e) => handlePriceChange(e.target.value, setDrum12LPrice)}
+          />
+        </div>
+
+        {/* Sifón */}
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label="Sifón de Soda"
+            labelPlacement="outside"
+            placeholder="0"
+            startContent={<span className="text-default-400 text-small">N°</span>}
+            type="number"
+              size="sm"
+            value={siphonQuantity}
+            onChange={(e) => setSiphonQuantity(e.target.value)}
+          />
+          <Input
+            className="font-semibold"
+            label="Precio de Sifón"
+            labelPlacement="outside"
+            placeholder="0.00"
+            startContent={<span className="text-default-400 text-small">$</span>}
+            type="number"
+            size="sm"
+            value={siphonPrice}
+            onChange={(e) => handlePriceChange(e.target.value, setSiphonPrice)}
+          />
+        </div>
+
+        {/* Tipo de Pago */}
+        <Select
+          size="sm"
+          variant="bordered"
+          items={day}
+          label="Pagado"
+          placeholder="Seleccione Tipo de Pago"
+          selectedKeys={selectedPaymentMethod ? [selectedPaymentMethod] : []}
+          onSelectionChange={(keys) =>
+            setSelectedPaymentMethod(Array.from(keys)[0] as string)
+          }
+        >
+          {day.map((option) => (
                     <SelectItem key={option.key} value={option.value}>
                       {option.label}
                     </SelectItem>
                   ))}
-                </Select>
- {/* Select para Estado del Pago (Booleano) */}
-                <Select
-                  size="sm"
-                  variant="bordered"
-                  className="px-2 pb-2"
-                  items={medioDePago}
-                  label="Se realizo"
-                  placeholder="Selecione si la persona se le fio o lo pago"
-                  selectedKeys={isPaid !== null ? [String(isPaid)] : []}
-                  onSelectionChange={(keys) => {
-                    const value = Array.from(keys)[0]; // Obtiene el primer valor del Set
-                    setIsPaid(value === "true"); // Convierte el string en boolean
-                  }}
-                >
-                 {medioDePago.map((option) => (
+        </Select>
+
+        {/* Estado del Pago */}
+        <Select
+          size="sm"
+          variant="bordered"
+          items={medioDePago}
+          label="¿Se realizó el pago?"
+          placeholder="Seleccione si la persona pagó o se le fió"
+          selectedKeys={isPaid !== null ? [String(isPaid)] : []}
+          onSelectionChange={(keys) => {
+            const value = Array.from(keys)[0];
+            setIsPaid(value === "true");
+          }}
+        >
+                   {medioDePago.map((option) => (
     <SelectItem key={option.value} value={option.value}>
       {option.label}
     </SelectItem>
   ))}
-                </Select>
-                
-                                <Textarea    
-                                className="px-2 "
-                                minRows={1}
-                                value={comments}
-                                onChange={(e) => handlePriceChange(e.target.value, setComments)}  type="text"   variant="bordered"  label="Notas"   size="sm"placeholder="Escribe Notas" />
+        </Select>
 
-                </div>
-            
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Cerrar
-                </Button>
-                <Button color="primary"  onPress={() => AddDeliveryFacet(onClose)} >
-                  Confirmar
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+        {/* Notas */}
+        <Textarea
+          className=""
+          minRows={1}
+          value={comments}
+          onChange={(e) => handlePriceChange(e.target.value, setComments)}
+          type="text"
+          variant="bordered"
+          label="Notas"
+          size="sm"
+          placeholder="Escribe notas"
+        />
+      </div>
+
+      <div className="flex justify-end gap-4 mt-6">
+        <Button color="danger" variant="light" >
+          Cancelar
+        </Button>
+        <Button color="primary" onPress={() => AddDeliveryFacet()}>
+          Confirmar Pedido
+        </Button>
+      </div>
+    </div>
     </>
   );
 }
