@@ -11,8 +11,6 @@ import toast from "react-hot-toast";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
-import SkeletonLoader from "../components/SkeletonLoader";
-
 import Landing from "./Landing";
 
 export const EditDocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
