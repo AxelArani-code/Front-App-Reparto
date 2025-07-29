@@ -293,7 +293,7 @@ const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
     <Landing />
 ) : !isLoaded ?(
-<SkeletonLoader />
+!isLoaded && <p className="text-center text-default-500 mt-4">Cargando días de reparto...</p>
 ) : schedule.length === 0 ? (
 
   

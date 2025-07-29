@@ -63,6 +63,17 @@ console.log("Session ID recuperado:", sessionId);
           localStorage.removeItem("savedEmail");
           localStorage.removeItem("savedPassword");
         }
+        
+// ✅ Guardar el sessionId correctamente
+localStorage.setItem('sessionId', result.executionResult.returned.SessionId);
+
+// ✅ Precargar días y almacenarlos
+const dayResult = await executeRequest('Backend.Actions.Days.GetDaysFacet', {
+  sessionId: result.executionResult.returned.SessionId
+});
+if (dayResult?.executionResult?.returned?.length > 0) {
+  localStorage.setItem("cachedDays", JSON.stringify(dayResult.executionResult.returned));
+}
 
               navigate('/')
       }
