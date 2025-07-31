@@ -131,6 +131,7 @@ const PersuasiveModal = ({ isOpen, onOpenChange }: PersuasiveModalProps) => {
             Sí, quiero transformar mi negocio
             <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
+          
           <Button 
             variant="ghost" 
             onClick={() => onOpenChange(false)}

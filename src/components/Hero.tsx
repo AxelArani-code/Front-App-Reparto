@@ -4,10 +4,11 @@ import { ArrowRight, Clock, Calculator, TrendingUp } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 import PersuasiveModal from "./PersuasiveModal";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <section id="inicio" className="pt-20 pb-16 lg:pt-28 lg:pb-24">
       <div className="container mx-auto px-4 lg:px-8">
@@ -63,6 +64,9 @@ const Hero = () => {
                 Solicitar Acceso Gratuito
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
+                <Button onClick={()=>{navigate('/login')}} >
+              Tengo Cuenta
+            </Button>
               <Button 
                 variant="outline" 
                 size="lg"

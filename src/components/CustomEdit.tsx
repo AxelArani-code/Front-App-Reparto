@@ -286,10 +286,21 @@ export default function CustomEdit() {
     onOpen: onOpenDeleteDelivery,
     onOpenChange: onDeleteChangeDelivery,
   } = useDisclosure();
-  const handleCall = () => {
-    window.location.href = `tel:${getTelephone}`;
-  };
+const handleCall = () => {
+  if (!getTelephone || getTelephone.toLowerCase().includes("no disponible")) {
+    toast.error("El número de teléfono no está disponible.");
+    return;
+  }
+
+  window.location.href = `tel:${getTelephone}`;
+};
+
   const handleWhatsApp = () => {
+      if (!getTelephone || getTelephone.toLowerCase().includes("no disponible")) {
+    toast.error("El número de teléfono no está disponible.");
+    return;
+  }
+
     window.open(
       `https://wa.me/${getTelephone}?text=Hola, quiero más información!`,
       "_blank"

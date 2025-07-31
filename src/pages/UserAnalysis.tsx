@@ -97,7 +97,8 @@ const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
  const formatDate = (date: CalendarDate) => {
   // Siempre establecer la hora a 12:00
   const jsDate = new Date(date.year, date.month - 1, date.day, 12, 0);
-
+jsDate.setDate(jsDate.getDate() + 1); // ✅ sumar 1 día
+  jsDate.setHours(0, 0); // o 23, 59 si querés el final del día
   const pad = (num: number) => num.toString().padStart(2, "0");
 
   const day = pad(jsDate.getDate());
@@ -119,7 +120,7 @@ const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
         if (parsed.start && parsed.end) {
           setSelectedRange({
             start: parseDate(parsed.start),
-            end: parseDate(parsed.end),
+           end: today("UTC"), // <-- Fuerza usar la fecha actual
           });
         }
       } catch (error) {

@@ -88,7 +88,8 @@ const [siphonAmounts, setSiphonAmounts] = useState<number>(0);
  const formatDate = (date: CalendarDate) => {
   // Siempre establecer la hora a 12:00
   const jsDate = new Date(date.year, date.month - 1, date.day, 12, 0);
-
+jsDate.setDate(jsDate.getDate() + 1); // ✅ sumar 1 día
+  jsDate.setHours(0, 0); // o 23, 59 si querés el final del día
   const pad = (num: number) => num.toString().padStart(2, "0");
 
   const day = pad(jsDate.getDate());

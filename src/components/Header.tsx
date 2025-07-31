@@ -39,8 +39,8 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Button onClick={()=>{navigate('/login')}} variant="hero">
-              Comenzar Ahora
+            <Button onClick={()=>{navigate('/login')}} >
+              Tengo Cuenta
             </Button>
           </div>
 
